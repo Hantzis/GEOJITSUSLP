@@ -1,15 +1,15 @@
 
-GEOJITSUSLP/frontend/node_modules
-GEOJITSUSLP/frontend//dist
+#GEOJITSUSLP/frontend/node_modules
+#GEOJITSUSLP/frontend/dist
 
 # local env files
 .env.local
 .env.*.local
 
 # Log files
-GEOJITSUSLP/frontend/npm-debug.log*
-GEOJITSUSLP/frontend/yarn-debug.log*
-GEOJITSUSLP/frontend/yarn-error.log*
+#GEOJITSUSLP/frontend/npm-debug.log*
+#GEOJITSUSLP/frontend/yarn-debug.log*
+#GEOJITSUSLP/frontend/yarn-error.log*
 
 # Editor directories and files
 .idea
