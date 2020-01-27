@@ -1,6 +1,6 @@
 <template>
   <v-app id="inspire">
-    <v-navigation-drawer v-model="drawerRight" app clipped right>
+    <v-navigation-drawer v-model="drawerRight" app clipped right mobile-break-point="800">
       <v-list dense>
         <v-list-item @click.stop="right = !right">
           <v-list-item-action>
@@ -25,14 +25,21 @@
       <v-app-bar-nav-icon @click.stop="drawer = !drawer" />
       <v-toolbar-title>Parcelas SLP</v-toolbar-title>
       <v-spacer />
-      <v-app-bar-nav-icon @click.stop="drawerRight = !drawerRight" />
-      <v-app-bar-nav-icon @click.stop="drawerRight = !drawerRight" />
-      <v-btn icon>
-        <v-icon>mdi-heart</v-icon>
-      </v-btn>
 
       <v-btn icon>
         <v-icon>mdi-magnify</v-icon>
+      </v-btn>
+
+      <v-btn icon>
+        <v-icon>mdi-email-outline</v-icon>
+      </v-btn>
+
+      <v-btn icon>
+        <v-icon>mdi-bell</v-icon>
+      </v-btn>
+
+      <v-btn icon @click.stop="drawerRight = !drawerRight">
+        <v-icon>mdi-layers</v-icon>
       </v-btn>
 
       <v-menu left bottom>
@@ -41,10 +48,12 @@
             <v-icon>mdi-dots-vertical</v-icon>
           </v-btn>
         </template>
-
         <v-list>
           <v-list-item v-for="n in 5" :key="n" @click="() => {}">
             <v-list-item-title>Option {{ n }}</v-list-item-title>
+          </v-list-item>
+          <v-list-item @click="() => {}">
+            <v-list-item-title>Menú opción</v-list-item-title>
           </v-list-item>
         </v-list>
       </v-menu>
@@ -68,6 +77,9 @@
     <v-content>
       <v-container class="fill-height" fluid>
         <v-row justify="center" align="center">
+          <div id="mapid" style="width: 600px; height: 400px;"></div>
+
+
           <v-col class="shrink">
             <v-tooltip right>
               <template v-slot:activator="{ on }">
@@ -118,6 +130,18 @@ export default {
     drawerRight: null,
     right: false,
     left: false
-  })
+  }),
+
+  created: () => {
+    let mymap = L.map("mapid").setView([51.505, -0.09], 13);
+    L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?' +
+            'access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw', {
+      maxZoom: 18,
+      attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, ' +
+              '<a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, ' +
+              'Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
+      id: 'mapbox/streets-v11'
+    }).addTo(mymap);
+  }
 };
 </script>
