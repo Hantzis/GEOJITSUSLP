@@ -1,6 +1,12 @@
 <template>
   <v-app id="inspire">
-    <v-navigation-drawer v-model="drawerRight" app clipped right mobile-break-point="800">
+    <v-navigation-drawer
+      v-model="drawerRight"
+      app
+      clipped
+      right
+      mobile-break-point="800"
+    >
       <v-list dense>
         <v-list-item @click.stop="right = !right">
           <v-list-item-action>
@@ -75,35 +81,11 @@
     <v-navigation-drawer v-model="left" fixed temporary />
 
     <v-content>
-      <v-container class="fill-height" fluid>
-        <v-row justify="center" align="center">
-          <div id="mapid" style="width: 600px; height: 400px;"></div>
+      <v-container fluid>
+        <v-row class="row-map">
 
+          <Map />
 
-          <v-col class="shrink">
-            <v-tooltip right>
-              <template v-slot:activator="{ on }">
-                <v-btn :href="source" icon large target="_blank" v-on="on">
-                  <v-icon large>mdi-code-tags</v-icon>
-                </v-btn>
-              </template>
-              <span>Source</span>
-            </v-tooltip>
-            <v-tooltip right>
-              <template v-slot:activator="{ on }">
-                <v-btn
-                  icon
-                  large
-                  href="https://codepen.io/johnjleider/pen/QewYYx"
-                  target="_blank"
-                  v-on="on"
-                >
-                  <v-icon large>mdi-codepen</v-icon>
-                </v-btn>
-              </template>
-              <span>Codepen</span>
-            </v-tooltip>
-          </v-col>
         </v-row>
       </v-container>
     </v-content>
@@ -119,29 +101,31 @@
 </template>
 
 <script>
+import Map from "./components/Map";
+
 export default {
   name: "App",
+  components: {
+    Map
+  },
   props: {
     source: String
   },
-
   data: () => ({
-    drawer: null,
-    drawerRight: null,
+    drawer: false,
+    drawerRight: false,
     right: false,
     left: false
   }),
-
-  created: () => {
-    let mymap = L.map("mapid").setView([51.505, -0.09], 13);
-    L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?' +
-            'access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw', {
-      maxZoom: 18,
-      attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, ' +
-              '<a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, ' +
-              'Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
-      id: 'mapbox/streets-v11'
-    }).addTo(mymap);
+  mounted() {
+    this.drawerRight = null;
   }
 };
 </script>
+
+<style scoped>
+.row-map {
+  margin-top: -12px;
+  margin-bottom: -12px;
+}
+</style>
