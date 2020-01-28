@@ -27,5 +27,6 @@ export default {
 .map {
   height: 800px;
   width: 100%;
+  z-index: 0;
 }
 </style>

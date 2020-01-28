@@ -5,7 +5,7 @@
       app
       clipped
       right
-      mobile-break-point="800"
+      mobile-break-point=320
     >
       <v-list dense>
         <v-list-item @click.stop="right = !right">
@@ -65,7 +65,7 @@
       </v-menu>
     </v-app-bar>
 
-    <v-navigation-drawer v-model="drawer" app>
+    <v-navigation-drawer v-model="drawer" app mobile-break-point=320>
       <v-list dense>
         <v-list-item @click.stop="left = !left">
           <v-list-item-action>
