@@ -9,15 +9,14 @@ import L from "leaflet";
 export default {
   name: "Map",
   mounted: () => {
-    const mymap = L.map("mapid").setView([51.505, -0.09], 13);
-    L.tileLayer("http://{s}.google.com/vt/lyrs=s&x={x}&y={y}&z={z}", {
+    const mymap = L.map("mapid").setView([22.151941, -100.972133], 10);
+    L.tileLayer("https://{s}.google.com/vt/lyrs=s&x={x}&y={y}&z={z}", {
       subdomains: ["mt0", "mt1", "mt2", "mt3"],
-      maxZoom: 18,
+      maxZoom: 20,
       // language=HTML
       attribution: `Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors,
                     <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a
-                    href="https://www.mapbox.com/">Mapbox</a>`,
-      id: "mapbox/streets-v11"
+                    href="https://www.mapbox.com/">Mapbox</a>`
     }).addTo(mymap);
   }
 };
