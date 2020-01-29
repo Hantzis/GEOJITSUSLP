@@ -5,7 +5,7 @@
       app
       clipped
       right
-      mobile-break-point=320
+      mobile-break-point="320"
     >
       <v-list dense>
         <v-list-item @click.stop="right = !right">
@@ -65,7 +65,7 @@
       </v-menu>
     </v-app-bar>
 
-    <v-navigation-drawer v-model="drawer" app mobile-break-point=320>
+    <v-navigation-drawer v-model="drawer" app mobile-break-point="320">
       <v-list dense>
         <v-list-item @click.stop="left = !left">
           <v-list-item-action>
@@ -82,7 +82,30 @@
 
     <v-content>
       <v-container fluid fill-height class="container-map">
-        <Map />
+        <!-- <Map /> -->
+        <l-map :zoom="zoom" :center="center">
+          <l-tile-layer
+            name="Google Satellite"
+            :url="url"
+            attribution="Google Maps"
+            layer-type="base"
+          />
+          <l-tile-layer
+            name="OSM"
+            url="http://{s}.tile.osm.org/{z}/{x}/{y}.png"
+            attribution="OpenStreetMap"
+            layer-type="base"
+          />
+
+          <l-tile-layer
+            name="OSM over"
+            url="http://{s}.tile.osm.org/{z}/{x}/{y}.png"
+            attribution="overlay atrrsdklkrs"
+            layer-type="overlay"
+          />
+          <l-marker :lat-lng="marker" />
+          <l-control-layers />
+        </l-map>
       </v-container>
     </v-content>
 
@@ -97,12 +120,16 @@
 </template>
 
 <script>
-import Map from "./components/Map";
+//import Map from "./components/Map";
+import { LMap, LTileLayer, LMarker, LControlLayers } from "vue2-leaflet";
 
 export default {
   name: "App",
   components: {
-    Map
+    LMap,
+    LTileLayer,
+    LMarker,
+    LControlLayers
   },
   props: {
     source: String
@@ -111,10 +138,17 @@ export default {
     drawer: false,
     drawerRight: false,
     right: false,
-    left: false
+    left: false,
+    zoom: 13,
+    // eslint-disable-next-line no-undef
+    center: L.latLng(47.41322, -1.219482),
+    url: "https://mt1.google.com/vt/lyrs=s&x={x}&y={y}&z={z}",
+    attribution: `&copy; <a href='http://osm.org/copyright'>OpenStreetMap</a> contributors`,
+    // eslint-disable-next-line no-undef
+    marker: L.latLng(47.41322, -1.219482)
   }),
   mounted() {
-    this.drawerRight = null;
+    this.drawerRight = false;
   }
 };
 </script>
