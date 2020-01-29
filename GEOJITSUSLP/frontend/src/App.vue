@@ -81,12 +81,8 @@
     <v-navigation-drawer v-model="left" fixed temporary />
 
     <v-content>
-      <v-container fluid>
-        <v-row class="row-map">
-
-          <Map />
-
-        </v-row>
+      <v-container fluid fill-height class="container-map">
+        <Map />
       </v-container>
     </v-content>
 
@@ -124,8 +120,7 @@ export default {
 </script>
 
 <style scoped>
-.row-map {
-  margin-top: -12px;
-  margin-bottom: -12px;
+.container-map {
+  padding: 0;
 }
 </style>
