@@ -27,7 +27,7 @@
       </v-list>
     </v-navigation-drawer>
 
-    <v-app-bar app clipped-right color="teal" dark>
+    <v-app-bar app clipped-right color="blue-grey" dark>
       <v-app-bar-nav-icon @click.stop="drawer = !drawer" />
       <v-toolbar-title>Parcelas SLP</v-toolbar-title>
       <v-spacer />
@@ -65,7 +65,12 @@
       </v-menu>
     </v-app-bar>
 
-    <v-navigation-drawer v-model="drawer" color="teal lighten-5" app mobile-break-point="320">
+    <v-navigation-drawer
+      v-model="drawer"
+      color="blue-grey lighten-5"
+      app
+      mobile-break-point="320"
+    >
       <v-list dense>
         <v-list-item @click.stop="left = !left">
           <v-list-item-action>
@@ -82,21 +87,19 @@
 
     <v-content>
       <v-container fluid fill-height class="container-map">
-        <!-- <Map /> -->
         <l-map :zoom="zoom" :center="center" style="z-index: 0">
+          <l-tile-layer
+            name="Open Street Map"
+            url="http://{s}.tile.osm.org/{z}/{x}/{y}.png"
+            attribution="OpenStreetMap"
+            layer-type="base"
+          />
           <l-tile-layer
             name="Google Satellite"
             :url="url"
             attribution="Google Maps"
             layer-type="base"
           />
-          <l-tile-layer
-            name="OSM"
-            url="http://{s}.tile.osm.org/{z}/{x}/{y}.png"
-            attribution="OpenStreetMap"
-            layer-type="base"
-          />
-
           <l-tile-layer
             name="OSM over"
             url="http://{s}.tile.osm.org/{z}/{x}/{y}.png"
@@ -111,10 +114,10 @@
 
     <v-navigation-drawer v-model="right" fixed right temporary />
 
-    <v-footer app color="teal" class="white--text">
-      <span>Vuetify</span>
+    <v-footer app color="blue-grey" class="white--text">
+      <span>Maptitude XYZ</span>
       <v-spacer />
-      <span>&copy; 2020</span>
+      <span>&copy; 2020 GeoJitsu</span>
     </v-footer>
   </v-app>
 </template>

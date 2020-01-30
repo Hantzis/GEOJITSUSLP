@@ -48,6 +48,10 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.gis',
+
+    'rest_framework',
+    'webgis',
 ]
 
 MIDDLEWARE = [
@@ -92,12 +96,26 @@ WSGI_APPLICATION = 'GEOJITSUSLP.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.contrib.gis.db.backends.postgis',
-        'NAME': 'parcelas',
-        'USER': '',
-        'PASSWORD': '',
+        'HOST': 'localhost',
+        'NAME': 'maptitude_slp',
+        'USER': 'maptitude',
+        'PASSWORD': 'irna3ev8',
     }
 }
 
+"""
+OSGEO_VENV = 'C:\\Anaconda3\\Library\\bin'
+GEOS_LIBRARY_PATH = str(OSGEO_VENV + '\\geos_c.dll')
+GDAL_LIBRARY_PATH = str(OSGEO_VENV + '\\gdal203.dll')
+os.environ["PATH"] += os.pathsep + str(OSGEO_VENV)
+"""
+
+# """
+OSGEO_VENV = 'C:\\WPy64-3810\\python-3.8.1.amd64\\Lib\site-packages\\osgeo'
+GEOS_LIBRARY_PATH = str(OSGEO_VENV + '\\geos_c.dll')
+GDAL_LIBRARY_PATH = str(OSGEO_VENV + '\\gdal300.dll')
+os.environ["PATH"] += os.pathsep + str(OSGEO_VENV)
+# """
 
 # Password validation
 # https://docs.djangoproject.com/en/2.2/ref/settings/#auth-password-validators
