@@ -1,7 +1,4 @@
 
-#GEOJITSUSLP/frontend/node_modules
-#GEOJITSUSLP/frontend/dist
-
 # local env files
 .env.local
 .env.*.local

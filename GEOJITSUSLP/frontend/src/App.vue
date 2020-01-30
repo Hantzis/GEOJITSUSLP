@@ -90,7 +90,7 @@
         <l-map :zoom="zoom" :center="center" style="z-index: 0">
           <l-tile-layer
             name="Open Street Map"
-            url="http://{s}.tile.osm.org/{z}/{x}/{y}.png"
+            url="https://{s}.tile.osm.org/{z}/{x}/{y}.png"
             attribution="OpenStreetMap"
             layer-type="base"
           />
@@ -102,7 +102,7 @@
           />
           <l-tile-layer
             name="OSM over"
-            url="http://{s}.tile.osm.org/{z}/{x}/{y}.png"
+            url="https://{s}.tile.osm.org/{z}/{x}/{y}.png"
             attribution="overlay atrrsdklkrs"
             layer-type="overlay"
           />
