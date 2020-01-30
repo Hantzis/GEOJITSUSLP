@@ -16,7 +16,6 @@ import os
 PROJECT_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 BASE_DIR = os.path.dirname(PROJECT_DIR)
 
-
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/2.2/howto/deployment/checklist/
 
@@ -51,6 +50,7 @@ INSTALLED_APPS = [
     'django.contrib.gis',
 
     'rest_framework',
+    'rest_framework_gis',
     'webgis',
 ]
 
@@ -89,7 +89,6 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'GEOJITSUSLP.wsgi.application'
 
-
 # Database
 # https://docs.djangoproject.com/en/2.2/ref/settings/#databases
 
@@ -111,9 +110,16 @@ os.environ["PATH"] += os.pathsep + str(OSGEO_VENV)
 """
 
 # """
-OSGEO_VENV = 'C:\\WPy64-3810\\python-3.8.1.amd64\\Lib\site-packages\\osgeo'
-GEOS_LIBRARY_PATH = str(OSGEO_VENV + '\\geos_c.dll')
-GDAL_LIBRARY_PATH = str(OSGEO_VENV + '\\gdal300.dll')
+OSGEO_VENV = r'C:\WPy64-3810\python-3.8.1.amd64\Lib\site-packages\osgeo'
+GEOS_LIBRARY_PATH = OSGEO_VENV + r'\geos_c.dll'
+GDAL_LIBRARY_PATH = OSGEO_VENV + r'\gdal300.dll'
+GDAL_DRIVER_PATH = OSGEO_VENV + r'\gdalplugins'
+GDAL_DATA = OSGEO_VENV + r'\data'
+PROJ_LIB = GDAL_DATA + r'\proj'
+PROJ_LIB_PATH = GDAL_DATA + r'\proj'
+PROJ_LIBRARY_PATH = GDAL_DATA + r'\proj'
+
+
 os.environ["PATH"] += os.pathsep + str(OSGEO_VENV)
 # """
 
@@ -135,7 +141,6 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
 # Internationalization
 # https://docs.djangoproject.com/en/2.2/topics/i18n/
 
@@ -148,7 +153,6 @@ USE_I18N = True
 USE_L10N = True
 
 USE_TZ = True
-
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.2/howto/static-files/
@@ -167,12 +171,13 @@ STATICFILES_DIRS = [
 # See https://docs.djangoproject.com/en/2.2/ref/contrib/staticfiles/#manifeststaticfilesstorage
 STATICFILES_STORAGE = 'django.contrib.staticfiles.storage.ManifestStaticFilesStorage'
 
-STATIC_ROOT = os.path.join(BASE_DIR, 'static')
-STATIC_URL = '/static/'
+STATIC_NAME = 'static'
+STATIC_ROOT = os.path.join(BASE_DIR, STATIC_NAME)
+STATIC_URL = f'/{STATIC_NAME}/'
 
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
-MEDIA_URL = '/media/'
-
+MEDIA_NAME = 'media'
+MEDIA_ROOT = os.path.join(BASE_DIR, MEDIA_NAME)
+MEDIA_URL = f'/{MEDIA_NAME}/'
 
 # Wagtail settings
 
