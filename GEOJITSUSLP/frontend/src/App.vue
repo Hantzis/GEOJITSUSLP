@@ -114,7 +114,7 @@
 
     <v-navigation-drawer v-model="right" fixed right temporary />
 
-    <v-footer app color="blue-grey" class="white--text">
+    <v-footer app class="white--text" color="blue-grey">
       <span>Maptitude XYZ</span>
       <v-spacer />
       <span>&copy; 2020 GeoJitsu</span>
@@ -123,7 +123,6 @@
 </template>
 
 <script>
-//import Map from "./components/Map";
 import { LMap, LTileLayer, LMarker, LControlLayers } from "vue2-leaflet";
 
 export default {
@@ -159,5 +158,8 @@ export default {
 <style scoped>
 .container-map {
   padding: 0;
+}
+
+.white--text {
 }
 </style>
