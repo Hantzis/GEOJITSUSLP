@@ -207,14 +207,18 @@ export default {
   }),
   methods: {
     get_coordenadas(evt) {
+      return evt.latLng;
+      /*
       console.log(evt);
+
       let coord = evt.latlng;
       let lat = coord.lat;
       let lng = coord.lng;
+
       console.log(
         "You clicked the map at latitude: " + lat + " and longitude: " + lng
       );
-      console.log(evt);
+      console.log(evt); */
     }
   },
   mounted() {
