@@ -70,7 +70,7 @@ MIDDLEWARE = [
 ]
 
 CORS_ORIGIN_ALLOW_ALL = True
-CORS_ORIGIN_WHITELIST = ['http://localhost:8080', 'https://parcelas-slp.maptitude.xyz/', '*']
+CORS_ORIGIN_WHITELIST = ['http://localhost:8080', 'https://parcelas-slp.maptitude.xyz']
 
 ROOT_URLCONF = 'GEOJITSUSLP.urls'
 
@@ -158,7 +158,7 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/2.2/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = 'es-mx'
 
 TIME_ZONE = 'UTC'
 
