@@ -95,7 +95,7 @@
         >
           <l-tile-layer
             name="Google Satellite"
-            :url="url"
+            url="https://mt1.google.com/vt/lyrs=s&x={x}&y={y}&z={z}"
             attribution="Google Maps"
             layer-type="base"
           />
@@ -105,20 +105,18 @@
             attribution="OpenStreetMap"
             layer-type="base"
           />
+          <l-popup></l-popup>
           <l-w-m-s-tile-layer
-            name="Municipios"
-            baseUrl="https://api.parcelas-slp.maptitude.xyz/geoserver/PARCELASSLP/ows?"
-            layers="municipios"
+            v-for="layer in layers"
+            :key="layer.name"
+            :name="layer.name"
+            :baseUrl="layer.baseUrl"
+            :layers="layer.layers"
             layer-type="overlay"
-            format="image/png"
-          >
-            <l-popup></l-popup>
-          </l-w-m-s-tile-layer>
-          <l-geo-json
-            name="Ejidos"
-            :geojson="ejidos"
-            attribution="INEGI"
-            layer-type="overlay"
+            :format="layer.format"
+            :transparent="layer.transparent"
+            :visible="layer.visible"
+            :gridSet="layer.gridSet"
           />
           <l-control-layers />
         </l-map>
@@ -144,6 +142,7 @@ import {
   LWMSTileLayer,
   LPopup
 } from "vue2-leaflet";
+// eslint-disable-next-line no-unused-vars
 import axios from "axios";
 
 export default {
@@ -152,6 +151,7 @@ export default {
     LMap,
     LTileLayer,
     LControlLayers,
+    // eslint-disable-next-line vue/no-unused-components
     LGeoJson,
     LWMSTileLayer,
     LPopup
@@ -160,6 +160,7 @@ export default {
     source: String
   },
   data: () => ({
+    wmstransparent: true,
     drawer: false,
     drawerRight: false,
     right: false,
@@ -167,12 +168,42 @@ export default {
     zoom: 10,
     // eslint-disable-next-line no-undef
     center: L.latLng(22.16, -101.08),
-    url: "https://mt1.google.com/vt/lyrs=s&x={x}&y={y}&z={z}",
     attribution: `&copy; <a href='http://osm.org/copyright'>OpenStreetMap</a> contributors`,
-    // eslint-disable-next-line no-undef
     municipios: null,
+    ejidos: null,
     parcelas: null,
-    ejidos: null
+    layers: [
+      {
+        name: "Municipios",
+        layers: "municipios",
+        baseUrl:
+          "https://api.parcelas-slp.maptitude.xyz/geoserver/PARCELASSLP/ows?",
+        format: "image/png",
+        gridSet: "EPSG:4326",
+        transparent: true,
+        visible: true
+      },
+      {
+        name: "Ejidos",
+        layers: "ejidos",
+        baseUrl:
+          "https://api.parcelas-slp.maptitude.xyz/geoserver/PARCELASSLP/ows?",
+        format: "image/png",
+        gridSet: "EPSG:4326",
+        transparent: true,
+        visible: true
+      },
+      {
+        name: "Parcelas",
+        layers: "parcelas",
+        baseUrl:
+          "https://api.parcelas-slp.maptitude.xyz/geoserver/PARCELASSLP/ows?",
+        format: "image/png",
+        gridSet: "EPSG:4326",
+        transparent: true,
+        visible: true
+      }
+    ]
   }),
   methods: {
     get_coordenadas(evt) {
@@ -183,11 +214,12 @@ export default {
       console.log(
         "You clicked the map at latitude: " + lat + " and longitude: " + lng
       );
+      console.log(evt);
     }
   },
   mounted() {
     this.loading = true;
-    axios
+    /* axios
       .get("https://api.parcelas-slp.maptitude.xyz/rest/v2/municipios/")
       .then(response => {
         this.municipios = response.data;
@@ -204,7 +236,8 @@ export default {
       .then(response => {
         this.parcelas = response.data;
         this.loading = false;
-      });
+      }); */
+    this.loading = false;
   }
 };
 </script>
