@@ -167,7 +167,6 @@ export default {
     url: "https://mt1.google.com/vt/lyrs=s&x={x}&y={y}&z={z}",
     attribution: `&copy; <a href='http://osm.org/copyright'>OpenStreetMap</a> contributors`,
     // eslint-disable-next-line no-undef
-    marker: L.latLng(22.16, -101.08),
     municipios: null,
     parcelas: null,
     ejidos: null
