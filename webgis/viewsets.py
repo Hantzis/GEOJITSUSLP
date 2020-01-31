@@ -1,4 +1,5 @@
 from rest_framework.viewsets import ModelViewSet
+"""
 from .models import Municipio, Ejido, Parcela
 from .serializers import MunicipioSerializer, EjidoSerializer, ParcelaSerializer
 
@@ -16,3 +17,4 @@ class EjidoViewSet(ModelViewSet):
 class ParcelaViewSet(ModelViewSet):
     queryset = Parcela.objects.all()
     serializer_class = ParcelaSerializer
+"""

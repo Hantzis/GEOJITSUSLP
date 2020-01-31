@@ -89,21 +89,33 @@
       <v-container fluid fill-height class="container-map">
         <l-map :zoom="zoom" :center="center" style="z-index: 0">
           <l-tile-layer
-            name="Open Street Map"
-            url="https://{s}.tile.osm.org/{z}/{x}/{y}.png"
-            attribution="OpenStreetMap"
-            layer-type="base"
-          />
-          <l-tile-layer
             name="Google Satellite"
             :url="url"
             attribution="Google Maps"
             layer-type="base"
           />
           <l-tile-layer
-            name="OSM over"
+            name="Open Street Map"
             url="https://{s}.tile.osm.org/{z}/{x}/{y}.png"
-            attribution="overlay atrrsdklkrs"
+            attribution="OpenStreetMap"
+            layer-type="base"
+          />
+          <l-tile-layer
+            name="Municipios"
+            url="https://api.parcelas-slp.maptitude.xyz/v1/municipios/"
+            attribution="INEGI"
+            layer-type="overlay"
+          />
+          <l-tile-layer
+            name="Ejidos"
+            url="https://api.parcelas-slp.maptitude.xyz/v1/ejidos/"
+            attribution="INEGI"
+            layer-type="overlay"
+          />
+          <l-tile-layer
+            name="Parcelas"
+            url="https://api.parcelas-slp.maptitude.xyz/v1/parcelas/"
+            attribution="INEGI"
             layer-type="overlay"
           />
           <l-marker :lat-lng="marker" />
@@ -143,11 +155,11 @@ export default {
     left: false,
     zoom: 13,
     // eslint-disable-next-line no-undef
-    center: L.latLng(47.41322, -1.219482),
+    center: L.latLng(22.16, -101.08),
     url: "https://mt1.google.com/vt/lyrs=s&x={x}&y={y}&z={z}",
     attribution: `&copy; <a href='http://osm.org/copyright'>OpenStreetMap</a> contributors`,
     // eslint-disable-next-line no-undef
-    marker: L.latLng(47.41322, -1.219482)
+    marker: L.latLng(22.16, -101.08, )
   }),
   mounted() {
     this.drawerRight = false;

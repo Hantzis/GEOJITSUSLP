@@ -112,7 +112,7 @@ PROJ_LIB = GDAL_DATA + r'\proj'
 os.environ["PATH"] += os.pathsep + str(OSGEO_VENV)
 """
 
-"""
+
 OSGEO_VENV = r'C:\WPy64-3810\python-3.8.1.amd64\Lib\site-packages\osgeo'
 GEOS_LIBRARY_PATH = OSGEO_VENV + r'\geos_c.dll'
 GDAL_LIBRARY_PATH = OSGEO_VENV + r'\gdal300.dll'
@@ -124,7 +124,13 @@ PROJ_LIB = GDAL_DATA + r'\proj'
 os.environ["PATH"] += os.pathsep + str(OSGEO_VENV)
 os.environ["PATH"] += os.pathsep + str(GDAL_DATA)
 os.environ["PATH"] += os.pathsep + str(PROJ_LIB)
-"""
+
+
+REST_FRAMEWORK = {
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.IsAuthenticatedOrReadOnly',
+    ]
+}
 
 # Password validation
 # https://docs.djangoproject.com/en/2.2/ref/settings/#auth-password-validators
