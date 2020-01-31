@@ -87,7 +87,12 @@
 
     <v-content>
       <v-container fluid fill-height class="container-map">
-        <l-map :zoom="zoom" :center="center" style="z-index: 0">
+        <l-map
+          :zoom="zoom"
+          :center="center"
+          style="z-index: 0"
+          @click="get_coordenadas"
+        >
           <l-tile-layer
             name="Google Satellite"
             :url="url"
@@ -100,25 +105,21 @@
             attribution="OpenStreetMap"
             layer-type="base"
           />
-          <l-geo-json
+          <l-w-m-s-tile-layer
             name="Municipios"
-            :geojson="municipios"
-            attribution="INEGI"
+            baseUrl="https://api.parcelas-slp.maptitude.xyz/geoserver/PARCELASSLP/ows?"
+            layers="municipios"
             layer-type="overlay"
-          />
+            format="image/png"
+          >
+            <l-popup></l-popup>
+          </l-w-m-s-tile-layer>
           <l-geo-json
             name="Ejidos"
             :geojson="ejidos"
             attribution="INEGI"
             layer-type="overlay"
           />
-          <l-geo-json
-            name="Parcelas"
-            :geojson="parcelas"
-            attribution="INEGI"
-            layer-type="overlay"
-          />
-          <l-marker :lat-lng="marker" />
           <l-control-layers />
         </l-map>
       </v-container>
@@ -138,9 +139,10 @@
 import {
   LMap,
   LTileLayer,
-  LMarker,
   LControlLayers,
-  LGeoJson
+  LGeoJson,
+  LWMSTileLayer,
+  LPopup
 } from "vue2-leaflet";
 import axios from "axios";
 
@@ -149,9 +151,10 @@ export default {
   components: {
     LMap,
     LTileLayer,
-    LMarker,
     LControlLayers,
-    LGeoJson
+    LGeoJson,
+    LWMSTileLayer,
+    LPopup
   },
   props: {
     source: String
@@ -171,7 +174,18 @@ export default {
     parcelas: null,
     ejidos: null
   }),
-  created() {
+  methods: {
+    get_coordenadas(evt) {
+      console.log(evt);
+      let coord = evt.latlng;
+      let lat = coord.lat;
+      let lng = coord.lng;
+      console.log(
+        "You clicked the map at latitude: " + lat + " and longitude: " + lng
+      );
+    }
+  },
+  mounted() {
     this.loading = true;
     axios
       .get("https://api.parcelas-slp.maptitude.xyz/rest/v2/municipios/")
@@ -191,9 +205,6 @@ export default {
         this.parcelas = response.data;
         this.loading = false;
       });
-  },
-  mounted() {
-    this.drawerRight = false;
   }
 };
 </script>
