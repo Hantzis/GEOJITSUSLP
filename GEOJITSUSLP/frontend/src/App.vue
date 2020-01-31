@@ -106,18 +106,18 @@
             attribution="INEGI"
             layer-type="overlay"
           />
-          <!-- <l-geo-json
+          <l-geo-json
             name="Ejidos"
-            geojson="https://api.parcelas-slp.maptitude.xyz/v1/ejidos/"
+            :geojson="ejidos"
             attribution="INEGI"
             layer-type="overlay"
           />
           <l-geo-json
             name="Parcelas"
-            geojson="https://api.parcelas-slp.maptitude.xyz/v1/parcelas/"
+            :geojson="parcelas"
             attribution="INEGI"
             layer-type="overlay"
-          /> -->
+          />
           <l-marker :lat-lng="marker" />
           <l-control-layers />
         </l-map>
@@ -161,7 +161,7 @@ export default {
     drawerRight: false,
     right: false,
     left: false,
-    zoom: 13,
+    zoom: 10,
     // eslint-disable-next-line no-undef
     center: L.latLng(22.16, -101.08),
     url: "https://mt1.google.com/vt/lyrs=s&x={x}&y={y}&z={z}",
@@ -175,9 +175,21 @@ export default {
   created() {
     this.loading = true;
     axios
-      .get("https://api.parcelas-slp.maptitude.xyz/v1/municipios/")
+      .get("https://api.parcelas-slp.maptitude.xyz/rest/v2/municipios/")
       .then(response => {
         this.municipios = response.data;
+        this.loading = false;
+      });
+    axios
+      .get("https://api.parcelas-slp.maptitude.xyz/rest/v2/ejidos/")
+      .then(response => {
+        this.ejidos = response.data;
+        this.loading = false;
+      });
+    axios
+      .get("https://api.parcelas-slp.maptitude.xyz/rest/v2/parcelas/")
+      .then(response => {
+        this.parcelas = response.data;
         this.loading = false;
       });
   },
