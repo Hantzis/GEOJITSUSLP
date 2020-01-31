@@ -100,24 +100,24 @@
             attribution="OpenStreetMap"
             layer-type="base"
           />
-          <l-tile-layer
+          <l-geo-json
             name="Municipios"
-            url="https://api.parcelas-slp.maptitude.xyz/v1/municipios/"
+            :geojson="municipios"
             attribution="INEGI"
             layer-type="overlay"
           />
-          <l-tile-layer
+          <!-- <l-geo-json
             name="Ejidos"
-            url="https://api.parcelas-slp.maptitude.xyz/v1/ejidos/"
+            geojson="https://api.parcelas-slp.maptitude.xyz/v1/ejidos/"
             attribution="INEGI"
             layer-type="overlay"
           />
-          <l-tile-layer
+          <l-geo-json
             name="Parcelas"
-            url="https://api.parcelas-slp.maptitude.xyz/v1/parcelas/"
+            geojson="https://api.parcelas-slp.maptitude.xyz/v1/parcelas/"
             attribution="INEGI"
             layer-type="overlay"
-          />
+          /> -->
           <l-marker :lat-lng="marker" />
           <l-control-layers />
         </l-map>
@@ -135,7 +135,14 @@
 </template>
 
 <script>
-import { LMap, LTileLayer, LMarker, LControlLayers } from "vue2-leaflet";
+import {
+  LMap,
+  LTileLayer,
+  LMarker,
+  LControlLayers,
+  LGeoJson
+} from "vue2-leaflet";
+import axios from "axios";
 
 export default {
   name: "App",
@@ -143,7 +150,8 @@ export default {
     LMap,
     LTileLayer,
     LMarker,
-    LControlLayers
+    LControlLayers,
+    LGeoJson
   },
   props: {
     source: String
@@ -159,8 +167,20 @@ export default {
     url: "https://mt1.google.com/vt/lyrs=s&x={x}&y={y}&z={z}",
     attribution: `&copy; <a href='http://osm.org/copyright'>OpenStreetMap</a> contributors`,
     // eslint-disable-next-line no-undef
-    marker: L.latLng(22.16, -101.08, )
+    marker: L.latLng(22.16, -101.08),
+    municipios: null,
+    parcelas: null,
+    ejidos: null
   }),
+  created() {
+    this.loading = true;
+    axios
+      .get("https://api.parcelas-slp.maptitude.xyz/v1/municipios/")
+      .then(response => {
+        this.municipios = response.data;
+        this.loading = false;
+      });
+  },
   mounted() {
     this.drawerRight = false;
   }
