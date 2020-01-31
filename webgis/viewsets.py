@@ -17,16 +17,38 @@ class CacheMixin:
     def list(self, request, *args, **kwargs):
         return list(CacheMixin).get(self, request, *args, **kwargs)
 
-class MunicipioViewSet(CacheMixin, ModelViewSet):
+class MunicipioViewSet(ModelViewSet):
     queryset = Municipio.objects.all()
     serializer_class = MunicipioSerializer
 
+    @method_decorator(cache_page(360 * 360 * 2))
+    def get(self, request, *args, **kwargs):
+        return super(MunicipioViewSet).get(self, request, *args, **kwargs)
 
-class EjidoViewSet(CacheMixin, ModelViewSet):
+    @method_decorator(cache_page(360 * 360 * 2))
+    def list(self, request, *args, **kwargs):
+        return list(MunicipioViewSet).get(self, request, *args, **kwargs)
+
+class EjidoViewSet(ModelViewSet):
     queryset = Ejido.objects.all()
     serializer_class = EjidoSerializer
 
+    @method_decorator(cache_page(360 * 360 * 2))
+    def get(self, request, *args, **kwargs):
+        return super(EjidoViewSet).get(self, request, *args, **kwargs)
 
-class ParcelaViewSet(CacheMixin, ModelViewSet):
+    @method_decorator(cache_page(360 * 360 * 2))
+    def list(self, request, *args, **kwargs):
+        return list(EjidoViewSet).get(self, request, *args, **kwargs)
+
+class ParcelaViewSet(ModelViewSet):
     queryset = Parcela.objects.all()
     serializer_class = ParcelaSerializer
+
+    @method_decorator(cache_page(360 * 360 * 2))
+    def get(self, request, *args, **kwargs):
+        return super(ParcelaViewSet).get(self, request, *args, **kwargs)
+
+    @method_decorator(cache_page(360 * 360 * 2))
+    def list(self, request, *args, **kwargs):
+        return list(ParcelaViewSet).get(self, request, *args, **kwargs)
