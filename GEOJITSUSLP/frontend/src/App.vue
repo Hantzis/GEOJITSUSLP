@@ -32,25 +32,25 @@
       <v-toolbar-title>Parcelas SLP</v-toolbar-title>
       <v-spacer />
 
-      <v-btn icon>
+      <v-btn icon aria-label="Buscar">
         <v-icon>mdi-magnify</v-icon>
       </v-btn>
 
-      <v-btn icon>
+      <v-btn icon aria-label="Mensajes">
         <v-icon>mdi-email-outline</v-icon>
       </v-btn>
 
-      <v-btn icon>
+      <v-btn icon aria-label="Notificaciones">
         <v-icon>mdi-bell</v-icon>
       </v-btn>
 
-      <v-btn icon @click.stop="drawerRight = !drawerRight">
+      <v-btn icon @click.stop="drawerRight = !drawerRight" aria-label="Capas de datos">
         <v-icon>mdi-layers</v-icon>
       </v-btn>
 
       <v-menu left bottom>
         <template v-slot:activator="{ on }">
-          <v-btn icon v-on="on">
+          <v-btn icon v-on="on" aria-label="Menú de capas">
             <v-icon>mdi-dots-vertical</v-icon>
           </v-btn>
         </template>
@@ -105,7 +105,6 @@
             attribution="OpenStreetMap"
             layer-type="base"
           />
-          <l-popup></l-popup>
           <l-w-m-s-tile-layer
             v-for="layer in layers"
             :key="layer.name"
@@ -154,6 +153,7 @@ export default {
     // eslint-disable-next-line vue/no-unused-components
     LGeoJson,
     LWMSTileLayer,
+    // eslint-disable-next-line vue/no-unused-components
     LPopup
   },
   props: {
@@ -175,30 +175,30 @@ export default {
     layers: [
       {
         name: "Municipios",
-        layers: "municipios",
+        layers: "PARCELASSLP:municipios",
         baseUrl:
-          "https://api.parcelas-slp.maptitude.xyz/geoserver/PARCELASSLP/ows?",
-        format: "image/png",
+          "https://api.parcelas-slp.maptitude.xyz/geoserver/gwc/service/wms?",
+        format: "image/png8",
         gridSet: "EPSG:4326",
         transparent: true,
         visible: true
       },
       {
         name: "Ejidos",
-        layers: "ejidos",
+        layers: "PARCELASSLP:ejidos",
         baseUrl:
-          "https://api.parcelas-slp.maptitude.xyz/geoserver/PARCELASSLP/ows?",
-        format: "image/png",
+          "https://api.parcelas-slp.maptitude.xyz/geoserver/gwc/service/wms?",
+        format: "image/png8",
         gridSet: "EPSG:4326",
         transparent: true,
         visible: true
       },
       {
         name: "Parcelas",
-        layers: "parcelas",
+        layers: "PARCELASSLP:parcelas",
         baseUrl:
-          "https://api.parcelas-slp.maptitude.xyz/geoserver/PARCELASSLP/ows?",
-        format: "image/png",
+          "https://api.parcelas-slp.maptitude.xyz/geoserver/gwc/service/wms?",
+        format: "image/png8",
         gridSet: "EPSG:4326",
         transparent: true,
         visible: true
