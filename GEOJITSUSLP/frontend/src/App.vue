@@ -44,7 +44,11 @@
         <v-icon>mdi-bell</v-icon>
       </v-btn>
 
-      <v-btn icon @click.stop="drawerRight = !drawerRight" aria-label="Capas de datos">
+      <v-btn
+        icon
+        @click.stop="drawerRight = !drawerRight"
+        aria-label="Capas de datos"
+      >
         <v-icon>mdi-layers</v-icon>
       </v-btn>
 
@@ -88,10 +92,11 @@
     <v-content>
       <v-container fluid fill-height class="container-map">
         <l-map
+          ref="map"
           :zoom="zoom"
           :center="center"
           style="z-index: 0"
-          @click="get_coordenadas"
+          @click="getFeatureInfo"
         >
           <l-tile-layer
             name="Google Satellite"
@@ -115,7 +120,6 @@
             :format="layer.format"
             :transparent="layer.transparent"
             :visible="layer.visible"
-            :gridSet="layer.gridSet"
           />
           <l-control-layers />
         </l-map>
@@ -125,9 +129,7 @@
     <v-navigation-drawer v-model="right" fixed right temporary />
 
     <v-footer app class="white--text" color="blue-grey">
-      <span>Maptitude XYZ</span>
-      <v-spacer />
-      <span>&copy; 2020 GeoJitsu</span>
+      <span>Maptitude XYZ</span><v-spacer /><span>&copy; 2020 GeoJitsu</span>
     </v-footer>
   </v-app>
 </template>
@@ -160,7 +162,6 @@ export default {
     source: String
   },
   data: () => ({
-    wmstransparent: true,
     drawer: false,
     drawerRight: false,
     right: false,
@@ -179,7 +180,7 @@ export default {
         baseUrl:
           "https://api.parcelas-slp.maptitude.xyz/geoserver/gwc/service/wms?",
         format: "image/png8",
-        gridSet: "EPSG:4326",
+        srs: "EPSG:4326",
         transparent: true,
         visible: true
       },
@@ -189,9 +190,9 @@ export default {
         baseUrl:
           "https://api.parcelas-slp.maptitude.xyz/geoserver/gwc/service/wms?",
         format: "image/png8",
-        gridSet: "EPSG:4326",
+        srs: "EPSG:4326",
         transparent: true,
-        visible: true
+        visible: false
       },
       {
         name: "Parcelas",
@@ -199,26 +200,69 @@ export default {
         baseUrl:
           "https://api.parcelas-slp.maptitude.xyz/geoserver/gwc/service/wms?",
         format: "image/png8",
-        gridSet: "EPSG:4326",
+        srs: "EPSG:4326",
         transparent: true,
-        visible: true
+        visible: false
       }
     ]
   }),
   methods: {
-    get_coordenadas(evt) {
-      return evt.latLng;
-      /*
-      console.log(evt);
-
-      let coord = evt.latlng;
-      let lat = coord.lat;
-      let lng = coord.lng;
-
-      console.log(
-        "You clicked the map at latitude: " + lat + " and longitude: " + lng
-      );
-      console.log(evt); */
+    getVisibleLayers() {
+      let activas = [];
+      for (let layer of Object.entries(this.$refs.map.mapObject._layers)) {
+        if (layer[1].wmsParams) {
+          activas.push(layer[1]);
+        }
+      }
+      return activas;
+    },
+    getFeatureInfoUrls(latlng) {
+      const point = this.$refs.map.mapObject.latLngToContainerPoint(latlng);
+      const size = this.$refs.map.mapObject.getSize();
+      const visible_layers = this.getVisibleLayers();
+      let urls = [];
+      if (visible_layers.length > 0) {
+        for (let layer of visible_layers) {
+          let srs = "EPSG:4326";
+          for (let conflayer of this.layers) {
+            if (conflayer.layers === layer.wmsParams.layers)
+              srs = conflayer.srs;
+          }
+          let params = {
+            request: "GetFeatureInfo",
+            service: "WMS",
+            srs: srs,
+            format: layer.wmsParams.format,
+            bbox: this.$refs.map.mapObject.getBounds().toBBoxString(),
+            height: size.y,
+            width: size.x,
+            layers: layer.wmsParams.layers,
+            query_layers: layer.wmsParams.layers,
+            info_format: "text/html",
+            styles: layer.styles || ""
+          };
+          params[params.version === "1.3.0" ? "i" : "x"] = point.x;
+          params[params.version === "1.3.0" ? "j" : "y"] = point.y;
+          const url = [layer._url] + new URLSearchParams(params);
+          urls.push(url);
+        }
+      }
+      return urls;
+    },
+    getFeatureInfo(evt) {
+      const urls = this.getFeatureInfoUrls(evt.latlng);
+      // eslint-disable-next-line no-unused-vars,no-undef
+      const popup = L.popup();
+      let cuerpo = "";
+      for (let url of urls) {
+        axios.get(url).then(response => {
+          cuerpo += response.data;
+          popup
+            .setLatLng(evt.latlng)
+            .setContent(cuerpo)
+            .openOn(this.$refs.map.mapObject);
+        });
+      }
     }
   },
   mounted() {
