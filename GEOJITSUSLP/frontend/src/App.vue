@@ -8,7 +8,8 @@
       mobile-break-point="320"
     >
       <v-list dense>
-        <v-list-item @click.stop="right = !right">
+        <!-- <v-list-item @click.stop="overright = !overright"> -->
+        <v-list-item>
           <v-list-item-action>
             <v-icon>mdi-exit-to-app</v-icon>
           </v-list-item-action>
@@ -16,7 +17,7 @@
             <v-list-item-title>Open Temporary Drawer</v-list-item-title>
           </v-list-item-content>
         </v-list-item>
-        <v-list-item @click.stop="right = !right">
+        <v-list-item>
           <v-list-item-action>
             <v-icon>mdi-exit-to-app</v-icon>
           </v-list-item-action>
@@ -76,19 +77,19 @@
       mobile-break-point="320"
     >
       <v-list dense>
-        <v-list-item @click.stop="left = !left">
+        <!-- <v-list-item @click.stop="overleft = !overleft"> -->
+        <v-list-item>
           <v-list-item-action>
             <v-icon>mdi-exit-to-app</v-icon>
           </v-list-item-action>
           <v-list-item-content>
-            <v-list-item-title>Open Temporary Drawer</v-list-item-title>
+            <v-list-item-title>Menú de opciones</v-list-item-title>
           </v-list-item-content>
         </v-list-item>
       </v-list>
     </v-navigation-drawer>
 
-    <v-navigation-drawer v-model="left" fixed temporary />
-
+    <v-navigation-drawer v-model="overleft" fixed temporary />
     <v-content>
       <v-container fluid fill-height class="container-map">
         <l-map
@@ -123,14 +124,74 @@
           />
           <l-control-layers />
         </l-map>
+        <v-speed-dial
+          v-model="fab"
+          :top="top"
+          :bottom="bottom"
+          :right="right"
+          :left="left"
+          :direction="direction"
+          :open-on-hover="hover"
+          :transition="transition"
+        >
+          <template v-slot:activator>
+            <v-btn v-model="fab" color="blue darken-2" dark fab>
+              <v-icon v-if="fab">mdi-close</v-icon>
+              <v-icon v-else>mdi-plus</v-icon>
+            </v-btn>
+          </template>
+          <v-btn fab dark small color="green" @click.stop="dialog = true; fab = false">
+            <v-icon>mdi-layers</v-icon>
+          </v-btn>
+          <v-btn fab dark small color="indigo">
+            <v-icon>mdi-layers</v-icon>
+          </v-btn>
+          <v-btn fab dark small color="purple">
+            <v-icon>mdi-layers</v-icon>
+          </v-btn>
+          <v-btn fab dark small color="red">
+            <v-icon>mdi-delete</v-icon>
+          </v-btn>
+        </v-speed-dial>
       </v-container>
     </v-content>
 
-    <v-navigation-drawer v-model="right" fixed right temporary />
+    <v-navigation-drawer v-model="overright" fixed right temporary />
 
     <v-footer app class="white--text" color="blue-grey">
       <span>Maptitude XYZ</span><v-spacer /><span>&copy; 2020 GeoJitsu</span>
     </v-footer>
+
+    <v-dialog v-model="dialog">
+      <v-card>
+        <v-card-title class="headline">Agregar capa filtrada de parcelas</v-card-title>
+
+        <v-card-text>
+          Seleccione el criterio de busqueda para mostrar solo los objetos que lo cumplan, como una capa nueva.
+        </v-card-text>
+
+        <v-card-actions>
+          <v-spacer></v-spacer>
+
+          <v-btn
+            color="green darken-1"
+            text
+            @click="dialog = false"
+          >
+            Cancelar
+          </v-btn>
+
+          <v-btn
+            color="green darken-1"
+            text
+            @click="dialog = false"
+          >
+            Agregar
+          </v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
+
   </v-app>
 </template>
 
@@ -162,10 +223,11 @@ export default {
     source: String
   },
   data: () => ({
+    loading: null,
     drawer: false,
     drawerRight: false,
-    right: false,
-    left: false,
+    overright: false,
+    overleft: false,
     zoom: 10,
     // eslint-disable-next-line no-undef
     center: L.latLng(22.16, -101.08),
@@ -204,7 +266,18 @@ export default {
         transparent: true,
         visible: false
       }
-    ]
+    ],
+    direction: "top",
+    fab: false,
+    fling: false,
+    hover: false,
+    tabs: null,
+    top: false,
+    right: false,
+    bottom: true,
+    left: true,
+    transition: "slide-y-reverse-transition",
+    dialog: false,
   }),
   methods: {
     getVisibleLayers() {
@@ -250,41 +323,62 @@ export default {
       return urls;
     },
     getFeatureInfo(evt) {
+      console.log(evt);
       const urls = this.getFeatureInfoUrls(evt.latlng);
       // eslint-disable-next-line no-unused-vars,no-undef
       const popup = L.popup();
       let cuerpo = "";
+      console.log(urls);
       for (let url of urls) {
-        axios.get(url).then(response => {
-          cuerpo += response.data;
-          popup
-            .setLatLng(evt.latlng)
-            .setContent(cuerpo)
-            .openOn(this.$refs.map.mapObject);
-        });
+        axios
+          .get(url)
+          .then(response => {
+            cuerpo += response.data;
+          })
+          .then(() => {
+            console.log(cuerpo.length);
+            if (cuerpo.length > 658) {
+              popup
+                .setLatLng(evt.latlng)
+                .setContent(cuerpo)
+                .openOn(this.$refs.map.mapObject);
+            }
+          });
       }
     }
   },
-  mounted() {
+  computed: {
+    activeFab() {
+      switch (this.tabs) {
+        case "one":
+          return { class: "purple", icon: "account_circle" };
+        case "two":
+          return { class: "red", icon: "edit" };
+        case "three":
+          return { class: "green", icon: "keyboard_arrow_up" };
+        default:
+          return {};
+      }
+    }
+  },
+  watch: {
+    top(val) {
+      this.bottom = !val;
+    },
+    right(val) {
+      this.left = !val;
+    },
+    bottom(val) {
+      this.top = !val;
+    },
+    left(val) {
+      this.right = !val;
+    }
+  },
+  created() {
     this.loading = true;
-    /* axios
-      .get("https://api.parcelas-slp.maptitude.xyz/rest/v2/municipios/")
-      .then(response => {
-        this.municipios = response.data;
-        this.loading = false;
-      });
-    axios
-      .get("https://api.parcelas-slp.maptitude.xyz/rest/v2/ejidos/")
-      .then(response => {
-        this.ejidos = response.data;
-        this.loading = false;
-      });
-    axios
-      .get("https://api.parcelas-slp.maptitude.xyz/rest/v2/parcelas/")
-      .then(response => {
-        this.parcelas = response.data;
-        this.loading = false;
-      }); */
+  },
+  mounted() {
     this.loading = false;
   }
 };
@@ -296,5 +390,18 @@ export default {
 }
 
 .white--text {
+}
+
+/* This is for documentation purposes and will not be needed in your application */
+#create .v-speed-dial {
+  position: absolute;
+}
+
+#create .v-btn--floating {
+  position: relative;
+}
+
+.v-speed-dial--bottom {
+  bottom: 72px;
 }
 </style>
