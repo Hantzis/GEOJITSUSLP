@@ -121,6 +121,7 @@
             :format="layer.format"
             :transparent="layer.transparent"
             :visible="layer.visible"
+            :options="layer.options"
           />
           <l-control-layers />
         </l-map>
@@ -140,7 +141,16 @@
               <v-icon v-else>mdi-plus</v-icon>
             </v-btn>
           </template>
-          <v-btn fab dark small color="green" @click.stop="dialog = true; fab = false">
+          <v-btn
+            fab
+            dark
+            small
+            color="green"
+            @click.stop="
+              dialog_green = true;
+              fab = false;
+            "
+          >
             <v-icon>mdi-layers</v-icon>
           </v-btn>
           <v-btn fab dark small color="indigo">
@@ -149,7 +159,13 @@
           <v-btn fab dark small color="purple">
             <v-icon>mdi-layers</v-icon>
           </v-btn>
-          <v-btn fab dark small color="red">
+          <v-btn
+            fab
+            dark
+            small
+            color="red"
+            @click="layers = layers.slice(0, 3)"
+          >
             <v-icon>mdi-delete</v-icon>
           </v-btn>
         </v-speed-dial>
@@ -162,36 +178,39 @@
       <span>Maptitude XYZ</span><v-spacer /><span>&copy; 2020 GeoJitsu</span>
     </v-footer>
 
-    <v-dialog v-model="dialog">
+    <v-dialog v-model="dialog_green">
       <v-card>
-        <v-card-title class="headline">Agregar capa filtrada de parcelas</v-card-title>
+        <v-card-title class="headline"
+          >Agregar capa filtrada de parcelas</v-card-title
+        >
 
         <v-card-text>
-          Seleccione el criterio de busqueda para mostrar solo los objetos que lo cumplan, como una capa nueva.
+          Seleccione el criterio de busqueda para mostrar solo los objetos que
+          lo cumplan, como una capa nueva.
+          <v-form ref="green-form" v-model="greenvalid" :lazy="lazy">
+            <v-select
+              v-model="select"
+              :items="items"
+              rules="[v => !!v || 'Item is required']"
+              label="Nombre"
+              required
+            />
+          </v-form>
         </v-card-text>
 
         <v-card-actions>
           <v-spacer></v-spacer>
 
-          <v-btn
-            color="green darken-1"
-            text
-            @click="dialog = false"
-          >
+          <v-btn color="green darken-1" text @click="dialog_green = false">
             Cancelar
           </v-btn>
 
-          <v-btn
-            color="green darken-1"
-            text
-            @click="dialog = false"
-          >
+          <v-btn color="green darken-1" text @click="putNewLayer('green')">
             Agregar
           </v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
-
   </v-app>
 </template>
 
@@ -204,7 +223,6 @@ import {
   LWMSTileLayer,
   LPopup
 } from "vue2-leaflet";
-// eslint-disable-next-line no-unused-vars
 import axios from "axios";
 
 export default {
@@ -229,6 +247,8 @@ export default {
     overright: false,
     overleft: false,
     zoom: 10,
+    lazy: false,
+    items: ["Item 1", "Item 2", "Item 3", "Item 4"],
     // eslint-disable-next-line no-undef
     center: L.latLng(22.16, -101.08),
     attribution: `&copy; <a href='http://osm.org/copyright'>OpenStreetMap</a> contributors`,
@@ -277,9 +297,27 @@ export default {
     bottom: true,
     left: true,
     transition: "slide-y-reverse-transition",
-    dialog: false,
+    dialog_green: false
   }),
   methods: {
+    putNewLayer(layer) {
+      console.log(layer);
+      this.dialog_green = false;
+      const new_layer = {
+        name: "Conafor",
+        layers: "PARCELASSLP:parcelas",
+        baseUrl:
+          "http://api.parcelas-slp.maptitude.xyz:8080/geoserver/PARCELASSLP/wms?",
+        format: "image/png8",
+        srs: "EPSG:4326",
+        transparent: true,
+        visible: true,
+        CQL_FILTER: "programa='Conafor'",
+        options: { CQL_FILTER: "programa='Conafor'" }
+      };
+      this.layers.push(new_layer);
+      console.log(this.layers);
+    },
     getVisibleLayers() {
       let activas = [];
       for (let layer of Object.entries(this.$refs.map.mapObject._layers)) {
@@ -323,21 +361,20 @@ export default {
       return urls;
     },
     getFeatureInfo(evt) {
-      console.log(evt);
       const urls = this.getFeatureInfoUrls(evt.latlng);
-      // eslint-disable-next-line no-unused-vars,no-undef
+      // eslint-disable-next-line no-undef
       const popup = L.popup();
       let cuerpo = "";
-      console.log(urls);
       for (let url of urls) {
         axios
           .get(url)
           .then(response => {
-            cuerpo += response.data;
+            if (response.data.length > 658) {
+              cuerpo += response.data;
+            }
           })
           .then(() => {
-            console.log(cuerpo.length);
-            if (cuerpo.length > 658) {
+            if (cuerpo.length > 0) {
               popup
                 .setLatLng(evt.latlng)
                 .setContent(cuerpo)
