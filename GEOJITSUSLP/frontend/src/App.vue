@@ -94,10 +94,10 @@
       <v-container fluid fill-height class="container-map">
         <l-map
           ref="map"
-          :zoom="zoom"
-          :center="center"
-          style="z-index: 0"
+          :zoom="Number(10)"
+          :center="[22.16, -101.08]"
           @click="getFeatureInfo"
+          style="z-index: 0"
         >
           <l-tile-layer
             name="Google Satellite"
@@ -126,38 +126,29 @@
           <l-control-layers />
         </l-map>
         <v-speed-dial
-          v-model="fab"
-          :top="top"
-          :bottom="bottom"
-          :right="right"
-          :left="left"
-          :direction="direction"
-          :open-on-hover="hover"
-          :transition="transition"
+          v-model="speed_dial.fab"
+          :top="speed_dial.top"
+          :bottom="speed_dial.bottom"
+          :right="speed_dial.right"
+          :left="speed_dial.left"
+          :direction="speed_dial.direction"
+          :open-on-hover="speed_dial.hover"
+          :transition="speed_dial.transition"
         >
           <template v-slot:activator>
-            <v-btn v-model="fab" color="blue darken-2" dark fab>
-              <v-icon v-if="fab">mdi-close</v-icon>
-              <v-icon v-else>mdi-plus</v-icon>
+            <v-btn v-model="speed_dial.fab" color="blue darken-2" dark fab>
+              <v-icon v-if="speed_dial.fab">mdi-close</v-icon>
+              <v-icon v-else>mdi-layers</v-icon>
             </v-btn>
           </template>
-          <v-btn
-            fab
-            dark
-            small
-            color="green"
-            @click.stop="
-              dialog_green = true;
-              fab = false;
-            "
-          >
-            <v-icon>mdi-layers</v-icon>
+          <v-btn fab dark small color="green" @click.stop="openGreenDialog">
+            <v-icon>mdi-plus</v-icon>
           </v-btn>
           <v-btn fab dark small color="indigo">
-            <v-icon>mdi-layers</v-icon>
+            <v-icon>mdi-plus</v-icon>
           </v-btn>
           <v-btn fab dark small color="purple">
-            <v-icon>mdi-layers</v-icon>
+            <v-icon>mdi-plus</v-icon>
           </v-btn>
           <v-btn
             fab
@@ -200,11 +191,9 @@
 
         <v-card-actions>
           <v-spacer></v-spacer>
-
           <v-btn color="green darken-1" text @click="dialog_green = false">
             Cancelar
           </v-btn>
-
           <v-btn color="green darken-1" text @click="putNewLayer('green')">
             Agregar
           </v-btn>
@@ -252,9 +241,6 @@ export default {
     // eslint-disable-next-line no-undef
     center: L.latLng(22.16, -101.08),
     attribution: `&copy; <a href='http://osm.org/copyright'>OpenStreetMap</a> contributors`,
-    municipios: null,
-    ejidos: null,
-    parcelas: null,
     layers: [
       {
         name: "Municipios",
@@ -274,7 +260,7 @@ export default {
         format: "image/png8",
         srs: "EPSG:4326",
         transparent: true,
-        visible: false
+        visible: true
       },
       {
         name: "Parcelas",
@@ -287,19 +273,32 @@ export default {
         visible: false
       }
     ],
-    direction: "top",
-    fab: false,
-    fling: false,
-    hover: false,
+    speed_dial: {
+      fab: false,
+      direction: "top",
+      hover: false,
+      top: false,
+      right: false,
+      bottom: true,
+      left: true,
+      transition: "slide-y-reverse-transition"
+    },
     tabs: null,
-    top: false,
-    right: false,
-    bottom: true,
-    left: true,
-    transition: "slide-y-reverse-transition",
-    dialog_green: false
+    dialog_green: false,
+    greenvalid: false
   }),
   methods: {
+    openGreenDialog() {
+      this.dialog_green = true;
+      this.speed_dial.fab = false;
+    },
+    dialogGreen(open) {
+      if (open) {
+        this.dialog_green = true;
+      } else {
+        this.dialog_green = false;
+      }
+    },
     putNewLayer(layer) {
       console.log(layer);
       this.dialog_green = false;
@@ -400,16 +399,16 @@ export default {
   },
   watch: {
     top(val) {
-      this.bottom = !val;
+      this.speed_dial.bottom = !val;
     },
     right(val) {
-      this.left = !val;
+      this.speed_dial.left = !val;
     },
     bottom(val) {
-      this.top = !val;
+      this.speed_dial.top = !val;
     },
     left(val) {
-      this.right = !val;
+      this.speed_dial.right = !val;
     }
   },
   created() {
