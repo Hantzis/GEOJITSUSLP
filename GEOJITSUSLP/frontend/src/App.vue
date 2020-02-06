@@ -108,7 +108,7 @@
           <l-tile-layer
             name="Open Street Map"
             url="https://{s}.tile.osm.org/{z}/{x}/{y}.png"
-            attribution="OpenStreetMap"
+            attribution="&copy; <a href='http://osm.org/copyright'>OpenStreetMap</a> contributors"
             layer-type="base"
           />
           <l-w-m-s-tile-layer
@@ -174,18 +174,55 @@
         <v-card-title class="headline"
           >Agregar capa filtrada de parcelas</v-card-title
         >
-
         <v-card-text>
-          Seleccione el criterio de busqueda para mostrar solo los objetos que
-          lo cumplan, como una capa nueva.
+          Asigne un nombre a la nueva capa y seleccione el criterio de busqueda
+          para mostrar solo los objetos que lo cumplan.
           <v-form ref="green-form" v-model="greenvalid" :lazy="lazy">
-            <v-select
-              v-model="select"
-              :items="items"
-              rules="[v => !!v || 'Item is required']"
-              label="Nombre"
-              required
-            />
+            <v-container>
+              <v-row>
+                <v-col>
+                  <h2>Agregar capa filtrada de parcelas</h2>
+                  <hr /><br />
+                  <p>Agregar capa filtrada de parcelas</p>
+                </v-col>
+              </v-row>
+              <v-row>
+                <v-col>
+                  <v-text-field
+                    v-model="parcelas_nombre_capa"
+                    :rules="parcela_nombre_capa_rules"
+                    label="Nombre capa"
+                    required
+                  ></v-text-field>
+                </v-col>
+              </v-row>
+              <v-row>
+                <v-col cols="12" md="6">
+                  <v-select
+                    v-model="parcelas_nombre_parcela"
+                    :items="items"
+                    :rules="parcela_nombre_parcela_rules"
+                    label="NFSDF"
+                    required
+                  />
+                </v-col>
+                <v-col cols="12" md="6">
+                  <v-text-field
+                    v-model="parcelas_nombre_capa"
+                    :rules="parcela_nombre_capa_rules"
+                    label="Nombre capa"
+                    required
+                  ></v-text-field>
+                </v-col>
+              </v-row>
+              <v-select
+                v-model="parcelas_nombre_parcela"
+                :items="items"
+                :rules="parcela_nombre_parcela_rules"
+                label="NFSDF"
+                required
+              />
+            </v-container>
           </v-form>
         </v-card-text>
 
@@ -235,12 +272,14 @@ export default {
     drawerRight: false,
     overright: false,
     overleft: false,
-    zoom: 10,
-    lazy: false,
+    lazy: true,
     items: ["Item 1", "Item 2", "Item 3", "Item 4"],
-    // eslint-disable-next-line no-undef
-    center: L.latLng(22.16, -101.08),
-    attribution: `&copy; <a href='http://osm.org/copyright'>OpenStreetMap</a> contributors`,
+    parcela_nombre_capa_rules: [
+      v => !!v || "Nombre de capa es obligatorio",
+      v => v.length <= 100 || "El nombre debe tener menos de 100 caracteres",
+      v => v.length >= 3 || "El nombre debe tener más de 3 caracteres"
+    ],
+    parcela_nombre_parcela_rules: [v => !!v || "Name is required"],
     layers: [
       {
         name: "Municipios",
@@ -292,13 +331,10 @@ export default {
       this.dialog_green = true;
       this.speed_dial.fab = false;
     },
-    dialogGreen(open) {
-      if (open) {
-        this.dialog_green = true;
-      } else {
-        this.dialog_green = false;
-      }
+    closeGreenDialog() {
+      this.dialog_green = false;
     },
+
     putNewLayer(layer) {
       console.log(layer);
       this.dialog_green = false;
@@ -306,7 +342,7 @@ export default {
         name: "Conafor",
         layers: "PARCELASSLP:parcelas",
         baseUrl:
-          "http://api.parcelas-slp.maptitude.xyz:8080/geoserver/PARCELASSLP/wms?",
+          "https://api.parcelas-slp.maptitude.xyz/geoserver/PARCELASSLP/wms?",
         format: "image/png8",
         srs: "EPSG:4326",
         transparent: true,
