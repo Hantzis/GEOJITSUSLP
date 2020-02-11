@@ -182,7 +182,8 @@
               <v-row>
                 <v-col>
                   <h2>Agregar capa filtrada de parcelas</h2>
-                  <hr /><br />
+                  <hr />
+                  <br />
                   <p>Agregar capa filtrada de parcelas</p>
                 </v-col>
               </v-row>
@@ -197,31 +198,21 @@
                 </v-col>
               </v-row>
               <v-row>
-                <v-col cols="12" md="6">
+                <v-col cols="12" sm="4" dense>
                   <v-select
-                    v-model="parcelas_nombre_parcela"
-                    :items="items"
-                    :rules="parcela_nombre_parcela_rules"
-                    label="NFSDF"
-                    required
+                    label="Nombre de parcela"
+                    v-model="tipo_nombre_parcelas_text"
+                    :items="tipo_nombre_parcelas"
                   />
                 </v-col>
-                <v-col cols="12" md="6">
+                <v-col cols="12" sm="8" dense>
                   <v-text-field
-                    v-model="parcelas_nombre_capa"
-                    :rules="parcela_nombre_capa_rules"
-                    label="Nombre capa"
-                    required
+                    :label="tipo_nombre_parcelas_text"
+                    :required="required"
+                    :disabled="disabled"
                   ></v-text-field>
                 </v-col>
               </v-row>
-              <v-select
-                v-model="parcelas_nombre_parcela"
-                :items="items"
-                :rules="parcela_nombre_parcela_rules"
-                label="NFSDF"
-                required
-              />
             </v-container>
           </v-form>
         </v-card-text>
@@ -267,15 +258,24 @@ export default {
     source: String
   },
   data: () => ({
+    required: false,
+    disabled: true,
+    tipo_nombre_parcelas_text: "",
+    parcelas_nombre_capa: "",
     loading: null,
     drawer: false,
     drawerRight: false,
     overright: false,
     overleft: false,
     lazy: true,
-    items: ["Item 1", "Item 2", "Item 3", "Item 4"],
+    tipo_nombre_parcelas: [
+      "Exactamente",
+      "Comienza con %",
+      "%Termina con",
+      "%Contiene%"
+    ],
+    tipo_nombre_parcelas_seleccionado: "",
     parcela_nombre_capa_rules: [
-      v => !!v || "Nombre de capa es obligatorio",
       v => v.length <= 100 || "El nombre debe tener menos de 100 caracteres",
       v => v.length >= 3 || "El nombre debe tener más de 3 caracteres"
     ],
@@ -434,6 +434,18 @@ export default {
     }
   },
   watch: {
+    tipo_nombre_parcelas_text(val) {
+      console.log(val);
+      console.log(this.disabled);
+      console.log(this.required);
+      if (val != "") {
+        this.disabled = false;
+        this.required = true;
+      } else {
+        this.disabled = true;
+        this.required = false;
+      }
+    },
     top(val) {
       this.speed_dial.bottom = !val;
     },
