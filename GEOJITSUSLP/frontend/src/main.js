@@ -8,6 +8,9 @@ import "@babel/polyfill";
 import "roboto-fontface/css/roboto/roboto-fontface.css";
 import "@mdi/font/css/materialdesignicons.css";
 
+import VueMask from "v-mask";
+Vue.use(VueMask);
+
 Vue.config.productionTip = false;
 
 new Vue({

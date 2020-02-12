@@ -203,13 +203,19 @@
                     label="Nombre de parcela"
                     v-model="tipo_nombre_parcelas_text"
                     :items="tipo_nombre_parcelas"
+                    clearable
                   />
                 </v-col>
                 <v-col cols="12" sm="8" dense>
                   <v-text-field
+                    v-model="nombre_parcelas_text"
                     :label="tipo_nombre_parcelas_text"
                     :required="required"
                     :disabled="disabled"
+                    :v-mask="nombre_parcelas_mask"
+                    :rules="parcela_nombre_parcela_rules"
+                    :hint="hint"
+                    prepend-inner-icon="mdi-place"
                   ></v-text-field>
                 </v-col>
               </v-row>
@@ -261,6 +267,7 @@ export default {
     required: false,
     disabled: true,
     tipo_nombre_parcelas_text: "",
+    nombre_parcelas_text: "",
     parcelas_nombre_capa: "",
     loading: null,
     drawer: false,
@@ -268,18 +275,20 @@ export default {
     overright: false,
     overleft: false,
     lazy: true,
+    nombre_parcelas_mask: "'####-##'",
     tipo_nombre_parcelas: [
       "Exactamente",
       "Comienza con %",
-      "%Termina con",
-      "%Contiene%"
+      "% Termina con",
+      "% Contiene %"
     ],
+    hint: "hint",
     tipo_nombre_parcelas_seleccionado: "",
     parcela_nombre_capa_rules: [
       v => v.length <= 100 || "El nombre debe tener menos de 100 caracteres",
       v => v.length >= 3 || "El nombre debe tener más de 3 caracteres"
     ],
-    parcela_nombre_parcela_rules: [v => !!v || "Name is required"],
+    parcela_nombre_parcela_rules: "[]",
     layers: [
       {
         name: "Municipios",
@@ -436,14 +445,44 @@ export default {
   watch: {
     tipo_nombre_parcelas_text(val) {
       console.log(val);
-      console.log(this.disabled);
-      console.log(this.required);
-      if (val != "") {
+      console.log("dis", this.disabled);
+      console.log("req", this.required);
+      if (val) {
+        console.log("VAL: ", val);
         this.disabled = false;
         this.required = true;
+        console.log("dis", this.disabled);
+        console.log("req", this.required);
+        this.parcela_nombre_parcela_rules = [v => !!v || "Name is required"];
+        if (val === "Exactamente") {
+          this.nombre_parcelas_mask = "''";
+        } else if (val === "Comienza con %") {
+          this.nombre_parcelas_mask = "'####-##'%";
+        } else if (val === "% Termina con") {
+          this.nombre_parcelas_mask = "%'####-##'";
+        } else if (val === "% Contiene %") {
+          this.nombre_parcelas_mask = "%'####-##'%";
+        } else {
+          this.nombre_parcelas_mask = "''";
+          this.required = false;
+          this.disabled = true;
+          this.nombre_parcelas_text = undefined;
+          this.tipo_nombre_parcelas_text = undefined;
+          this.parcela_nombre_parcela_rules = [v => !!v || ""];
+          this.hint = "";
+        }
+        /*
+        nombre_parcelas_mask
+        tipo_nombre_parcelas: [
+         "Exactamente",
+         "Comienza con %",
+         "% Termina con",
+         "% Contiene %"
+        ],
+        */
       } else {
-        this.disabled = true;
         this.required = false;
+        this.disabled = true;
       }
     },
     top(val) {
