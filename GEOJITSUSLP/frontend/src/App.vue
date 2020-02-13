@@ -214,7 +214,6 @@
                     :disabled="disabled"
                     :v-mask="nombre_parcelas_mask"
                     :rules="parcela_nombre_parcela_rules"
-                    :hint="hint"
                     prepend-inner-icon="mdi-place"
                   ></v-text-field>
                 </v-col>
@@ -282,7 +281,6 @@ export default {
       "% Termina con",
       "% Contiene %"
     ],
-    hint: "hint",
     tipo_nombre_parcelas_seleccionado: "",
     parcela_nombre_capa_rules: [
       v => v.length <= 100 || "El nombre debe tener menos de 100 caracteres",
@@ -457,11 +455,11 @@ export default {
         if (val === "Exactamente") {
           this.nombre_parcelas_mask = "''";
         } else if (val === "Comienza con %") {
-          this.nombre_parcelas_mask = "'####-##'%";
+          this.nombre_parcelas_mask = "''";
         } else if (val === "% Termina con") {
-          this.nombre_parcelas_mask = "%'####-##'";
+          this.nombre_parcelas_mask = "''";
         } else if (val === "% Contiene %") {
-          this.nombre_parcelas_mask = "%'####-##'%";
+          this.nombre_parcelas_mask = "''";
         } else {
           this.nombre_parcelas_mask = "''";
           this.required = false;
@@ -469,7 +467,6 @@ export default {
           this.nombre_parcelas_text = undefined;
           this.tipo_nombre_parcelas_text = undefined;
           this.parcela_nombre_parcela_rules = [v => !!v || ""];
-          this.hint = "";
         }
         /*
         nombre_parcelas_mask
