@@ -286,7 +286,7 @@ export default {
       v => v.length <= 100 || "El nombre debe tener menos de 100 caracteres",
       v => v.length >= 3 || "El nombre debe tener más de 3 caracteres"
     ],
-    parcela_nombre_parcela_rules: "[]",
+    parcela_nombre_parcela_rules: [],
     layers: [
       {
         name: "Municipios",
@@ -358,7 +358,6 @@ export default {
         options: { CQL_FILTER: "programa='Conafor'" }
       };
       this.layers.push(new_layer);
-      console.log(this.layers);
     },
     getVisibleLayers() {
       let activas = [];
@@ -394,6 +393,9 @@ export default {
             info_format: "text/html",
             styles: layer.styles || ""
           };
+          if (layer.wmsParams.CQL_FILTER) {
+            params.CQL_FILTER = layer.wmsParams.CQL_FILTER;
+          }
           params[params.version === "1.3.0" ? "i" : "x"] = point.x;
           params[params.version === "1.3.0" ? "j" : "y"] = point.y;
           const url = [layer._url] + new URLSearchParams(params);
@@ -412,7 +414,9 @@ export default {
           .get(url)
           .then(response => {
             if (response.data.length > 658) {
-              cuerpo += response.data;
+              if (!cuerpo.includes(response.data)) {
+                cuerpo += response.data;
+              }
             }
           })
           .then(() => {

@@ -101,9 +101,9 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.contrib.gis.db.backends.postgis',
         'HOST': 'localhost',
-        'NAME': 'maptitude_slp',
+        'NAME': 'geojitsuslp',
         'USER': 'maptitude',
-        'PASSWORD': 'irna3ev8',
+        'PASSWORD': 'irnA3ev8',
     }
 }
 
@@ -124,7 +124,7 @@ GDAL_LIBRARY_PATH = OSGEO_VENV + r'\gdal300.dll'
 GDAL_DRIVER_PATH = OSGEO_VENV + r'\gdalplugins'
 GDAL_DATA = OSGEO_VENV + r'\data'
 PROJ_LIB = GDAL_DATA + r'\proj'
-
+# PROJ_LIB = r'C:\WPy64-3810\python-3.8.1.amd64\Lib\site-packages\pyproj\proj_dir\share\proj'
 
 os.environ["PATH"] += os.pathsep + str(OSGEO_VENV)
 os.environ["PATH"] += os.pathsep + str(GDAL_DATA)

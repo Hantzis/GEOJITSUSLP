@@ -9,3 +9,5 @@ router.register('ejidos', EjidoViewSet)
 router.register('parcelas', ParcelaViewSet)
 
 urlpatterns = router.urls
+
+
