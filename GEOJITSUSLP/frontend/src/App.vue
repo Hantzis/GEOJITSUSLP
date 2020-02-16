@@ -175,16 +175,14 @@
           >Agregar capa filtrada de parcelas</v-card-title
         >
         <v-card-text>
-          Asigne un nombre a la nueva capa y seleccione el criterio de busqueda
-          para mostrar solo los objetos que lo cumplan.
           <v-form ref="green-form" v-model="greenvalid" :lazy="lazy">
             <v-container>
               <v-row>
                 <v-col>
-                  <h2>Agregar capa filtrada de parcelas</h2>
-                  <hr />
-                  <br />
-                  <p>Agregar capa filtrada de parcelas</p>
+                  <p>
+                    Asigne un nombre a la nueva capa y seleccione el criterio de
+                    busqueda para mostrar solo los objetos que lo cumplan.
+                  </p>
                 </v-col>
               </v-row>
               <v-row>
@@ -215,7 +213,48 @@
                     :v-mask="nombre_parcelas_mask"
                     :rules="parcela_nombre_parcela_rules"
                     prepend-inner-icon="mdi-place"
-                    :class="{ 'v-input--is-focused': disabled }"
+                  ></v-text-field>
+                </v-col>
+              </v-row>
+              <v-row>
+                <v-col cols="12" sm="4" dense>
+                  <v-select
+                    label="Nombre de propietario"
+                    v-model="tipo_nombre_parcelas_text"
+                    :items="tipo_nombre_parcelas"
+                    clearable
+                  />
+                </v-col>
+                <v-col cols="12" sm="8" dense>
+                  <v-text-field
+                    v-model="nombre_parcelas_text"
+                    :label="tipo_nombre_parcelas_text"
+                    :required="required"
+                    :disabled="disabled"
+                    :v-mask="nombre_parcelas_mask"
+                    :rules="parcela_nombre_parcela_rules"
+                    prepend-inner-icon="mdi-place"
+                  ></v-text-field>
+                </v-col>
+              </v-row>
+              <v-row>
+                <v-col cols="12" sm="4" dense>
+                  <v-select
+                    label="Programa al que pertenece"
+                    v-model="tipo_nombre_parcelas_text"
+                    :items="tipo_nombre_parcelas"
+                    clearable
+                  />
+                </v-col>
+                <v-col cols="12" sm="8" dense>
+                  <v-text-field
+                    v-model="nombre_parcelas_text"
+                    :label="tipo_nombre_parcelas_text"
+                    :required="required"
+                    :disabled="disabled"
+                    :v-mask="nombre_parcelas_mask"
+                    :rules="parcela_nombre_parcela_rules"
+                    prepend-inner-icon="mdi-place"
                   ></v-text-field>
                 </v-col>
               </v-row>
