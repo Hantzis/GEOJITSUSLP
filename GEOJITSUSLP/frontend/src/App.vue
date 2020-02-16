@@ -215,6 +215,7 @@
                     :v-mask="nombre_parcelas_mask"
                     :rules="parcela_nombre_parcela_rules"
                     prepend-inner-icon="mdi-place"
+                    :class="{ 'v-input--is-focused': disabled }"
                   ></v-text-field>
                 </v-col>
               </v-row>
@@ -455,7 +456,9 @@ export default {
         this.required = true;
         console.log("dis", this.disabled);
         console.log("req", this.required);
-        this.parcela_nombre_parcela_rules = [v => !!v || "Name is required"];
+        this.parcela_nombre_parcela_rules = [
+          v => !!v || "Este campo es obligatorio"
+        ];
         if (val === "Exactamente") {
           this.nombre_parcelas_mask = "''";
         } else if (val === "Comienza con %") {
@@ -468,22 +471,16 @@ export default {
           this.nombre_parcelas_mask = "''";
           this.required = false;
           this.disabled = true;
-          this.nombre_parcelas_text = undefined;
-          this.tipo_nombre_parcelas_text = undefined;
-          this.parcela_nombre_parcela_rules = [v => !!v || ""];
+          this.parcela_nombre_parcela_rules = [];
         }
-        /*
-        nombre_parcelas_mask
-        tipo_nombre_parcelas: [
-         "Exactamente",
-         "Comienza con %",
-         "% Termina con",
-         "% Contiene %"
-        ],
-        */
       } else {
         this.required = false;
         this.disabled = true;
+        this.parcela_nombre_parcela_rules = [];
+        this.nombre_parcelas_text = undefined;
+        console.log(val);
+        console.log("dis", this.disabled);
+        console.log("req", this.required);
       }
     },
     top(val) {

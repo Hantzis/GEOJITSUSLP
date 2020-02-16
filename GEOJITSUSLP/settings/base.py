@@ -126,9 +126,9 @@ GDAL_DATA = OSGEO_VENV + r'\data'
 PROJ_LIB = GDAL_DATA + r'\proj'
 # PROJ_LIB = r'C:\WPy64-3810\python-3.8.1.amd64\Lib\site-packages\pyproj\proj_dir\share\proj'
 
-os.environ["PATH"] += os.pathsep + str(OSGEO_VENV)
-os.environ["PATH"] += os.pathsep + str(GDAL_DATA)
-os.environ["PATH"] += os.pathsep + str(PROJ_LIB)
+# os.environ["PATH"] += os.pathsep + str(OSGEO_VENV)
+# os.environ["PATH"] += os.pathsep + str(GDAL_DATA)
+# os.environ["PATH"] += os.pathsep + str(PROJ_LIB)
 
 
 REST_FRAMEWORK = {

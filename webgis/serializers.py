@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from rest_framework_gis.serializers import GeoFeatureModelSerializer
+from rest_framework_gis.serializers import GeoFeatureModelSerializer, ModelSerializer
 from . models import Municipio, Ejido, Parcela
 
 
@@ -24,3 +24,7 @@ class ParcelaSerializer(GeoFeatureModelSerializer):
         fields = '__all__'
         geo_field = 'geom'
 
+class ParcelaNombreSerializer(ModelSerializer):
+    class Meta:
+        model = Parcela
+        fields = ('nombre_parcela',)
