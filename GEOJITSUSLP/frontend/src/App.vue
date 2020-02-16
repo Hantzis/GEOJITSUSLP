@@ -200,7 +200,7 @@
                   <v-select
                     label="Nombre de parcela"
                     v-model="tipo_nombre_parcelas_text"
-                    :items="tipo_nombre_parcelas"
+                    :items="tipo_filtro_string"
                     clearable
                   />
                 </v-col>
@@ -210,9 +210,7 @@
                     :label="tipo_nombre_parcelas_text"
                     :required="required"
                     :disabled="disabled"
-                    :v-mask="nombre_parcelas_mask"
-                    :rules="parcela_nombre_parcela_rules"
-                    prepend-inner-icon="mdi-place"
+                    prepend-inner-icon="mdi-maps"
                   ></v-text-field>
                 </v-col>
               </v-row>
@@ -221,7 +219,7 @@
                   <v-select
                     label="Nombre de propietario"
                     v-model="tipo_nombre_parcelas_text"
-                    :items="tipo_nombre_parcelas"
+                    :items="tipo_filtro_string"
                     clearable
                   />
                 </v-col>
@@ -231,7 +229,6 @@
                     :label="tipo_nombre_parcelas_text"
                     :required="required"
                     :disabled="disabled"
-                    :v-mask="nombre_parcelas_mask"
                     :rules="parcela_nombre_parcela_rules"
                     prepend-inner-icon="mdi-place"
                   ></v-text-field>
@@ -241,20 +238,20 @@
                 <v-col cols="12" sm="4" dense>
                   <v-select
                     label="Programa al que pertenece"
-                    v-model="tipo_nombre_parcelas_text"
-                    :items="tipo_nombre_parcelas"
+                    v-model="tipo_filtro_programa"
+                    :items="tipo_filtro_string"
                     clearable
                   />
                 </v-col>
                 <v-col cols="12" sm="8" dense>
                   <v-text-field
-                    v-model="nombre_parcelas_text"
-                    :label="tipo_nombre_parcelas_text"
-                    :required="required"
-                    :disabled="disabled"
-                    :v-mask="nombre_parcelas_mask"
+                    v-model="parcela.programa.texto"
+                    :label="tipo_filtro_programa"
+                    :required="parcela.programa.texto_required"
+                    :disabled="parcela.programa.texto_disabled"
                     :rules="parcela_nombre_parcela_rules"
                     prepend-inner-icon="mdi-place"
+                    :hint="hint_programa"
                   ></v-text-field>
                 </v-col>
               </v-row>
@@ -303,25 +300,74 @@ export default {
     source: String
   },
   data: () => ({
+    parcela: {
+      programa: {
+        texto: "",
+        texto_required: false,
+        texto_disabled: true
+      },
+      nombre: {
+        texto: "",
+        texto_required: false,
+        texto_disabled: true
+      },
+      propietario: {
+        texto: "",
+        texto_required: false,
+        texto_disabled: true
+      }
+    },
     required: false,
     disabled: true,
     tipo_nombre_parcelas_text: "",
     nombre_parcelas_text: "",
     parcelas_nombre_capa: "",
+    tipo_filtro_parcela: "",
+    tipo_filtro_propietario: "",
+    tipo_filtro_programa: "",
     loading: null,
     drawer: false,
     drawerRight: false,
     overright: false,
     overleft: false,
     lazy: true,
-    nombre_parcelas_mask: "'####-##'",
-    tipo_nombre_parcelas: [
-      "Exactamente",
-      "Comienza con %",
-      "% Termina con",
-      "% Contiene %"
+    tipo_filtro_string: [
+      "Igual a",
+      "No igual a",
+      "Comienza con",
+      "Termina con",
+      "Contiene",
+      "No contiene",
+      "Falta (es nulo)",
+      "No falta (no es nulo)",
+      "En",
+      "No En"
     ],
-    tipo_nombre_parcelas_seleccionado: "",
+    hint_parcela: "",
+    hint_propietario: "",
+    hint_programa: "",
+    tipo_nombre_parcelas_hints: {
+      "Igual a":
+        "Seleccionar para este campo todos los elementos que coinciden exactamente ( = )",
+      "No igual a":
+        "Seleccionar para este campo todos los elementos que son diferentes exactamente ( != )",
+      "Comienza con":
+        "Seleccionar para este campo todos los elementos que contienen este texto al inicio ( LIKE 'inicia%' )",
+      "Termina con":
+        "Seleccionar para este campo todos los elementos que contienen este texto al final ( LIKE '%termina' )",
+      Contiene:
+        "Seleccionar para este campo todos los elementos que contienen este texto ( LIKE '%contiene%' )",
+      "No contiene":
+        "Seleccionar para este campo todos los elementos que no contienen este texto al final ( NOT LIKE '%termina%' )",
+      "Falta (es nulo)":
+        "Seleccionar para este campo todos elementos que tienen este campo vacío ( IS NULL )",
+      "No falta (no es nulo)":
+        "Seleccionar para este campo todos los elementos que no tienen este campo vacío ( IS NOT NULL )",
+      En:
+        "Seleccionar para este campo los elementos que coinciden con alguno de los objetos seleccionados ( IN (tupla, ) ) ",
+      "No en":
+        "Seleccionar para este campo los elementos que no coinciden con alguno de los objetos seleccionados ( NOT IN (tupla, ) ) "
+    },
     parcela_nombre_capa_rules: [
       v => v.length <= 100 || "El nombre debe tener menos de 100 caracteres",
       v => v.length >= 3 || "El nombre debe tener más de 3 caracteres"
@@ -498,20 +544,6 @@ export default {
         this.parcela_nombre_parcela_rules = [
           v => !!v || "Este campo es obligatorio"
         ];
-        if (val === "Exactamente") {
-          this.nombre_parcelas_mask = "''";
-        } else if (val === "Comienza con %") {
-          this.nombre_parcelas_mask = "''";
-        } else if (val === "% Termina con") {
-          this.nombre_parcelas_mask = "''";
-        } else if (val === "% Contiene %") {
-          this.nombre_parcelas_mask = "''";
-        } else {
-          this.nombre_parcelas_mask = "''";
-          this.required = false;
-          this.disabled = true;
-          this.parcela_nombre_parcela_rules = [];
-        }
       } else {
         this.required = false;
         this.disabled = true;
@@ -520,6 +552,30 @@ export default {
         console.log(val);
         console.log("dis", this.disabled);
         console.log("req", this.required);
+      }
+    },
+    tipo_filtro_programa(val) {
+      console.log(val);
+      console.log("dis", this.parcela.programa.texto_disabled);
+      console.log("req", this.parcela.programa.texto_required);
+      if (val) {
+        console.log("VAL: ", val);
+        this.hint_programa = this.tipo_nombre_parcelas_hints[val];
+        this.parcela.programa.texto_disabled = false;
+        this.parcela.programa.texto_required = true;
+        console.log("dis", this.parcela.programa.texto_disabled);
+        console.log("req", this.parcela.programa.texto_required);
+        this.parcela_nombre_parcela_rules = [
+          v => !!v || "Este campo es obligatorio"
+        ];
+      } else {
+        this.parcela.programa.texto_required = false;
+        this.parcela.programa.texto_disabled = true;
+        this.parcela_nombre_parcela_rules = [];
+        this.parcela.programa.texto = undefined;
+        console.log(val);
+        console.log("dis", this.parcela.programa.texto_disabled);
+        console.log("req", this.parcela.programa.texto_required);
       }
     },
     top(val) {
