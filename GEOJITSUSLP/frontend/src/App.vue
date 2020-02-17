@@ -238,20 +238,19 @@
                 <v-col cols="12" sm="4" dense>
                   <v-select
                     label="Programa al que pertenece"
-                    v-model="tipo_filtro_programa"
+                    v-model="parcela_programa_filtro_tipo"
                     :items="tipo_filtro_string"
                     clearable
                   />
                 </v-col>
                 <v-col cols="12" sm="8" dense>
                   <v-text-field
-                    v-model="parcela.programa.texto"
+                    v-model="parcela_programa_filtro_texto"
                     :label="tipo_filtro_programa"
-                    :required="parcela.programa.texto_required"
-                    :disabled="parcela.programa.texto_disabled"
+                    :required="parcela_programa_filtro_texto_required"
+                    :disabled="parcela_programa_filtro_texto_disabled"
                     :rules="parcela_nombre_parcela_rules"
-                    prepend-inner-icon="mdi-place"
-                    :hint="hint_programa"
+                    :hint="hint_parcela_programa"
                   ></v-text-field>
                 </v-col>
               </v-row>
@@ -300,6 +299,11 @@ export default {
     source: String
   },
   data: () => ({
+    parcela_programa_filtro_tipo: undefined,
+    parcela_programa_filtro_texto: undefined,
+    parcela_programa_filtro_texto_required: false,
+    parcela_programa_filtro_texto_disabled: true,
+
     parcela: {
       programa: {
         texto: "",
@@ -319,8 +323,8 @@ export default {
     },
     required: false,
     disabled: true,
-    tipo_nombre_parcelas_text: "",
-    nombre_parcelas_text: "",
+    tipo_nombre_parcelas_text: undefined,
+    nombre_parcelas_text: undefined,
     parcelas_nombre_capa: "",
     tipo_filtro_parcela: "",
     tipo_filtro_propietario: "",
@@ -345,8 +349,8 @@ export default {
     ],
     hint_parcela: "",
     hint_propietario: "",
-    hint_programa: "",
-    tipo_nombre_parcelas_hints: {
+    hint_parcela_programa: "",
+    nombre_filtro_hints: {
       "Igual a":
         "Seleccionar para este campo todos los elementos que coinciden exactamente ( = )",
       "No igual a":
@@ -358,7 +362,7 @@ export default {
       Contiene:
         "Seleccionar para este campo todos los elementos que contienen este texto ( LIKE '%contiene%' )",
       "No contiene":
-        "Seleccionar para este campo todos los elementos que no contienen este texto al final ( NOT LIKE '%termina%' )",
+        "Seleccionar para este campo todos los elementos que no contienen este texto al final ( NOT LIKE '%contiene%' )",
       "Falta (es nulo)":
         "Seleccionar para este campo todos elementos que tienen este campo vacío ( IS NULL )",
       "No falta (no es nulo)":
@@ -531,64 +535,116 @@ export default {
     }
   },
   watch: {
-    tipo_nombre_parcelas_text(val) {
+    parcela_nombre_filtro_tipo(val) {
       console.log(val);
-      console.log("dis", this.disabled);
-      console.log("req", this.required);
+      console.log("dis", this.parcela_programa_filtro_texto_disabled);
+      console.log("req", this.parcela_programa_filtro_texto_required);
       if (val) {
         console.log("VAL: ", val);
-        this.disabled = false;
-        this.required = true;
-        console.log("dis", this.disabled);
-        console.log("req", this.required);
+        this.hint_parcela_nombre = this.nombre_filtro_hints[val];
+        this.parcela_nombre_filtro_texto_disabled = false;
+        this.parcela_nombre_filtro_texto_required = true;
+        console.log("dis", this.parcela_nombre_filtro_texto_disabled);
+        console.log("req", this.parcela_nombre_filtro_texto_required);
         this.parcela_nombre_parcela_rules = [
           v => !!v || "Este campo es obligatorio"
         ];
+        if (val === "Falta (es nulo)") {
+          this.parcela_nombre_parcela_rules = [];
+          this.parcela_nombre_filtro_texto_required = false;
+          this.parcela_nombre_filtro_texto_disabled = true;
+          this.parcela_nombre_filtro_texto = undefined;
+        }
+        if (val === "No falta (no es nulo)") {
+          this.parcela_nombre_parcela_rules = [];
+          this.parcela_programa_filtro_texto_required = false;
+          this.parcela_programa_filtro_texto_disabled = true;
+          this.parcela_programa_filtro_texto = undefined;
+        }
       } else {
-        this.required = false;
-        this.disabled = true;
         this.parcela_nombre_parcela_rules = [];
-        this.nombre_parcelas_text = undefined;
+        this.parcela_programa_filtro_texto_required = false;
+        this.parcela_programa_filtro_texto_disabled = true;
+        this.hint_parcela_programa = undefined;
+        this.parcela_programa_filtro_tipo = undefined;
         console.log(val);
-        console.log("dis", this.disabled);
-        console.log("req", this.required);
+        console.log("dis", this.parcela_programa_filtro_texto_disabled);
+        console.log("req", this.parcela_programa_filtro_texto_required);
       }
     },
-    tipo_filtro_programa(val) {
+    parcela_propietario_filtro_tipo(val) {
       console.log(val);
-      console.log("dis", this.parcela.programa.texto_disabled);
-      console.log("req", this.parcela.programa.texto_required);
+      console.log("dis", this.parcela_programa_filtro_texto_disabled);
+      console.log("req", this.parcela_programa_filtro_texto_required);
       if (val) {
         console.log("VAL: ", val);
-        this.hint_programa = this.tipo_nombre_parcelas_hints[val];
-        this.parcela.programa.texto_disabled = false;
-        this.parcela.programa.texto_required = true;
-        console.log("dis", this.parcela.programa.texto_disabled);
-        console.log("req", this.parcela.programa.texto_required);
+        this.hint_parcela_programa = this.nombre_filtro_hints[val];
+        this.parcela_programa_filtro_texto_disabled = false;
+        this.parcela_programa_filtro_texto_required = true;
+        console.log("dis", this.parcela_programa_filtro_texto_disabled);
+        console.log("req", this.parcela_programa_filtro_texto_required);
         this.parcela_nombre_parcela_rules = [
           v => !!v || "Este campo es obligatorio"
         ];
+        if (val === "Falta (es nulo)") {
+          this.parcela_nombre_parcela_rules = [];
+          this.parcela_programa_filtro_texto_required = false;
+          this.parcela_programa_filtro_texto_disabled = true;
+          this.parcela_programa_filtro_texto = undefined;
+        }
+        if (val === "No falta (no es nulo)") {
+          this.parcela_nombre_parcela_rules = [];
+          this.parcela_programa_filtro_texto_required = false;
+          this.parcela_programa_filtro_texto_disabled = true;
+          this.parcela_programa_filtro_texto = undefined;
+        }
       } else {
-        this.parcela.programa.texto_required = false;
-        this.parcela.programa.texto_disabled = true;
         this.parcela_nombre_parcela_rules = [];
-        this.parcela.programa.texto = undefined;
+        this.parcela_programa_filtro_texto_required = false;
+        this.parcela_programa_filtro_texto_disabled = true;
+        this.hint_parcela_programa = undefined;
+        this.parcela_programa_filtro_tipo = undefined;
         console.log(val);
-        console.log("dis", this.parcela.programa.texto_disabled);
-        console.log("req", this.parcela.programa.texto_required);
+        console.log("dis", this.parcela_programa_filtro_texto_disabled);
+        console.log("req", this.parcela_programa_filtro_texto_required);
       }
     },
-    top(val) {
-      this.speed_dial.bottom = !val;
-    },
-    right(val) {
-      this.speed_dial.left = !val;
-    },
-    bottom(val) {
-      this.speed_dial.top = !val;
-    },
-    left(val) {
-      this.speed_dial.right = !val;
+    parcela_programa_filtro_tipo(val) {
+      console.log(val);
+      console.log("dis", this.parcela_programa_filtro_texto_disabled);
+      console.log("req", this.parcela_programa_filtro_texto_required);
+      if (val) {
+        console.log("VAL: ", val);
+        this.hint_parcela_programa = this.nombre_filtro_hints[val];
+        this.parcela_programa_filtro_texto_disabled = false;
+        this.parcela_programa_filtro_texto_required = true;
+        console.log("dis", this.parcela_programa_filtro_texto_disabled);
+        console.log("req", this.parcela_programa_filtro_texto_required);
+        this.parcela_nombre_parcela_rules = [
+          v => !!v || "Este campo es obligatorio"
+        ];
+        if (val === "Falta (es nulo)") {
+          this.parcela_nombre_parcela_rules = [];
+          this.parcela_programa_filtro_texto_required = false;
+          this.parcela_programa_filtro_texto_disabled = true;
+          this.parcela_programa_filtro_texto = undefined;
+        }
+        if (val === "No falta (no es nulo)") {
+          this.parcela_nombre_parcela_rules = [];
+          this.parcela_programa_filtro_texto_required = false;
+          this.parcela_programa_filtro_texto_disabled = true;
+          this.parcela_programa_filtro_texto = undefined;
+        }
+      } else {
+        this.parcela_nombre_parcela_rules = [];
+        this.parcela_programa_filtro_texto_required = false;
+        this.parcela_programa_filtro_texto_disabled = true;
+        this.hint_parcela_programa = undefined;
+        this.parcela_programa_filtro_tipo = undefined;
+        console.log(val);
+        console.log("dis", this.parcela_programa_filtro_texto_disabled);
+        console.log("req", this.parcela_programa_filtro_texto_required);
+      }
     }
   },
   created() {
