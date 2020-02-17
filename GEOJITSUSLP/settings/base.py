@@ -101,7 +101,7 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.contrib.gis.db.backends.postgis',
         'HOST': 'localhost',
-        'NAME': 'geojitsuslp',
+        'NAME': 'maptitude',
         'USER': 'maptitude',
         'PASSWORD': 'irnA3ev8',
     }
