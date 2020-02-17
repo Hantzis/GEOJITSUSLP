@@ -642,8 +642,8 @@ export default {
         this.hint_parcela_programa = undefined;
         this.parcela_programa_filtro_tipo = undefined;
         console.log(val);
-        console.log("dis", this.parcela_programa_filtro_texto_disabled);
-        console.log("req", this.parcela_programa_filtro_texto_required);
+        console.log("dis:", this.parcela_programa_filtro_texto_disabled);
+        console.log("req:", this.parcela_programa_filtro_texto_required);
       }
     }
   },
