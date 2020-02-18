@@ -33,10 +33,14 @@ class WMSServer(models.Model):
 
 class WMSCRS(models.Model):
     crs = models.CharField(max_length=20, unique=True, primary_key=True)
+    description = models.CharField(max_length=200, blank=True, null=True)
     # poner descripción
 
     def __str__(self):
-        return self.crs
+        return "{} - {}".format(self.crs, self.description)
+
+    class Meta:
+        ordering = ['crs']
 
 class WMSLayer(models.Model):
     # el layer_name debe ser unique con el usuario propietario (despues)

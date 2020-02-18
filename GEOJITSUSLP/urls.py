@@ -18,6 +18,7 @@ urlpatterns = [
     url(r'^search/$', search_views.search, name='search'),
 
     path('rest/v2/', include('webgis.urls')),
+    path('rest/v2/', include('gj_layers.urls')),
 
     # For anything not caught by a more specific rule above, hand over to
     # Wagtail's page serving mechanism. This should be the last pattern in
