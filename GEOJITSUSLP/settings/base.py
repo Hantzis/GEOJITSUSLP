@@ -52,6 +52,9 @@ INSTALLED_APPS = [
 
     'rest_framework',
     'rest_framework_gis',
+    'gj_core',
+    'gj_common',
+    'gj_layers',
     'webgis',
 ]
 
@@ -103,7 +106,7 @@ DATABASES = {
         'HOST': 'localhost',
         'NAME': 'maptitude',
         'USER': 'maptitude',
-        'PASSWORD': 'irnA3ev8',
+        'PASSWORD': 'irna3ev8',
     }
 }
 
