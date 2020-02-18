@@ -45,9 +45,9 @@ class WMSCRS(models.Model):
 class WMSLayer(models.Model):
     # el layer_name debe ser unique con el usuario propietario (despues)
     layer_name = models.CharField(max_length=255, unique=True)
-    layer_visible = models.BooleanField(default=False)
+    visible = models.BooleanField(default=False)
     server = models.ForeignKey(WMSServer, on_delete=models.PROTECT)
-    version = models.CharField(max_length=5)
+    version = models.CharField(max_length=5, choices=(('', 'WMS Version'), ('1.1.1', '1.1.1'), ('1.3.0', '1.3.0')))
     layers = models.CharField(max_length=255)
     styles = models.CharField(max_length=255, blank=True, null=True)
     crs = models.ForeignKey(WMSCRS, on_delete=models.PROTECT, default='EPSG:4326')
@@ -57,7 +57,7 @@ class WMSLayer(models.Model):
                                                       ('image/vnd.jpeg-png', 'image/vnd.jpeg-png'),
                                                       ('image/vnd.jpeg-png8', 'image/vnd.jpeg-png8')))
     transparent = models.BooleanField(default=True)
-    sld = models.CharField(max_length=255, blank=True, null=True) # tal vez haya que cambiar a texto
+    sld = models.CharField(max_length=255, blank=True, null=True, verbose_name='sld') # tal vez haya que cambiar a texto
     time = models.DateTimeField(null=True, blank=True)
     cql_filter = models.TextField(blank=True, null=True)
 

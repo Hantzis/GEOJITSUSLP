@@ -379,189 +379,189 @@
   "model": "gj_layers.wmscrs",
   "pk": "EPSG:20065",
   "fields": {
-    "description": null
+    "description": "Pulkovo 1995 / Gauss-Kruger 5N (deprecated)"
   }
 },
 {
   "model": "gj_layers.wmscrs",
   "pk": "EPSG:20066",
   "fields": {
-    "description": null
+    "description": "Pulkovo 1995 / Gauss-Kruger 6N (deprecated)"
   }
 },
 {
   "model": "gj_layers.wmscrs",
   "pk": "EPSG:20067",
   "fields": {
-    "description": null
+    "description": "Pulkovo 1995 / Gauss-Kruger 7N (deprecated)"
   }
 },
 {
   "model": "gj_layers.wmscrs",
   "pk": "EPSG:20068",
   "fields": {
-    "description": null
+    "description": "Pulkovo 1995 / Gauss-Kruger 8N (deprecated)"
   }
 },
 {
   "model": "gj_layers.wmscrs",
   "pk": "EPSG:20069",
   "fields": {
-    "description": null
+    "description": "Pulkovo 1995 / Gauss-Kruger 9N (deprecated)"
   }
 },
 {
   "model": "gj_layers.wmscrs",
   "pk": "EPSG:2007",
   "fields": {
-    "description": null
+    "description": "St. Vincent 45 / British West Indies Grid"
   }
 },
 {
   "model": "gj_layers.wmscrs",
   "pk": "EPSG:20070",
   "fields": {
-    "description": null
+    "description": "Pulkovo 1995 / Gauss-Kruger 10N (deprecated)"
   }
 },
 {
   "model": "gj_layers.wmscrs",
   "pk": "EPSG:20071",
   "fields": {
-    "description": null
+    "description": "Pulkovo 1995 / Gauss-Kruger 11N (deprecated)"
   }
 },
 {
   "model": "gj_layers.wmscrs",
   "pk": "EPSG:20072",
   "fields": {
-    "description": null
+    "description": "Pulkovo 1995 / Gauss-Kruger 12N (deprecated)"
   }
 },
 {
   "model": "gj_layers.wmscrs",
   "pk": "EPSG:20073",
   "fields": {
-    "description": null
+    "description": "Pulkovo 1995 / Gauss-Kruger 13N (deprecated)"
   }
 },
 {
   "model": "gj_layers.wmscrs",
   "pk": "EPSG:20074",
   "fields": {
-    "description": null
+    "description": "Pulkovo 1995 / Gauss-Kruger 14N (deprecated)"
   }
 },
 {
   "model": "gj_layers.wmscrs",
   "pk": "EPSG:20075",
   "fields": {
-    "description": null
+    "description": "Pulkovo 1995 / Gauss-Kruger 15N (deprecated)"
   }
 },
 {
   "model": "gj_layers.wmscrs",
   "pk": "EPSG:20076",
   "fields": {
-    "description": null
+    "description": "Pulkovo 1995 / Gauss-Kruger 16N (deprecated)"
   }
 },
 {
   "model": "gj_layers.wmscrs",
   "pk": "EPSG:20077",
   "fields": {
-    "description": null
+    "description": "Pulkovo 1995 / Gauss-Kruger 17N (deprecated)"
   }
 },
 {
   "model": "gj_layers.wmscrs",
   "pk": "EPSG:20078",
   "fields": {
-    "description": null
+    "description": "Pulkovo 1995 / Gauss-Kruger 18N (deprecated)"
   }
 },
 {
   "model": "gj_layers.wmscrs",
   "pk": "EPSG:20079",
   "fields": {
-    "description": null
+    "description": "Pulkovo 1995 / Gauss-Kruger 19N (deprecated)"
   }
 },
 {
   "model": "gj_layers.wmscrs",
   "pk": "EPSG:2008",
   "fields": {
-    "description": null
+    "description": "NAD27(CGQ77) / SCoPQ zone 2 (deprecated)"
   }
 },
 {
   "model": "gj_layers.wmscrs",
   "pk": "EPSG:20080",
   "fields": {
-    "description": null
+    "description": "Pulkovo 1995 / Gauss-Kruger 20N (deprecated)"
   }
 },
 {
   "model": "gj_layers.wmscrs",
   "pk": "EPSG:20081",
   "fields": {
-    "description": null
+    "description": "Pulkovo 1995 / Gauss-Kruger 21N (deprecated)"
   }
 },
 {
   "model": "gj_layers.wmscrs",
   "pk": "EPSG:20082",
   "fields": {
-    "description": null
+    "description": "Pulkovo 1995 / Gauss-Kruger 22N (deprecated)"
   }
 },
 {
   "model": "gj_layers.wmscrs",
   "pk": "EPSG:20083",
   "fields": {
-    "description": null
+    "description": "Pulkovo 1995 / Gauss-Kruger 23N (deprecated)"
   }
 },
 {
   "model": "gj_layers.wmscrs",
   "pk": "EPSG:20084",
   "fields": {
-    "description": null
+    "description": "Pulkovo 1995 / Gauss-Kruger 24N (deprecated)"
   }
 },
 {
   "model": "gj_layers.wmscrs",
   "pk": "EPSG:20085",
   "fields": {
-    "description": null
+    "description": "Pulkovo 1995 / Gauss-Kruger 25N (deprecated)"
   }
 },
 {
   "model": "gj_layers.wmscrs",
   "pk": "EPSG:20086",
   "fields": {
-    "description": null
+    "description": "Pulkovo 1995 / Gauss-Kruger 26N (deprecated)"
   }
 },
 {
   "model": "gj_layers.wmscrs",
   "pk": "EPSG:20087",
   "fields": {
-    "description": null
+    "description": "Pulkovo 1995 / Gauss-Kruger 27N (deprecated)"
   }
 },
 {
   "model": "gj_layers.wmscrs",
   "pk": "EPSG:20088",
   "fields": {
-    "description": null
+    "description": "Pulkovo 1995 / Gauss-Kruger 28N (deprecated)"
   }
 },
 {
   "model": "gj_layers.wmscrs",
   "pk": "EPSG:20089",
   "fields": {
-    "description": null
+    "description": "Pulkovo 1995 / Gauss-Kruger 29N (deprecated)"
   }
 },
 {
@@ -41008,6 +41008,24 @@
   "pk": "EPSG:900913",
   "fields": {
     "description": "Google Maps Global Mercator"
+  }
+},
+{
+  "model": "gj_layers.wmslayer",
+  "pk": 1,
+  "fields": {
+    "layer_name": "Municipios SLP",
+    "visible": true,
+    "server": 1,
+    "version": "1.3.0",
+    "layers": "PARCELASSLP:municipios",
+    "styles": null,
+    "crs": "EPSG:4326",
+    "format": "image/png8",
+    "transparent": true,
+    "sld": null,
+    "time": null,
+    "cql_filter": ""
   }
 }
 ]
