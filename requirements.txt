@@ -1,3 +1,7 @@
 djangorestframework
 Django>=3.0,<3.1
 wagtail>=2.8,<2.9
+owslib
+python-memcached
+psycopg2-binary
+django-cors-headers

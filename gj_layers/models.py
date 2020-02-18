@@ -32,7 +32,8 @@ class WMSServer(models.Model):
 
 
 class WMSCRS(models.Model):
-    crs = models.CharField(max_length=20, unique=True)
+    crs = models.CharField(max_length=20, unique=True, primary_key=True)
+    # poner descripción
 
     def __str__(self):
         return self.crs
@@ -45,24 +46,24 @@ class WMSLayer(models.Model):
     version = models.CharField(max_length=5)
     layers = models.CharField(max_length=255)
     styles = models.CharField(max_length=255, blank=True, null=True)
-    crs = models.CharField(max_length=20)
-    format = models.CharField(max_length=50 choices=('', 'Image Format'), ('image/gif', 'image/gif'),
-                                                    ('image/jpeg', 'image/jpeg'), ('image/png', 'image/png'),
-                                                    ('image/png8', 'image/png8 (Recommended)'),
-                                                    ('image/vnd.jpeg-png', 'image/vnd.jpeg-png'),
-                                                    ('image/vnd.jpeg-png8', 'image/vnd.jpeg-png8'))
+    crs = models.ForeignKey(WMSCRS, on_delete=models.PROTECT, default='EPSG:4326')
+    format = models.CharField(max_length=50, choices=(('', 'Image Format'), ('image/gif', 'image/gif'),
+                                                      ('image/jpeg', 'image/jpeg'), ('image/png', 'image/png'),
+                                                      ('image/png8', 'image/png8 (Recommended)'),
+                                                      ('image/vnd.jpeg-png', 'image/vnd.jpeg-png'),
+                                                      ('image/vnd.jpeg-png8', 'image/vnd.jpeg-png8')))
     transparent = models.BooleanField(default=True)
     sld = models.CharField(max_length=255, blank=True, null=True) # tal vez haya que cambiar a texto
     time = models.DateTimeField(null=True, blank=True)
-
+    cql_filter = models.TextField(blank=True, null=True)
 
     def save(self, *args, **kwargs):
         try:
             wms = WebMapService(self.server.server_baseurl, self.server.server_version)
             self.version = self.server.server_version
-            if not self.layers in list(wms.contents):
+            if self.layers not in list(wms.contents):
                 raise ValidationError("Layer don't exists")
-            super(WMSServer, self).save(*args, **kwargs)
+            super(WMSLayer, self).save(*args, **kwargs)
         except Exception as error:
             raise ValidationError(error)
 
