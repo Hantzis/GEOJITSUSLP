@@ -568,7 +568,7 @@
   "model": "gj_layers.wmscrs",
   "pk": "EPSG:2009",
   "fields": {
-    "description": null
+    "description": "NAD27(CGQ77) / SCoPQ zone 3"
   }
 },
 {
