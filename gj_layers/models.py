@@ -4,6 +4,12 @@ from django.core.exceptions import ValidationError
 
 # Create your models here.
 
+class XYZLayer(models.Model):
+    layer_name = models.CharField(max_length=255, unique=True)
+    server = models.URLField()
+    
+    def __str__(self):
+        return self.server_name
 
 class WMSServer(models.Model):
     # el server_name debe ser unique con el usuario propietario (despues)
