@@ -10,8 +10,10 @@
   "dependencies": {
     "@mdi/font": "^3.6.95",
     "core-js": "^3.6.4",
+    "lodash": "^4.17.15",
     "register-service-worker": "^1.6.2",
     "roboto-fontface": "*",
+    "sl-vue-tree": "^1.8.4",
     "vue": "^2.6.11",
     "vue-router": "^3.1.5",
     "vuelayers": "^0.11.21",

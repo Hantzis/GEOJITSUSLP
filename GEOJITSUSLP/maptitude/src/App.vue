@@ -1,33 +1,125 @@
 <template>
   <v-app id="inspire">
-    <v-navigation-drawer v-model="drawerRight" app clipped right>
-      <v-list dense>
-        <v-list-item click.stop="right = !right">
-          <v-list-item-action>
-            <v-icon>mdi-exit-to-app</v-icon>
-          </v-list-item-action>
-          <v-list-item-content>
-            <v-list-item-title>Open Temporary Drawer</v-list-item-title>
-          </v-list-item-content>
-        </v-list-item>
-      </v-list>
+    <v-navigation-drawer
+      v-model="drawerRight"
+      app
+      clipped
+      right
+      mobile-break-point="320"
+    >
+      <v-col></v-col>
+      <v-container>
+        <v-card class="mx-auto" max-width="400">
+          <v-list
+            :disabled="false"
+            :dense="false"
+            :two-line="false"
+            :three-line="false"
+            :shaped="false"
+            :flat="false"
+            :subheader="true"
+            :sub-group="false"
+            :nav="false"
+            :avatar="false"
+            :rounded="false"
+          >
+            <v-subheader><v-icon>mdi-map</v-icon> Mapas Base</v-subheader>
+            <v-list-item-group v-model="item" color="primary">
+              <v-list-item
+                v-for="(item, i) in items_list"
+                :key="i"
+                :inactive="inactive"
+              >
+                <v-list-item-avatar v-if="avatar">
+                  <v-img :src="item.avatar"></v-img>
+                </v-list-item-avatar>
+                <v-radio></v-radio>
+                <v-list-item-content>
+                  <v-list-item-title v-html="item.title"></v-list-item-title>
+                  <v-list-item-subtitle
+                    v-if="twoLine || threeLine"
+                    v-html="item.subtitle"
+                  ></v-list-item-subtitle>
+                </v-list-item-content>
+              </v-list-item>
+            </v-list-item-group>
+          </v-list>
+        </v-card>
+      </v-container>
+
+      <v-container>
+        <v-card>
+          <v-list
+            :disabled="false"
+            :dense="false"
+            :two-line="false"
+            :three-line="false"
+            :shaped="false"
+            :flat="false"
+            :subheader="true"
+            :sub-group="false"
+            :nav="false"
+            :avatar="false"
+            :rounded="false"
+          >
+            <v-subheader><v-icon>mdi-layers</v-icon> Capas</v-subheader>
+            <v-list-item-group v-model="item" color="primary">
+              <v-list-item
+                v-for="(item, i) in capas_list"
+                :key="i"
+                :inactive="inactive"
+              >
+                <v-checkbox></v-checkbox>
+                <v-list-item-avatar v-if="avatar">
+                  <v-img :src="item.avatar"></v-img>
+                </v-list-item-avatar>
+                <v-list-item-content>
+                  <v-list-item-title v-html="item.title"></v-list-item-title>
+                  <v-list-item-subtitle
+                    v-if="twoLine || threeLine"
+                    v-html="item.subtitle"
+                  ></v-list-item-subtitle>
+                </v-list-item-content>
+              </v-list-item>
+            </v-list-item-group>
+          </v-list>
+        </v-card>
+
+        <v-treeview
+          :items="items"
+          :dense="true"
+          :selectable="true"
+          :activatable="true"
+          :hoverable="true"
+          :open-on-click="false"
+          :selected-color="false"
+          selection-type="independent"
+          selectedColor="accent"
+        ></v-treeview>
+      </v-container>
     </v-navigation-drawer>
 
     <v-app-bar app clipped-right color="blue-grey" dark>
       <v-app-bar-nav-icon @click.stop="drawer = !drawer" />
-      <v-toolbar-title>Toolbar</v-toolbar-title>
+      <v-toolbar-title>Maptitude</v-toolbar-title>
       <v-spacer />
-      <v-app-bar-nav-icon @click.stop="drawerRight = !drawerRight" />
+      <v-btn
+        icon
+        @click.stop="drawerRight = !drawerRight"
+        aria-label="Capas de datos"
+      >
+        <v-icon>mdi-layers</v-icon>
+      </v-btn>
     </v-app-bar>
 
-    <v-navigation-drawer v-model="drawer" app>
+    <v-navigation-drawer v-model="drawer" app mobile-break-point="320">
       <v-list dense>
         <v-list-item click.stop="left = !left">
           <v-list-item-action>
             <v-icon>mdi-exit-to-app</v-icon>
           </v-list-item-action>
           <v-list-item-content>
-            <v-list-item-title>Open Temporary Drawer</v-list-item-title>
+            <v-list-item-title>Open Temporary Draweraa</v-list-item-title>
           </v-list-item-content>
         </v-list-item>
       </v-list>
@@ -60,10 +152,10 @@
               url="https://api.parcelas-slp.maptitude.xyz/geoserver/gwc/service/wms?"
               layers="PARCELASSLP:municipios"
               format="image/png"
-              :overlay="true == true"
+              :overlay="true"
               projection="EPSG:4326"
               version="1.1.1"
-              :visible="true == true"
+              :visible="true"
             ></vl-source-wms>
           </vl-layer-tile>
           <vl-layer-tile>
@@ -71,10 +163,10 @@
               url="https://api.parcelas-slp.maptitude.xyz/geoserver/gwc/service/wms?"
               layers="PARCELASSLP:ejidos"
               format="image/png"
-              :overlay="true == true"
+              :overlay="true"
               projection="EPSG:4326"
               version="1.1.1"
-              :visible="true == true"
+              :visible="true"
             ></vl-source-wms>
           </vl-layer-tile>
           <vl-layer-tile>
@@ -82,184 +174,12 @@
               url="https://api.parcelas-slp.maptitude.xyz/geoserver/gwc/service/wms?"
               layers="PARCELASSLP:parcelas"
               format="image/png"
-              :overlay="true == true"
+              :overlay="true"
               projection="EPSG:4326"
               version="1.1.1"
-              :visible="true == true"
+              :visible="true"
             ></vl-source-wms>
           </vl-layer-tile>
-
-          <!-- interactions -->
-          <vl-interaction-select
-            :features.sync="selectedFeatures"
-            v-if="drawType == null"
-          >
-            <template slot-scope="select">
-              <!-- select styles -->
-              <vl-style-box>
-                <vl-style-stroke color="#423e9e" :width="7"></vl-style-stroke>
-                <vl-style-fill :color="[254, 178, 76, 0.7]"></vl-style-fill>
-                <vl-style-circle :radius="5">
-                  <vl-style-stroke color="#423e9e" :width="7"></vl-style-stroke>
-                  <vl-style-fill :color="[254, 178, 76, 0.7]"></vl-style-fill>
-                </vl-style-circle>
-              </vl-style-box>
-              <vl-style-box :z-index="1">
-                <vl-style-stroke color="#d43f45" :width="2"></vl-style-stroke>
-                <vl-style-circle :radius="5">
-                  <vl-style-stroke color="#d43f45" :width="2"></vl-style-stroke>
-                </vl-style-circle>
-              </vl-style-box>
-              <!--// select styles -->
-
-              <!-- selected feature popup -->
-              <vl-overlay
-                class="feature-popup"
-                v-for="feature in select.features"
-                :key="feature.id"
-                :id="feature.id"
-                :position="pointOnSurface(feature.geometry)"
-                :auto-pan="true"
-                :auto-pan-animation="{ duration: 300 }"
-              >
-                <template slot-scope="popup">
-                  <section class="card">
-                    <header class="card-header">
-                      <p class="card-header-title">
-                        Feature ID {{ feature.id }}
-                      </p>
-                      <a
-                        class="card-header-icon"
-                        title="Close"
-                        @click="
-                          selectedFeatures = selectedFeatures.filter(
-                            f => f.id !== feature.id
-                          )
-                        "
-                      >
-                        <b-icon icon="close"></b-icon>
-                      </a>
-                    </header>
-                    <div class="card-content">
-                      <div class="content">
-                        <p>
-                          Overlay popup content for Feature with ID
-                          <strong>{{ feature.id }}</strong>
-                        </p>
-                        <p>Popup: {{ JSON.stringify(popup) }}</p>
-                        <p>
-                          Feature:
-                          {{
-                            JSON.stringify({
-                              id: feature.id,
-                              properties: feature.properties
-                            })
-                          }}
-                        </p>
-                      </div>
-                    </div>
-                  </section>
-                </template>
-              </vl-overlay>
-              <!--// selected popup -->
-            </template>
-          </vl-interaction-select>
-          <!--// interactions -->
-
-          <!-- map panel, controls -->
-          <div class="map-panel">
-            <b-collapse class="panel box is-paddingless" :open.sync="panelOpen">
-              <div slot="trigger" class="panel-heading">
-                <div class="columns">
-                  <div class="column is-11">
-                    <strong>Map panel</strong>
-                  </div>
-                  <div class="column">
-                    <b-icon
-                      :icon="panelOpen ? 'chevron-up' : 'chevron-down'"
-                      size="is-small"
-                    ></b-icon>
-                  </div>
-                </div>
-              </div>
-              <p class="panel-tabs">
-                <a
-                  @click="showMapPanelTab('state')"
-                  :class="mapPanelTabClasses('state')"
-                  >State</a
-                >
-                <a
-                  @click="showMapPanelTab('layers')"
-                  :class="mapPanelTabClasses('layers')"
-                  >Layers</a
-                >
-                <a
-                  @click="showMapPanelTab('draw')"
-                  :class="mapPanelTabClasses('draw')"
-                  >Draw</a
-                >
-              </p>
-
-              <div class="panel-block" v-show="mapPanel.tab === 'state'">
-                <table class="table is-fullwidth">
-                  <tr>
-                    <th>Map center</th>
-                    <td>{{ center }}</td>
-                  </tr>
-                  <tr>
-                    <th>Map zoom</th>
-                    <td>{{ zoom }}</td>
-                  </tr>
-                  <tr>
-                    <th>Map rotation</th>
-                    <td>{{ rotation }}</td>
-                  </tr>
-                  <tr>
-                    <th>Device coordinate</th>
-                    <td>{{ deviceCoordinate }}</td>
-                  </tr>
-                  <tr>
-                    <th>Selected features</th>
-                    <td>{{ selectedFeatures.map(f => f.id) }}</td>
-                  </tr>
-                </table>
-              </div>
-
-              <div
-                class="panel-block"
-                v-for="layer in layers"
-                :key="layer.id"
-                @click="showMapPanelLayer"
-                :class="{ 'is-active': layer.visible }"
-                v-show="mapPanel.tab === 'layers'"
-              >
-                <b-switch :key="layer.id" v-model="layer.visible">
-                  {{ layer.title }}
-                </b-switch>
-              </div>
-
-              <div
-                class="panel-block draw-panel"
-                v-show="mapPanel.tab === 'draw'"
-              >
-                <div class="buttons">
-                  <button
-                    v-for="control in drawControls"
-                    :key="control.type || -1"
-                    @click="drawType = control.type"
-                    :class="
-                      drawType && drawType === control.type ? 'is-info' : ''
-                    "
-                    class="button"
-                  >
-                    <b-icon :icon="control.icon"></b-icon>
-                    <span>{{ control.label }}</span>
-                  </button>
-                </div>
-              </div>
-            </b-collapse>
-          </div>
-          <!--// map panel, controls -->
         </vl-map>
       </v-container>
     </v-content>
@@ -278,27 +198,12 @@
 import Vue from "vue";
 import VueLayers from "vuelayers";
 import "vuelayers/lib/style.css";
-
-// eslint-disable-next-line no-unused-vars
-import { createProj, addProj, findPointOnSurface, createStyle, createMultiPointGeom, loadingBBox } from "vuelayers/lib/ol-ext";
-import { range, random } from "lodash";
+//import * as olExt from "vuelayers/lib/ol-ext";
 
 Vue.use(VueLayers);
 
-// Custom projection for static Image layer
-let x = 1024 * 10000;
-let y = 968 * 10000;
-let imageExtent = [-x / 2, -y / 2, x / 2, y / 2];
-let customProj = createProj({
-  code: "xkcd-image",
-  units: "pixels",
-  extent: imageExtent
-});
-// add to the list of known projections
-// after that it can be used by code
-addProj(customProj);
-
 export default {
+  components: {},
   props: {
     source: String
   },
@@ -312,274 +217,140 @@ export default {
     center: [0, 0],
     rotation: 0,
     geolocPosition: undefined,
-    selectedFeatures: [],
-    drawType: undefined,
-    clickCoordinate: undefined,
-    deviceCoordinate: undefined,
-    mapPanel: {
-      tab: "state"
-    },
-    panelOpen: true,
-    mapVisible: true,
-    drawControls: [
+    nodes: [
+      { title: "Item1", isLeaf: true },
+      { title: "Item2", isLeaf: true, data: { visible: false } },
+      { title: "Folder1" },
       {
-        type: "point",
-        label: "Draw Point",
-        icon: "map-marker"
-      },
-      {
-        type: "line-string",
-        label: "Draw LineString",
-        icon: "minus"
-      },
-      {
-        type: "polygon",
-        label: "Draw Polygon",
-        icon: "square-o"
-      },
-      {
-        type: "circle",
-        label: "Draw Circle",
-        icon: "circle-thin"
-      },
-      {
-        type: undefined,
-        label: "Stop drawing",
-        icon: "times"
+        title: "Folder2",
+        isExpanded: true,
+        children: [
+          { title: "Item3", isLeaf: true },
+          { title: "Item4", isLeaf: true }
+        ]
       }
     ],
-    drawnFeatures: [],
-    // base layers
-    baseLayers: [
+    capas_list: [
       {
-        name: "osm",
-        title: "OpenStreetMap",
-        visible: true
+        avatar: "https://cdn.vuetifyjs.com/images/lists/1.jpg",
+        title: "Municipios",
+        subtitle:
+          "<span class='text--primary'>Ali Connors</span> &mdash; I'll be in your neighborhood doing errands this weekend. Do you want to hang out?"
       },
       {
-        name: "sputnik",
-        title: "Sputnik Maps",
-        visible: false
+        avatar: "https://cdn.vuetifyjs.com/images/lists/2.jpg",
+        title: "Ejidos",
+        subtitle:
+          "<span class='text--primary'>to Alex, Scott, Jennifer</span> &mdash; Wish I could come, but I'm out of town this weekend."
       },
-      // needs paid plan to get key
-      // {
-      //   name: 'mapbox',
-      //   title: 'Mapbox',
-      // },
       {
-        name: "bingmaps",
+        avatar: "https://cdn.vuetifyjs.com/images/lists/3.jpg",
+        title: "Parcelas",
+        subtitle:
+          "<span class='text--primary'>Sandra Adams</span> &mdash; Do you have Paris recommendations? Have you ever been?"
+      }
+    ],
+    items_list: [
+      {
+        avatar: "https://cdn.vuetifyjs.com/images/lists/1.jpg",
+        title: "Google Satellite",
+        subtitle:
+          "<span class='text--primary'>Ali Connors</span> &mdash; I'll be in your neighborhood doing errands this weekend. Do you want to hang out?"
+      },
+      {
+        avatar: "https://cdn.vuetifyjs.com/images/lists/2.jpg",
+        title: "Google Terrain",
+        subtitle:
+          "<span class='text--primary'>to Alex, Scott, Jennifer</span> &mdash; Wish I could come, but I'm out of town this weekend."
+      },
+      {
+        avatar: "https://cdn.vuetifyjs.com/images/lists/3.jpg",
+        title: "Open Street Map",
+        subtitle:
+          "<span class='text--primary'>Sandra Adams</span> &mdash; Do you have Paris recommendations? Have you ever been?"
+      },
+      {
+        avatar: "https://cdn.vuetifyjs.com/images/lists/4.jpg",
         title: "Bing Maps",
-        apiKey:
-          "ArbsA9NX-AZmebC6VyXAnDqjXk6mo2wGCmeYM8EwyDaxKfQhUYyk0jtx6hX5fpMn",
-        imagerySet: "CanvasGray",
-        visible: false
+        subtitle:
+          "<span class='text--primary'>Trevor Hansen</span> &mdash; Have any ideas about what we should get Heidi for her birthday?"
+      },
+      {
+        avatar: "https://cdn.vuetifyjs.com/images/lists/5.jpg",
+        title: "Mapbox",
+        subtitle:
+          "<span class='text--primary'>Britta Holt</span> &mdash; We should eat this: Grate, Squash, Corn, and tomatillo Tacos."
       }
     ],
-    // layers config
-    layers: [
-      // Circles
+    items: [
       {
-        id: "circles",
-        title: "Circles",
-        cmp: "vl-layer-vector",
-        visible: false,
-        source: {
-          cmp: "vl-source-vector",
-          staticFeatures: range(0, 100).map(i => {
-            let coordinate = [random(-50, 50), random(-50, 50)];
-            return {
-              type: "Feature",
-              id: "random-cirlce-" + i,
-              geometry: {
-                type: "Circle",
-                coordinates: coordinate,
-                radius: random(Math.pow(10, 5), Math.pow(10, 6))
-              }
-            };
-          })
-        }
-      },
-      // Countries vector layer
-      // loads GeoJSON data from remote server
-      {
-        id: "countries",
-        title: "Countries",
-        cmp: "vl-layer-vector",
-        visible: false,
-        source: {
-          cmp: "vl-source-vector",
-          url:
-            "https://openlayers.org/en/latest/examples/data/geojson/countries.geojson"
-        },
-        style: [
-          {
-            cmp: "vl-style-box",
-            styles: {
-              "vl-style-fill": {
-                color: [255, 255, 255, 0.5]
-              },
-              "vl-style-stroke": {
-                color: "#219e46",
-                width: 2
-              },
-              "vl-style-text": {
-                text: "\uf041",
-                font: "24px FontAwesome",
-                fill: {
-                  color: "#2355af"
-                },
-                stroke: {
-                  color: "white"
-                }
-              }
-            }
-          }
-        ]
-      },
-      // Tile layer with WMS source
-      {
-        id: "wms",
-        title: "WMS",
-        cmp: "vl-layer-tile",
-        visible: false,
-        source: {
-          cmp: "vl-source-wms",
-          url: "https://ahocevar.com/geoserver/wms",
-          layers: "topp:states",
-          extParams: { TILED: true },
-          serverType: "geoserver"
-        }
-      },
-      // Tile layer with WMTS source
-      {
-        id: "wmts",
-        title: "WMTS",
-        cmp: "vl-layer-tile",
-        visible: false,
-        source: {
-          cmp: "vl-source-wmts",
-          url:
-            "https://services.arcgisonline.com/arcgis/rest/services/Demographics/USA_Population_Density/MapServer/WMTS/",
-          layerName: "0",
-          matrixSet: "EPSG:3857",
-          format: "image/png",
-          styleName: "default"
-        }
-      },
-      // Vector layer with clustering
-      {
-        id: "cluster",
-        title: "Cluster",
-        cmp: "vl-layer-vector",
-        renderMode: "image",
-        visible: false,
-        // Cluster source (vl-source-cluster) wraps vector source (vl-source-vector)
-        source: {
-          cmp: "vl-source-cluster",
-          distance: 50,
-          source: {
-            cmp: "vl-source-vector",
-            // features defined as array of GeoJSON encoded Features
-            // to not overload Vue and DOM
-            features: range(0, 10000).map(i => {
-              let coordinate = [random(-50, 50), random(-50, 50)];
-              return {
-                type: "Feature",
-                id: "random-" + i,
-                geometry: {
-                  type: "Point",
-                  coordinates: coordinate
-                }
-              };
-            })
-          }
-        },
-        style: [
-          {
-            cmp: "vl-style-func",
-            factory: this.clusterStyleFunc
-          }
+        id: 1,
+        name: "Municipios",
+        children: [
+          { id: 2, name: "Calendar : app" },
+          { id: 3, name: "Chrome : app" },
+          { id: 4, name: "Webstorm : app" }
         ]
       },
       {
-        id: "wfs",
-        title: "WFS (Canada water areas)",
-        cmp: "vl-layer-vector",
-        visible: false,
-        renderMode: "image",
-        source: {
-          cmp: "vl-source-vector",
-          features: [],
-          url(extent, resolution, projection) {
-            return (
-              "https://ahocevar.com/geoserver/wfs?service=WFS&" +
-              "version=1.1.0&request=GetFeature&typename=osm:water_areas&" +
-              "outputFormat=application/json&srsname=" +
-              projection +
-              "&" +
-              "bbox=" +
-              extent.join(",") +
-              "," +
-              projection
-            );
+        id: 5,
+        name: "Documents :",
+        children: [
+          {
+            id: 6,
+            name: "vuetify :",
+            children: [
+              {
+                id: 7,
+                name: "src :",
+                children: [
+                  { id: 8, name: "index : ts" },
+                  { id: 9, name: "bootstrap : ts" }
+                ]
+              }
+            ]
           },
-          strategyFactory() {
-            return loadingBBox;
-          }
-        }
-      },
-      {
-        id: "static-image",
-        title: "Static Image with custom projection",
-        cmp: "vl-layer-image",
-        visible: false,
-        source: {
-          cmp: "vl-source-image-static",
-          projection: customProj.getCode(),
-          url: "https://imgs.xkcd.com/comics/online_communities.png",
-          size: [1024, 968],
-          extent: imageExtent
-        }
-      },
-      {
-        id: "wms-image",
-        title: "Image WMS",
-        cmp: "vl-layer-image",
-        visible: false,
-        source: {
-          cmp: "vl-source-image-wms",
-          url: "https://ahocevar.com/geoserver/wms",
-          layers: "topp:states",
-          serverType: "geoserver"
-        }
-      },
-      {
-        id: "vector-tiles",
-        title: "Vector tiles",
-        cmp: "vl-layer-vector-tile",
-        visible: false,
-        source: {
-          cmp: "vl-source-vector-tile",
-          url:
-            "https://basemaps.arcgis.com/v1/arcgis/rest/services/World_Basemap/VectorTileServer/tile/{z}/{y}/{x}.pbf"
-        },
-        style: [
           {
-            cmp: "vl-style-box",
-            styles: {
-              "vl-style-stroke": {
-                width: 2,
-                color: "#2979ff"
-              },
-              "vl-style-circle": {
-                radius: 5,
-                stroke: {
-                  width: 1.5,
-                  color: "#2979ff"
-                }
+            id: 10,
+            name: "material2 :",
+            children: [
+              {
+                id: 11,
+                name: "src :",
+                children: [
+                  { id: 12, name: "v-btn : ts" },
+                  { id: 13, name: "v-card : ts" },
+                  { id: 14, name: "v-window : ts" }
+                ]
               }
-            }
+            ]
           }
+        ]
+      },
+      {
+        id: 15,
+        name: "Downloads :",
+        children: [
+          { id: 16, name: "October : pdf" },
+          { id: 17, name: "November : pdf" },
+          { id: 18, name: "Tutorial : html" }
+        ]
+      },
+      {
+        id: 19,
+        name: "Videos :",
+        children: [
+          {
+            id: 20,
+            name: "Tutorials :",
+            children: [
+              { id: 21, name: "Basic layouts : mp4" },
+              { id: 22, name: "Advanced techniques : mp4" },
+              { id: 23, name: "All about app : dir" }
+            ]
+          },
+          { id: 24, name: "Intro : mov" },
+          { id: 25, name: "Conference introduction : avi" }
         ]
       }
     ]
@@ -590,6 +361,7 @@ export default {
 <style scoped>
 .container-map {
   padding: 0;
+  margin-bottom: -7px;
 }
 
 .white--text {
