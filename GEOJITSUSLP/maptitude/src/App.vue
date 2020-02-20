@@ -7,150 +7,107 @@
       right
       mobile-break-point="320"
     >
-      <v-container>
-        <v-expansion-panels
-          :accordion="false"
-          :popout="false"
-          :inset="false"
-          :multiple="true"
-          :focusable="false"
-          :disabled="false"
-          :readonly="false"
-          :flat="false"
-          :hover="true"
-          :tile="false"
-        >
-          <v-expansion-panel>
-            <v-expansion-panel-header>Mapas Base</v-expansion-panel-header>
-            <v-expansion-panel-content>
-              <v-list-item-group v-model="item" color="primary">
-                <v-list-item
-                  v-for="(item, i) in items_list"
-                  :key="i"
-                  :inactive="inactive"
+      <v-tabs icons-and-text v-model="vmodel_layertab">
+        <v-tab href="#capas">Capas<v-icon>mdi-layers</v-icon></v-tab>
+        <v-tab href="#base">Mapas Base<v-icon>mdi-map</v-icon></v-tab>
+      </v-tabs>
+
+      <v-tabs-items v-model="vmodel_layertab">
+        <v-tab-item value="base">
+          <!-- CARD Mapas base -->
+          <v-card>
+            <v-card-title style="padding-bottom: 0;">
+              <v-icon>mdi-map</v-icon> Mapas Base
+            </v-card-title>
+            <v-card-text>
+              <v-radio-group v-model="vmodel_capasbase" :mandatory="true">
+                <v-radio label="Open Street Map" value="osm"></v-radio>
+                <v-radio
+                  label="Google Satellite"
+                  value="google_satellite"
+                ></v-radio>
+                <v-radio
+                  label="Google Terrain"
+                  value="google_terrain"
+                ></v-radio>
+                <v-radio
+                  label="Google Streets"
+                  value="google_streets"
+                ></v-radio>
+                <v-radio label="Bing Maps" value="bing"></v-radio>
+                <v-radio label="Mapbox" value="mapbox"></v-radio>
+              </v-radio-group>
+            </v-card-text>
+          </v-card>
+          <!-- /CARD Mapas base -->
+        </v-tab-item>
+        <v-tab-item value="capas">
+          <!-- CARD Capas -->
+          <v-card style="border-radius: 0px;">
+            <v-card-title style="padding-bottom: 0;">
+              <v-icon>mdi-layers</v-icon> Capas
+            </v-card-title>
+            <v-card-text> </v-card-text>
+          </v-card>
+          <v-expansion-panels
+            style="border-radius: 0px;"
+            :accordion="true"
+            :multiple="true"
+            :hover="true"
+            :flat="true"
+            :focusable="true"
+          >
+            <v-expansion-panel>
+              <v-expansion-panel-header>Municipios</v-expansion-panel-header>
+              <v-expansion-panel-content>
+                <v-row>
+                <p style="margin-bottom: 0; margin-top: 16px;">Opacidad</p>
+                </v-row>
+                <v-row>
+                  <v-slider
+                    v-model="slider"
+                    thumb-label
+                  ></v-slider>
+                </v-row>
+                <v-row
+                  align="center"
+                  justify="center"
                 >
-                  <v-list-item-avatar v-if="avatar">
-                    <v-img :src="item.avatar"></v-img>
-                  </v-list-item-avatar>
-                  <v-radio></v-radio>
-                  <v-list-item-content>
-                    <v-list-item-title v-html="item.title"></v-list-item-title>
-                    <v-list-item-subtitle
-                      v-if="twoLine || threeLine"
-                      v-html="item.subtitle"
-                    ></v-list-item-subtitle>
-                  </v-list-item-content>
-                </v-list-item>
-              </v-list-item-group>
-            </v-expansion-panel-content>
-          </v-expansion-panel>
-          <v-expansion-panel>
-            <v-expansion-panel-header>Capas</v-expansion-panel-header>
-            <v-expansion-panel-content>
-              dsads
-            </v-expansion-panel-content>
-          </v-expansion-panel>
-          <v-expansion-panel>
-            <v-expansion-panel-header>Ayuda</v-expansion-panel-header>
-            <v-expansion-panel-content>
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-              eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut
-              enim ad minim veniam, quis nostrud exercitation ullamco laboris
-              nisi ut aliquip ex ea commodo consequat.
-            </v-expansion-panel-content>
-          </v-expansion-panel>
-        </v-expansion-panels>
-      </v-container>
+                  <v-btn-toggle>
+                    <v-btn>
+                      <v-icon>mdi-map</v-icon>
+                    </v-btn>
+                    <v-btn>
+                      <v-icon>mdi-layers</v-icon>
+                    </v-btn>
+                    <v-btn>
+                      <v-icon>mdi-phone</v-icon>
+                    </v-btn>
+                    <v-btn>
+                      <v-icon>mdi-wifi</v-icon>
+                    </v-btn>
+                    <v-btn>
+                      <v-icon>mdi-alert</v-icon>
+                    </v-btn>
+                  </v-btn-toggle>
+                </v-row>
+                <v-divider></v-divider>
+              </v-expansion-panel-content>
+            </v-expansion-panel>
+            <v-expansion-panel v-for="(item, i) in 5" :key="i">
+              <v-expansion-panel-header>Item</v-expansion-panel-header>
+              <v-expansion-panel-content>
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
+                eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut
+                enim ad minim veniam, quis nostrud exercitation ullamco laboris
+                nisi ut aliquip ex ea commodo consequat.
+              </v-expansion-panel-content>
+            </v-expansion-panel>
+          </v-expansion-panels>
 
-      <v-container>
-        <v-card class="mx-auto" max-width="400">
-          <v-list
-            :disabled="false"
-            :dense="false"
-            :two-line="false"
-            :three-line="false"
-            :shaped="false"
-            :flat="false"
-            :subheader="true"
-            :sub-group="false"
-            :nav="false"
-            :avatar="false"
-            :rounded="false"
-          >
-            <v-subheader><v-icon>mdi-map</v-icon> Mapas Base</v-subheader>
-            <v-list-item-group v-model="item" color="primary">
-              <v-list-item
-                v-for="(item, i) in items_list"
-                :key="i"
-                :inactive="inactive"
-              >
-                <v-list-item-avatar v-if="avatar">
-                  <v-img :src="item.avatar"></v-img>
-                </v-list-item-avatar>
-                <v-radio></v-radio>
-                <v-list-item-content>
-                  <v-list-item-title v-html="item.title"></v-list-item-title>
-                  <v-list-item-subtitle
-                    v-if="twoLine || threeLine"
-                    v-html="item.subtitle"
-                  ></v-list-item-subtitle>
-                </v-list-item-content>
-              </v-list-item>
-            </v-list-item-group>
-          </v-list>
-        </v-card>
-      </v-container>
-
-      <v-container>
-        <v-card>
-          <v-list
-            :disabled="false"
-            :dense="false"
-            :two-line="false"
-            :three-line="false"
-            :shaped="false"
-            :flat="false"
-            :subheader="true"
-            :sub-group="false"
-            :nav="false"
-            :avatar="false"
-            :rounded="false"
-          >
-            <v-subheader><v-icon>mdi-layers</v-icon> Capas</v-subheader>
-            <v-list-item-group v-model="item" color="primary">
-              <v-list-item
-                v-for="(item, i) in capas_list"
-                :key="i"
-                :inactive="inactive"
-              >
-                <v-checkbox></v-checkbox>
-                <v-list-item-avatar v-if="avatar">
-                  <v-img :src="item.avatar"></v-img>
-                </v-list-item-avatar>
-                <v-list-item-content>
-                  <v-list-item-title v-html="item.title"></v-list-item-title>
-                  <v-list-item-subtitle
-                    v-if="twoLine || threeLine"
-                    v-html="item.subtitle"
-                  ></v-list-item-subtitle>
-                </v-list-item-content>
-              </v-list-item>
-            </v-list-item-group>
-          </v-list>
-        </v-card>
-
-        <v-treeview
-          :items="items"
-          :dense="true"
-          :selectable="true"
-          :activatable="true"
-          :hoverable="true"
-          :open-on-click="false"
-          :selected-color="false"
-          selection-type="independent"
-          selectedColor="accent"
-        ></v-treeview>
-      </v-container>
+          <!-- /CARD Mapas base -->
+        </v-tab-item>
+      </v-tabs-items>
     </v-navigation-drawer>
 
     <v-app-bar app clipped-right color="blue-grey" dark>
@@ -261,10 +218,12 @@ export default {
   props: {
     source: String
   },
-
+  watch: {
+    model_capasbase(val) {
+      console.log("model_capasbase", val);
+    }
+  },
   data: () => ({
-    twoLine: false,
-    threeLine: false,
     drawer: false,
     drawerRight: false,
     right: false,
@@ -273,6 +232,9 @@ export default {
     center: [0, 0],
     rotation: 0,
     geolocPosition: undefined,
+    twoLine: false,
+    threeLine: false,
+    threeLtwoLinetwoLineine: true,
     nodes: [
       { title: "Item1", isLeaf: true },
       { title: "Item2", isLeaf: true, data: { visible: false } },
@@ -286,6 +248,9 @@ export default {
         ]
       }
     ],
+    vmodel_capasbase: "osm",
+    vmodel_layertab: "osm",
+    slider: 80,
     capas_list: [
       {
         avatar: "https://cdn.vuetifyjs.com/images/lists/1.jpg",
@@ -434,9 +399,5 @@ export default {
 
 .v-speed-dial--bottomG {
   bottom: 72px;
-}
-
-.v-expansion-panel-content__wrap {
-  padding: 0;
 }
 </style>
