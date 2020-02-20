@@ -7,7 +7,61 @@
       right
       mobile-break-point="320"
     >
-      <v-col></v-col>
+      <v-container>
+        <v-expansion-panels
+          :accordion="false"
+          :popout="false"
+          :inset="false"
+          :multiple="true"
+          :focusable="false"
+          :disabled="false"
+          :readonly="false"
+          :flat="false"
+          :hover="true"
+          :tile="false"
+        >
+          <v-expansion-panel>
+            <v-expansion-panel-header>Mapas Base</v-expansion-panel-header>
+            <v-expansion-panel-content>
+              <v-list-item-group v-model="item" color="primary">
+                <v-list-item
+                  v-for="(item, i) in items_list"
+                  :key="i"
+                  :inactive="inactive"
+                >
+                  <v-list-item-avatar v-if="avatar">
+                    <v-img :src="item.avatar"></v-img>
+                  </v-list-item-avatar>
+                  <v-radio></v-radio>
+                  <v-list-item-content>
+                    <v-list-item-title v-html="item.title"></v-list-item-title>
+                    <v-list-item-subtitle
+                      v-if="twoLine || threeLine"
+                      v-html="item.subtitle"
+                    ></v-list-item-subtitle>
+                  </v-list-item-content>
+                </v-list-item>
+              </v-list-item-group>
+            </v-expansion-panel-content>
+          </v-expansion-panel>
+          <v-expansion-panel>
+            <v-expansion-panel-header>Capas</v-expansion-panel-header>
+            <v-expansion-panel-content>
+              dsads
+            </v-expansion-panel-content>
+          </v-expansion-panel>
+          <v-expansion-panel>
+            <v-expansion-panel-header>Ayuda</v-expansion-panel-header>
+            <v-expansion-panel-content>
+              Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
+              eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut
+              enim ad minim veniam, quis nostrud exercitation ullamco laboris
+              nisi ut aliquip ex ea commodo consequat.
+            </v-expansion-panel-content>
+          </v-expansion-panel>
+        </v-expansion-panels>
+      </v-container>
+
       <v-container>
         <v-card class="mx-auto" max-width="400">
           <v-list
@@ -209,6 +263,8 @@ export default {
   },
 
   data: () => ({
+    twoLine: false,
+    threeLine: false,
     drawer: false,
     drawerRight: false,
     right: false,
@@ -378,5 +434,9 @@ export default {
 
 .v-speed-dial--bottomG {
   bottom: 72px;
+}
+
+.v-expansion-panel-content__wrap {
+  padding: 0;
 }
 </style>
