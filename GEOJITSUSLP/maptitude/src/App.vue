@@ -6,6 +6,7 @@
       clipped
       right
       mobile-break-point="320"
+      style="width: 268px;"
     >
       <v-tabs icons-and-text v-model="vmodel_layertab">
         <v-tab href="#capas">Capas<v-icon>mdi-layers</v-icon></v-tab>
@@ -61,6 +62,10 @@
               <v-expansion-panel-header>Municipios</v-expansion-panel-header>
               <v-expansion-panel-content>
                 <v-row>
+                  <br />
+                  <p>Descripción de la capa de municipios.</p>
+                </v-row>
+                <v-row>
                 <p style="margin-bottom: 0; margin-top: 16px;">Opacidad</p>
                 </v-row>
                 <v-row>
@@ -75,19 +80,101 @@
                 >
                   <v-btn-toggle>
                     <v-btn>
-                      <v-icon>mdi-map</v-icon>
+                      <v-icon>mdi-view_list</v-icon>
                     </v-btn>
                     <v-btn>
-                      <v-icon>mdi-layers</v-icon>
+                      <v-icon>mdi-info</v-icon>
                     </v-btn>
                     <v-btn>
-                      <v-icon>mdi-phone</v-icon>
+                      <v-icon>mdi-filter</v-icon>
                     </v-btn>
                     <v-btn>
-                      <v-icon>mdi-wifi</v-icon>
+                      <v-icon>mdi-settings</v-icon>
                     </v-btn>
                     <v-btn>
-                      <v-icon>mdi-alert</v-icon>
+                      <v-icon>mdi-delete</v-icon>
+                    </v-btn>
+                  </v-btn-toggle>
+                </v-row>
+                <v-divider></v-divider>
+              </v-expansion-panel-content>
+            </v-expansion-panel>
+            <v-expansion-panel>
+              <v-expansion-panel-header>Ejidos</v-expansion-panel-header>
+              <v-expansion-panel-content>
+                <v-row>
+                  <br />
+                  <p>Descripción de la capa de municipios.</p>
+                </v-row>
+                <v-row>
+                <p style="margin-bottom: 0; margin-top: 16px;">Opacidad</p>
+                </v-row>
+                <v-row>
+                  <v-slider
+                    v-model="slider"
+                    thumb-label
+                  ></v-slider>
+                </v-row>
+                <v-row
+                  align="center"
+                  justify="center"
+                >
+                  <v-btn-toggle>
+                    <v-btn>
+                      <v-icon>mdi-view_list</v-icon>
+                    </v-btn>
+                    <v-btn>
+                      <v-icon>mdi-info</v-icon>
+                    </v-btn>
+                    <v-btn>
+                      <v-icon>mdi-filter</v-icon>
+                    </v-btn>
+                    <v-btn>
+                      <v-icon>mdi-settings</v-icon>
+                    </v-btn>
+                    <v-btn>
+                      <v-icon>mdi-delete</v-icon>
+                    </v-btn>
+                  </v-btn-toggle>
+                </v-row>
+                <v-divider></v-divider>
+              </v-expansion-panel-content>
+            </v-expansion-panel>
+            <v-expansion-panel>
+              <v-expansion-panel-header>Parcelas</v-expansion-panel-header>
+              <v-expansion-panel-content>
+                <v-row>
+                  <br />
+                  <p>Descripción de la capa de municipios.</p>
+                </v-row>
+                <v-row>
+                <p style="margin-bottom: 0; margin-top: 16px;">Opacidad</p>
+                </v-row>
+                <v-row>
+                  <v-slider
+                    v-model="slider"
+                    thumb-label
+                  ></v-slider>
+                </v-row>
+                <v-row
+                  align="center"
+                  justify="center"
+                >
+                  <v-btn-toggle>
+                    <v-btn>
+                      <v-icon>mdi-view_list</v-icon>
+                    </v-btn>
+                    <v-btn>
+                      <v-icon>mdi-information</v-icon>
+                    </v-btn>
+                    <v-btn>
+                      <v-icon>mdi-filter</v-icon>
+                    </v-btn>
+                    <v-btn>
+                      <v-icon>mdi-settings</v-icon>
+                    </v-btn>
+                    <v-btn>
+                      <v-icon>mdi-delete</v-icon>
                     </v-btn>
                   </v-btn-toggle>
                 </v-row>
