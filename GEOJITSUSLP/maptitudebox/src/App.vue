@@ -6,7 +6,7 @@
       clipped
       right
       mobile-break-point="320"
-      style="width: 268px;"
+      style="width: 284px;"
     >
       <v-tabs icons-and-text v-model="vmodel_layertab">
         <v-tab href="#capas">Capas<v-icon>mdi-layers</v-icon></v-tab>
@@ -61,6 +61,19 @@
             <v-expansion-panel>
               <v-expansion-panel-header>Municipios</v-expansion-panel-header>
               <v-expansion-panel-content>
+                <v-row style="margin-top: 14px;">
+                  <v-btn-toggle>
+                    <v-btn color="blue-grey" class="v-button-upper">
+                      <v-icon color="grey lighten-5">mdi-chevron-down</v-icon>
+                    </v-btn>
+                    <v-btn color="blue-grey" class="v-button-upper">
+                      <v-icon color="grey lighten-5">mdi-chevron-up</v-icon>
+                    </v-btn>
+                    <v-btn color="red" class="v-button-upper">
+                      <v-icon color="grey lighten-5">mdi-delete</v-icon>
+                    </v-btn>
+                  </v-btn-toggle>
+                </v-row>
                 <v-row>
                   <br />
                   <p>Descripción de la capa de municipios.</p>
@@ -73,20 +86,20 @@
                 </v-row>
                 <v-row align="center" justify="center">
                   <v-btn-toggle>
-                    <v-btn>
-                      <v-icon>mdi-invert_colors</v-icon>
+                    <v-btn color="purple">
+                      <v-icon color="grey lighten-5">mdi-texture</v-icon>
                     </v-btn>
-                    <v-btn>
-                      <v-icon>mdi-info</v-icon>
+                    <v-btn color="cyan">
+                      <v-icon color="grey lighten-5">mdi-information</v-icon>
                     </v-btn>
-                    <v-btn>
-                      <v-icon>mdi-filter</v-icon>
+                    <v-btn color="lime">
+                      <v-icon color="grey lighten-5">mdi-filter</v-icon>
                     </v-btn>
-                    <v-btn>
-                      <v-icon>mdi-settings</v-icon>
+                    <v-btn color="blue-grey">
+                      <v-icon color="grey lighten-5">mdi-settings</v-icon>
                     </v-btn>
-                    <v-btn>
-                      <v-icon>mdi-delete</v-icon>
+                    <v-btn color="blue">
+                      <v-icon color="grey lighten-5">mdi-cloud-download</v-icon>
                     </v-btn>
                   </v-btn-toggle>
                 </v-row>
@@ -190,6 +203,13 @@
       >
         <v-icon>mdi-layers</v-icon>
       </v-btn>
+      <v-btn
+        icon
+        @click.stop="drawerRight = !drawerRight"
+        aria-label="Capas de datos"
+      >
+        <v-icon>mdi-information</v-icon>
+      </v-btn>
     </v-app-bar>
 
     <v-navigation-drawer v-model="drawer" app mobile-break-point="320">
@@ -209,58 +229,14 @@
 
     <v-content>
       <v-container fluid fill-height class="container-map">
-        <vl-map
-          :load-tiles-while-animating="true"
-          :load-tiles-while-interacting="true"
-          data-projection="EPSG:4326"
-          style="height: 100%"
-        >
-          <vl-view :zoom="Number(10)" :center="Array(-101.08, 22.16)"></vl-view>
-
-          <vl-layer-tile>
-            <vl-source-xyz
-              name="Google Satellite"
-              url="https://mt1.google.com/vt/lyrs=s&x={x}&y={y}&z={z}"
-              :overlay="true == false"
-            ></vl-source-xyz>
-          </vl-layer-tile>
-          <vl-layer-tile name="Open Street Map">
-            <vl-source-osm></vl-source-osm>
-          </vl-layer-tile>
-          <vl-layer-tile>
-            <vl-source-wms
-              url="https://api.parcelas-slp.maptitude.xyz/geoserver/gwc/service/wms?"
-              layers="PARCELASSLP:municipios"
-              format="image/png"
-              :overlay="true"
-              projection="EPSG:4326"
-              version="1.1.1"
-              :visible="true"
-            ></vl-source-wms>
-          </vl-layer-tile>
-          <vl-layer-tile>
-            <vl-source-wms
-              url="https://api.parcelas-slp.maptitude.xyz/geoserver/gwc/service/wms?"
-              layers="PARCELASSLP:ejidos"
-              format="image/png"
-              :overlay="true"
-              projection="EPSG:4326"
-              version="1.1.1"
-              :visible="true"
-            ></vl-source-wms>
-          </vl-layer-tile>
-          <vl-layer-tile>
-            <vl-source-wms
-              url="https://api.parcelas-slp.maptitude.xyz/geoserver/gwc/service/wms?"
-              layers="PARCELASSLP:parcelas"
-              format="image/png"
-              :overlay="true"
-              projection="EPSG:4326"
-              version="1.1.1"
-              :visible="true"
-            ></vl-source-wms>
-          </vl-layer-tile>
-        </vl-map>
+        <MglMap :accessToken="accessToken" :mapStyle.sync="mapStyle">
+          <MglRasterLayer
+            :source="municipios"
+            sourceId="municipios"
+            layerId="municipios"
+            :layer="municipios"
+          ></MglRasterLayer>
+        </MglMap>
       </v-container>
     </v-content>
 
@@ -275,28 +251,41 @@
 </template>
 
 <script>
-import Vue from "vue";
-import VueLayers from "vuelayers";
-import "vuelayers/lib/style.css";
 import "@mdi/font/css/materialdesignicons.css";
-//import * as olExt from "vuelayers/lib/ol-ext";
-
-Vue.use(VueLayers);
+import "mapbox-gl/dist/mapbox-gl.css";
+import Mapbox from "mapbox-gl";
+import { MglMap, MglRasterLayer } from "vue-mapbox";
 
 export default {
-  components: {},
-  icons: {
-    iconfont: "mdiSvg" // 'mdi' || 'mdiSvg' || 'md' || 'fa' || 'fa4' || 'faSvg'
+  components: {
+    MglMap,
+    MglRasterLayer
   },
-  props: {
-    source: String
-  },
+  props: {},
   watch: {
     model_capasbase(val) {
       console.log("model_capasbase", val);
     }
   },
   data: () => ({
+    municipios: {
+      type: "raster",
+      url:
+        "https://api.parcelas-slp.maptitude.xyz/geoserver/wms?&service=WMS&request=GetMap&layers=PARCELASSLP%3Amunicipios&styles=&format=image%2Fpng8&transparent=true&version=1.1.1&width=256&height=256&srs=EPSG%3A4326",
+      tiles: [
+        "https://api.parcelas-slp.maptitude.xyz/geoserver/wms?&service=WMS&request=GetMap&layers=PARCELASSLP%3Amunicipios&styles=&format=image%2Fpng8&transparent=true&version=1.1.1&width=256&height=256&srs=EPSG%3A4326"
+      ],
+      tileSize: 256
+    },
+    accessToken:
+      "pk.eyJ1Ijoibml6aGlzYWViYSIsImEiOiJjanZwZXNpeWYwZDcxNDlwOXVhejg1Yno3In0.kqEaQSkVaFMpKKtx0FyNRA",
+    mapbox_styles: {
+      outdoors_v11: {
+        name: "Outdoors",
+        url: "mapbox://styles/mapbox/outdoors-v11"
+      }
+    },
+    mapStyle: "mapbox://styles/mapbox/outdoors-v11",
     drawer: false,
     drawerRight: false,
     right: false,
@@ -304,151 +293,16 @@ export default {
     zoom: 2,
     center: [0, 0],
     rotation: 0,
-    geolocPosition: undefined,
     twoLine: false,
     threeLine: false,
-    threeLtwoLinetwoLineine: true,
-    nodes: [
-      { title: "Item1", isLeaf: true },
-      { title: "Item2", isLeaf: true, data: { visible: false } },
-      { title: "Folder1" },
-      {
-        title: "Folder2",
-        isExpanded: true,
-        children: [
-          { title: "Item3", isLeaf: true },
-          { title: "Item4", isLeaf: true }
-        ]
-      }
-    ],
     vmodel_capasbase: "osm",
     vmodel_layertab: "osm",
-    slider: 80,
-    capas_list: [
-      {
-        avatar: "https://cdn.vuetifyjs.com/images/lists/1.jpg",
-        title: "Municipios",
-        subtitle:
-          "<span class='text--primary'>Ali Connors</span> &mdash; I'll be in your neighborhood doing errands this weekend. Do you want to hang out?"
-      },
-      {
-        avatar: "https://cdn.vuetifyjs.com/images/lists/2.jpg",
-        title: "Ejidos",
-        subtitle:
-          "<span class='text--primary'>to Alex, Scott, Jennifer</span> &mdash; Wish I could come, but I'm out of town this weekend."
-      },
-      {
-        avatar: "https://cdn.vuetifyjs.com/images/lists/3.jpg",
-        title: "Parcelas",
-        subtitle:
-          "<span class='text--primary'>Sandra Adams</span> &mdash; Do you have Paris recommendations? Have you ever been?"
-      }
-    ],
-    items_list: [
-      {
-        avatar: "https://cdn.vuetifyjs.com/images/lists/1.jpg",
-        title: "Google Satellite",
-        subtitle:
-          "<span class='text--primary'>Ali Connors</span> &mdash; I'll be in your neighborhood doing errands this weekend. Do you want to hang out?"
-      },
-      {
-        avatar: "https://cdn.vuetifyjs.com/images/lists/2.jpg",
-        title: "Google Terrain",
-        subtitle:
-          "<span class='text--primary'>to Alex, Scott, Jennifer</span> &mdash; Wish I could come, but I'm out of town this weekend."
-      },
-      {
-        avatar: "https://cdn.vuetifyjs.com/images/lists/3.jpg",
-        title: "Open Street Map",
-        subtitle:
-          "<span class='text--primary'>Sandra Adams</span> &mdash; Do you have Paris recommendations? Have you ever been?"
-      },
-      {
-        avatar: "https://cdn.vuetifyjs.com/images/lists/4.jpg",
-        title: "Bing Maps",
-        subtitle:
-          "<span class='text--primary'>Trevor Hansen</span> &mdash; Have any ideas about what we should get Heidi for her birthday?"
-      },
-      {
-        avatar: "https://cdn.vuetifyjs.com/images/lists/5.jpg",
-        title: "Mapbox",
-        subtitle:
-          "<span class='text--primary'>Britta Holt</span> &mdash; We should eat this: Grate, Squash, Corn, and tomatillo Tacos."
-      }
-    ],
-    items: [
-      {
-        id: 1,
-        name: "Municipios",
-        children: [
-          { id: 2, name: "Calendar : app" },
-          { id: 3, name: "Chrome : app" },
-          { id: 4, name: "Webstorm : app" }
-        ]
-      },
-      {
-        id: 5,
-        name: "Documents :",
-        children: [
-          {
-            id: 6,
-            name: "vuetify :",
-            children: [
-              {
-                id: 7,
-                name: "src :",
-                children: [
-                  { id: 8, name: "index : ts" },
-                  { id: 9, name: "bootstrap : ts" }
-                ]
-              }
-            ]
-          },
-          {
-            id: 10,
-            name: "material2 :",
-            children: [
-              {
-                id: 11,
-                name: "src :",
-                children: [
-                  { id: 12, name: "v-btn : ts" },
-                  { id: 13, name: "v-card : ts" },
-                  { id: 14, name: "v-window : ts" }
-                ]
-              }
-            ]
-          }
-        ]
-      },
-      {
-        id: 15,
-        name: "Downloads :",
-        children: [
-          { id: 16, name: "October : pdf" },
-          { id: 17, name: "November : pdf" },
-          { id: 18, name: "Tutorial : html" }
-        ]
-      },
-      {
-        id: 19,
-        name: "Videos :",
-        children: [
-          {
-            id: 20,
-            name: "Tutorials :",
-            children: [
-              { id: 21, name: "Basic layouts : mp4" },
-              { id: 22, name: "Advanced techniques : mp4" },
-              { id: 23, name: "All about app : dir" }
-            ]
-          },
-          { id: 24, name: "Intro : mov" },
-          { id: 25, name: "Conference introduction : avi" }
-        ]
-      }
-    ]
-  })
+    slider: 80
+  }),
+  created() {
+    // We need to set mapbox-gl library here in order to use it in template
+    this.mapbox = Mapbox;
+  }
 };
 </script>
 
@@ -472,5 +326,12 @@ export default {
 
 .v-speed-dial--bottomG {
   bottom: 72px;
+}
+
+.v-button-upper {
+  height: 28px;
+  min-height: 28px;
+  min-width: 28px;
+  width: 28px;
 }
 </style>
