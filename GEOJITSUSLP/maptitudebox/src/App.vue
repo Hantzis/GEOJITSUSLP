@@ -231,10 +231,10 @@
       <v-container fluid fill-height class="container-map">
         <MglMap :accessToken="accessToken" :mapStyle.sync="mapStyle">
           <MglRasterLayer
-            :source="municipios"
             sourceId="municipios"
             layerId="municipios"
             :layer="municipios"
+            :data-src="municipios"
           ></MglRasterLayer>
         </MglMap>
       </v-container>
@@ -270,6 +270,9 @@ export default {
   data: () => ({
     municipios: {
       type: "raster",
+      sourceId: "municipios",
+      id: "municipios",
+      source: "municipios",
       url:
         "https://api.parcelas-slp.maptitude.xyz/geoserver/wms?&service=WMS&request=GetMap&layers=PARCELASSLP%3Amunicipios&styles=&format=image%2Fpng8&transparent=true&version=1.1.1&width=256&height=256&srs=EPSG%3A4326",
       tiles: [
