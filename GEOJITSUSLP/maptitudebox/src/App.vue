@@ -9,8 +9,13 @@
       style="width: 284px;"
     >
       <v-tabs icons-and-text v-model="vmodel_layertab">
-        <v-tab href="#capas">Capas<v-icon>mdi-layers</v-icon></v-tab>
-        <v-tab href="#base">Mapas Base<v-icon>mdi-map</v-icon></v-tab>
+        <v-tab href="#capas">Capas<v-icon>mdi-view_list</v-icon></v-tab>
+        <v-tab href="#base">Mapas Base<v-icon>mdi-info</v-icon></v-tab>
+        <v-tab href="#base">Mapas Base<v-icon>mdi-info</v-icon></v-tab>
+        <v-tab href="#base">Mapas Base<v-icon>mdi-filter</v-icon></v-tab>
+        <v-tab href="#base">Mapas Base<v-icon>mdi-settings</v-icon></v-tab>
+        <v-tab href="#base">Mapas Base<v-icon>mdi-delete</v-icon></v-tab>
+
       </v-tabs>
 
       <v-tabs-items v-model="vmodel_layertab">
@@ -46,12 +51,12 @@
           <!-- CARD Capas -->
           <v-card style="border-radius: 0px;">
             <v-card-title style="padding-bottom: 0;">
-              <v-icon>mdi-layers</v-icon> Capas
+              <v-icon>mdi-layers</v-icon><v-icon>mdi-info</v-icon>Capas
             </v-card-title>
             <v-card-text> </v-card-text>
           </v-card>
           <v-expansion-panels
-            style="border-radius: 0px;"
+            style="border-radius: 0;"
             :accordion="true"
             :multiple="true"
             :hover="true"
@@ -61,28 +66,41 @@
             <v-expansion-panel>
               <v-expansion-panel-header>Municipios</v-expansion-panel-header>
               <v-expansion-panel-content>
-                <v-row style="margin-top: 14px;">
-                  <v-btn-toggle>
-                    <v-btn color="blue-grey" class="v-button-upper">
-                      <v-icon color="grey lighten-5">mdi-chevron-down</v-icon>
-                    </v-btn>
-                    <v-btn color="blue-grey" class="v-button-upper">
-                      <v-icon color="grey lighten-5">mdi-chevron-up</v-icon>
-                    </v-btn>
-                    <v-btn color="red" class="v-button-upper">
-                      <v-icon color="grey lighten-5">mdi-delete</v-icon>
-                    </v-btn>
-                  </v-btn-toggle>
+                <v-row justify="space-between" align="start">
+                  <v-col pa-0>
+                    <v-row justify="start">
+                      <v-switch style="margin-top: 0; bottom: 0;"></v-switch>
+                    </v-row>
+                  </v-col>
+                  <v-col pa-0>
+                    <v-row justify="end">
+                      <v-btn-toggle no-toggle>
+                        <v-btn color="blue-grey" style="height: 28px; width: 28px; min-width: 28px;">
+                          <v-icon color="grey lighten-5">mdi-chevron-up</v-icon>
+                        </v-btn>
+                        <v-btn color="blue-grey" style="height: 28px; width: 28px; min-width: 28px;">
+                          <v-icon color="grey lighten-5">mdi-chevron-down</v-icon>
+                        </v-btn>
+                        <v-btn color="red" style="height: 28px; width: 28px; min-width: 28px;">
+                          <v-icon color="grey lighten-5">mdi-delete</v-icon>
+                        </v-btn>
+                      </v-btn-toggle>
+                    </v-row>
+                  </v-col>
                 </v-row>
-                <v-row>
-                  <br />
-                  <p>Descripción de la capa de municipios.</p>
-                </v-row>
-                <v-row>
-                  <p style="margin-bottom: 0; margin-top: 16px;">Opacidad</p>
-                </v-row>
-                <v-row>
-                  <v-slider v-model="slider" thumb-label></v-slider>
+                <v-row style="margin-top: -20px;">
+                  <v-card class="mx-auto" max-width="245">
+                    <v-img class="black--text align-end text--secondary" height="137px" width="245px" src="https://api.parcelas-slp.maptitude.xyz/geoserver/SLP/wms?service=WMS&version=1.1.0&request=GetMap&layers=SLP%3Amunicipios&bbox=-1.1299319633648233E7%2C2472249.2933160546%2C-1.1214552619463304E7%2C2591032.4653501143&width=548&height=768&srs=EPSG%3A3857&format=image%2Fpng" aspect-ratio="1.7">
+                      <v-card-title>Municipios</v-card-title>
+                    </v-img>
+                    <v-card-text>
+                      <v-slider v-model="slider" thumb-label style="min-height: 20px; margin-left: 4px; margin-right: 4px;"></v-slider>
+                      <v-tabs v-model="vmodel_layertab">
+                        <v-tab href="#simbologia">Simbología<v-icon>mdi-layers</v-icon></v-tab>
+                        <v-tab href="#informacion">Información<v-icon>mdi-map</v-icon></v-tab>
+                      </v-tabs>
+                    </v-card-text>
+                  </v-card>
                 </v-row>
                 <v-row align="center" justify="center">
                   <v-btn-toggle>
@@ -103,7 +121,11 @@
                     </v-btn>
                   </v-btn-toggle>
                 </v-row>
-                <v-divider></v-divider>
+                <v-row>
+                  <v-img width="245px" src="https://api.parcelas-slp.maptitude.xyz/geoserver/wms?request=GetLegendGraphic&version=1.0.0&format=image/png&width=30&HEIGHT=30&layer=SLP:municipios&legend_options=fontName:Arial;fontAntiAliasing:true;fontSize:12" />
+                </v-row>
+                <p> </p>
+                <v-divider bold></v-divider>
               </v-expansion-panel-content>
             </v-expansion-panel>
             <v-expansion-panel>
@@ -111,7 +133,7 @@
               <v-expansion-panel-content>
                 <v-row>
                   <br />
-                  <p>Descripción de la capa de municipios.</p>
+                  <p>Descripción de la capa de ejidos.</p>
                 </v-row>
                 <v-row>
                   <p style="margin-bottom: 0; margin-top: 16px;">Opacidad</p>
@@ -145,8 +167,7 @@
               <v-expansion-panel-header>Parcelas</v-expansion-panel-header>
               <v-expansion-panel-content>
                 <v-row>
-                  <br />
-                  <p>Descripción de la capa de municipios.</p>
+                  <p>Descripción de la capa de parcelas.</p>
                 </v-row>
                 <v-row>
                   <p style="margin-bottom: 0; margin-top: 16px;">Opacidad</p>
@@ -176,8 +197,8 @@
                 <v-divider></v-divider>
               </v-expansion-panel-content>
             </v-expansion-panel>
-            <v-expansion-panel v-for="(item, i) in 5" :key="i">
-              <v-expansion-panel-header>Item</v-expansion-panel-header>
+            <v-expansion-panel v-for="(item, i) in 2" :key="i">
+              <v-expansion-panel-header>Item {{ i }}</v-expansion-panel-header>
               <v-expansion-panel-content>
                 Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
                 eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut
@@ -194,7 +215,7 @@
 
     <v-app-bar app clipped-right color="blue-grey" dark>
       <v-app-bar-nav-icon @click.stop="drawer = !drawer" />
-      <v-toolbar-title>Maptitude</v-toolbar-title>
+      <v-toolbar-title>PokeTree GO</v-toolbar-title>
       <v-spacer />
       <v-btn
         icon
@@ -229,12 +250,17 @@
 
     <v-content>
       <v-container fluid fill-height class="container-map">
-        <MglMap :accessToken="accessToken" :mapStyle.sync="mapStyle">
+        <MglMap
+          :accessToken="accessToken"
+          :mapStyle.sync="mapStyle"
+          :zoom="10"
+          :center="Array(-100.96, 22.16)"
+        >
           <MglRasterLayer
-            sourceId="municipios"
-            layerId="municipios"
-            :layer="municipios"
-            :data-src="municipios"
+            sourceId="municipios_src"
+            layerId="municipios_lyr"
+            :source="municipios_src"
+            :layer="municipios_lyr"
           ></MglRasterLayer>
         </MglMap>
       </v-container>
@@ -243,7 +269,7 @@
     <v-navigation-drawer v-model="right" fixed right temporary />
 
     <v-footer app color="blue-grey" class="white--text">
-      <span>Maptitude XYZ</span>
+      <span>Nizhi Saeba</span>
       <v-spacer />
       <span>&copy; 2020</span>
     </v-footer>
@@ -268,15 +294,26 @@ export default {
     }
   },
   data: () => ({
+    municipios_src: {
+      id: "municipios_source",
+      type: "raster",
+      tiles: [
+        "https://api.parcelas-slp.maptitude.xyz/geoserver/wms?&service=WMS&request=GetMap&layers=SLP%3Amunicipios&styles=&format=image%2Fpng8&transparent=true&version=1.1.1&width=256&height=256&srs=EPSG%3A3857&bbox={bbox-epsg-3857}",
+      ],
+      tileSize: 256
+    },
+    municipios_lyr: {
+      id: "municipios_layer",
+      type: "raster",
+      source: "municipios_src"
+    },
     municipios: {
       type: "raster",
       sourceId: "municipios",
       id: "municipios",
       source: "municipios",
-      url:
-        "https://api.parcelas-slp.maptitude.xyz/geoserver/wms?&service=WMS&request=GetMap&layers=PARCELASSLP%3Amunicipios&styles=&format=image%2Fpng8&transparent=true&version=1.1.1&width=256&height=256&srs=EPSG%3A4326",
       tiles: [
-        "https://api.parcelas-slp.maptitude.xyz/geoserver/wms?&service=WMS&request=GetMap&layers=PARCELASSLP%3Amunicipios&styles=&format=image%2Fpng8&transparent=true&version=1.1.1&width=256&height=256&srs=EPSG%3A4326"
+        "https://api.parcelas-slp.maptitude.xyz/geoserver/wms?&service=WMS&request=GetMap&layers=PARCELASSLP%3Amunicipios&styles=&format=image%2Fpng8&transparent=true&version=1.1.1&width=256&height=256&srs=EPSG%3A4326&bbox={bbox-epsg-4326}"
       ],
       tileSize: 256
     },
