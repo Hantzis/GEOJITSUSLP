@@ -163,40 +163,44 @@
                       <v-tab-item value="info">
                         <v-card>
                           <v-card-text>
-                            info
+                            info que viene de layer_description
                           </v-card-text>
                         </v-card>
                       </v-tab-item>
                       <v-tab-item value="filter">
                         <v-card>
                           <v-card-text>
-                            info
+                            <v-btn block x-large color="#cddc39" dark>Abrir dialogo</v-btn>
                           </v-card-text>
                         </v-card>
                       </v-tab-item>
                       <v-tab-item value="settings">
                         <v-card>
                           <v-card-text>
-                            info
+                            <v-btn block x-large color="#607d8b" dark>Abrir dialogo</v-btn>
                           </v-card-text>
                         </v-card>
                       </v-tab-item>
                       <v-tab-item value="download">
-
-                            <v-list dense>
-                              <v-list-item-group v-model="items" color="primary">
-                                <v-list-item>
-                                  <v-list-item-content>
-                                    <v-list-item-title
-                                      v-text="items[0].text"
-                                    ></v-list-item-title>
-                                  </v-list-item-content>
-                                </v-list-item>
-                                <v-list-item>
-                                  Shapefile
-                                </v-list-item>
-                              </v-list-item-group>
-                            </v-list>
+                        <v-list dense>
+                          <v-list-item-group color="primary">
+                            <v-list-item>
+                              <v-list-item-content>
+                                <v-list-item-title
+                                  v-text="items[0].text"
+                                ></v-list-item-title>
+                              </v-list-item-content>
+                            </v-list-item>
+                            <v-list-item>
+                              <v-list-item-content>
+                                KML
+                              </v-list-item-content>
+                            </v-list-item>
+                            <v-list-item>
+                              Shapefile
+                            </v-list-item>
+                          </v-list-item-group>
+                        </v-list>
                       </v-tab-item>
                     </v-tabs-items>
                   </v-card>
@@ -293,7 +297,7 @@
 
     <v-app-bar app clipped-right color="blue-grey" dark>
       <v-app-bar-nav-icon @click.stop="drawer = !drawer" />
-      <v-toolbar-title>PokeTree GO</v-toolbar-title>
+      <v-toolbar-title>Maptitude XYZ</v-toolbar-title>
       <v-spacer />
       <v-btn
         icon
@@ -347,7 +351,7 @@
     <v-navigation-drawer v-model="right" fixed right temporary />
 
     <v-footer app color="blue-grey" class="white--text">
-      <span>Nizhi Saeba</span>
+      <span>Maptitude XYZ</span>
       <v-spacer />
       <span>&copy; 2020</span>
     </v-footer>

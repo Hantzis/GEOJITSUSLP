@@ -51,6 +51,7 @@ class WMSCRS(models.Model):
 class WMSLayer(models.Model):
     # el layer_name debe ser unique con el usuario propietario (despues)
     layer_name = models.CharField(max_length=255, unique=True)
+    layer_description = models.CharField(max_length=255, unique=True)
     visible = models.BooleanField(default=False)
     server = models.ForeignKey(WMSServer, on_delete=models.PROTECT)
     version = models.CharField(max_length=5, choices=(('', 'WMS Version'), ('1.1.1', '1.1.1'), ('1.3.0', '1.3.0')))
