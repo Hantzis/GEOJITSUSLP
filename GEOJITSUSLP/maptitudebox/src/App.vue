@@ -50,245 +50,7 @@
             </v-card-title>
             <v-card-text> </v-card-text>
           </v-card>
-          <v-expansion-panels
-            style="border-radius: 0;"
-            :accordion="true"
-            :multiple="true"
-            :hover="true"
-            :flat="true"
-            :focusable="true"
-          >
-            <v-expansion-panel>
-              <v-expansion-panel-header>Municipios</v-expansion-panel-header>
-              <v-expansion-panel-content>
-                <v-row justify="space-between" align="start">
-                  <v-col pa-0>
-                    <v-row justify="start">
-                      <v-switch style="margin-top: 0; bottom: 0;"></v-switch>
-                    </v-row>
-                  </v-col>
-                  <v-col pa-0>
-                    <v-row justify="end">
-                      <v-btn-toggle no-toggle>
-                        <v-btn
-                          color="blue-grey"
-                          style="height: 28px; width: 28px; min-width: 28px;"
-                        >
-                          <v-icon color="grey lighten-5">mdi-chevron-up</v-icon>
-                        </v-btn>
-                        <v-btn
-                          color="blue-grey"
-                          style="height: 28px; width: 28px; min-width: 28px;"
-                        >
-                          <v-icon color="grey lighten-5"
-                            >mdi-chevron-down</v-icon
-                          >
-                        </v-btn>
-                        <v-btn
-                          color="red"
-                          style="height: 28px; width: 28px; min-width: 28px;"
-                        >
-                          <v-icon color="grey lighten-5">mdi-delete</v-icon>
-                        </v-btn>
-                      </v-btn-toggle>
-                    </v-row>
-                  </v-col>
-                </v-row>
-                <v-row style="margin-top: -20px;">
-                  <v-card class="mx-auto" max-width="245">
-                    <v-img
-                      class="black--text align-end text--secondary"
-                      height="137px"
-                      width="245px"
-                      src="https://api.parcelas-slp.maptitude.xyz/geoserver/SLP/wms?service=WMS&version=1.1.0&request=GetMap&layers=SLP%3Amunicipios&bbox=-1.1299319633648233E7%2C2472249.2933160546%2C-1.1214552619463304E7%2C2591032.4653501143&width=548&height=768&srs=EPSG%3A3857&format=image%2Fpng"
-                      aspect-ratio="1.7"
-                    >
-                      <v-card-title>Municipios</v-card-title>
-                    </v-img>
-                    <v-card-text>
-                      <v-slider
-                        v-model="slider"
-                        thumb-label
-                        style="min-height: 20px; margin-left: 4px; margin-right: 4px;"
-                      ></v-slider>
-                    </v-card-text>
-                    <v-tabs
-                      color="black"
-                      slider-size="3"
-                      v-model="vmodel_layericontabs"
-                    >
-                      <v-tab
-                        href="#legend"
-                        style="background-color: #9c27b0; min-width: 48px; max-width: 49px;"
-                      >
-                        <v-icon color="grey lighten-5">mdi-texture</v-icon>
-                      </v-tab>
-                      <v-tab
-                        href="#info"
-                        style="background-color: #00bcd4; min-width: 48px; max-width: 49px;"
-                      >
-                        <v-icon color="grey lighten-5">mdi-information</v-icon>
-                      </v-tab>
-                      <v-tab
-                        href="#filter"
-                        style="background-color: #cddc39; min-width: 48px; max-width: 49px;"
-                      >
-                        <v-icon color="grey lighten-5">mdi-filter</v-icon>
-                      </v-tab>
-                      <v-tab
-                        href="#settings"
-                        style="background-color: #607d8b; min-width: 48px; max-width: 49px;"
-                      >
-                        <v-icon color="grey lighten-5">mdi-settings</v-icon>
-                      </v-tab>
-                      <v-tab
-                        href="#download"
-                        style="background-color: #2196F3; min-width: 48px; max-width: 49px;"
-                      >
-                        <v-icon color="grey lighten-5"
-                          >mdi-cloud-download</v-icon
-                        >
-                      </v-tab>
-                    </v-tabs>
-                    <v-tabs-items v-model="vmodel_layericontabs">
-                      <v-tab-item value="legend">
-                        <v-card>
-                          <v-card-text>
-                            <v-img
-                              src="https://api.parcelas-slp.maptitude.xyz/geoserver/wms?request=GetLegendGraphic&version=1.1.1&format=image/png&width=30&HEIGHT=30&layer=SLP:municipios&legend_options=fontName:Arial;fontAntiAliasing:true;fontSize:16"
-                            />
-                          </v-card-text>
-                        </v-card>
-                      </v-tab-item>
-                      <v-tab-item value="info">
-                        <v-card>
-                          <v-card-text>
-                            info que viene de layer_description
-                          </v-card-text>
-                        </v-card>
-                      </v-tab-item>
-                      <v-tab-item value="filter">
-                        <v-card>
-                          <v-card-text>
-                            <v-btn block x-large color="#cddc39" dark>Abrir dialogo</v-btn>
-                          </v-card-text>
-                        </v-card>
-                      </v-tab-item>
-                      <v-tab-item value="settings">
-                        <v-card>
-                          <v-card-text>
-                            <v-btn block x-large color="#607d8b" dark>Abrir dialogo</v-btn>
-                          </v-card-text>
-                        </v-card>
-                      </v-tab-item>
-                      <v-tab-item value="download">
-                        <v-list dense>
-                          <v-list-item-group color="primary">
-                            <v-list-item>
-                              <v-list-item-content>
-                                <v-list-item-title
-                                  v-text="items[0].text"
-                                ></v-list-item-title>
-                              </v-list-item-content>
-                            </v-list-item>
-                            <v-list-item>
-                              <v-list-item-content>
-                                KML
-                              </v-list-item-content>
-                            </v-list-item>
-                            <v-list-item>
-                              Shapefile
-                            </v-list-item>
-                          </v-list-item-group>
-                        </v-list>
-                      </v-tab-item>
-                    </v-tabs-items>
-                  </v-card>
-                </v-row>
-
-                <p></p>
-                <v-divider bold></v-divider>
-              </v-expansion-panel-content>
-            </v-expansion-panel>
-            <v-expansion-panel>
-              <v-expansion-panel-header>Ejidos</v-expansion-panel-header>
-              <v-expansion-panel-content>
-                <v-row>
-                  <br />
-                  <p>Descripción de la capa de ejidos.</p>
-                </v-row>
-                <v-row>
-                  <p style="margin-bottom: 0; margin-top: 16px;">Opacidad</p>
-                </v-row>
-                <v-row>
-                  <v-slider v-model="slider" thumb-label></v-slider>
-                </v-row>
-                <v-row align="center" justify="center">
-                  <v-btn-toggle>
-                    <v-btn>
-                      <v-icon>mdi-view_list</v-icon>
-                    </v-btn>
-                    <v-btn>
-                      <v-icon>mdi-info</v-icon>
-                    </v-btn>
-                    <v-btn>
-                      <v-icon>mdi-filter</v-icon>
-                    </v-btn>
-                    <v-btn>
-                      <v-icon>mdi-settings</v-icon>
-                    </v-btn>
-                    <v-btn>
-                      <v-icon>mdi-delete</v-icon>
-                    </v-btn>
-                  </v-btn-toggle>
-                </v-row>
-                <v-divider></v-divider>
-              </v-expansion-panel-content>
-            </v-expansion-panel>
-            <v-expansion-panel>
-              <v-expansion-panel-header>Parcelas</v-expansion-panel-header>
-              <v-expansion-panel-content>
-                <v-row>
-                  <p>Descripción de la capa de parcelas.</p>
-                </v-row>
-                <v-row>
-                  <p style="margin-bottom: 0; margin-top: 16px;">Opacidad</p>
-                </v-row>
-                <v-row>
-                  <v-slider v-model="slider" thumb-label></v-slider>
-                </v-row>
-                <v-row align="center" justify="center">
-                  <v-btn-toggle>
-                    <v-btn>
-                      <v-icon>mdi-view_list</v-icon>
-                    </v-btn>
-                    <v-btn>
-                      <v-icon>mdi-information</v-icon>
-                    </v-btn>
-                    <v-btn>
-                      <v-icon>mdi-filter</v-icon>
-                    </v-btn>
-                    <v-btn>
-                      <v-icon>mdi-settings</v-icon>
-                    </v-btn>
-                    <v-btn>
-                      <v-icon>mdi-delete</v-icon>
-                    </v-btn>
-                  </v-btn-toggle>
-                </v-row>
-                <v-divider></v-divider>
-              </v-expansion-panel-content>
-            </v-expansion-panel>
-            <v-expansion-panel v-for="(item, i) in 2" :key="i">
-              <v-expansion-panel-header>Item {{ i }}</v-expansion-panel-header>
-              <v-expansion-panel-content>
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-                eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut
-                enim ad minim veniam, quis nostrud exercitation ullamco laboris
-                nisi ut aliquip ex ea commodo consequat.
-              </v-expansion-panel-content>
-            </v-expansion-panel>
-          </v-expansion-panels>
+          <MapboxLayer></MapboxLayer>
 
           <!-- /CARD Mapas base -->
         </v-tab-item>
@@ -306,13 +68,13 @@
       >
         <v-icon>mdi-layers</v-icon>
       </v-btn>
-      <v-btn
-        icon
-        @click.stop="drawerRight = !drawerRight"
-        aria-label="Capas de datos"
-      >
+      <v-btn icon>
         <v-icon>mdi-information</v-icon>
       </v-btn>
+      <v-btn icon>
+        <v-icon>mdi-login</v-icon>
+      </v-btn>
+
     </v-app-bar>
 
     <v-navigation-drawer v-model="drawer" app mobile-break-point="320">
@@ -322,7 +84,7 @@
             <v-icon>mdi-exit-to-app</v-icon>
           </v-list-item-action>
           <v-list-item-content>
-            <v-list-item-title>Open Temporary Draweraa</v-list-item-title>
+            <v-list-item-title>Menú de opciones</v-list-item-title>
           </v-list-item-content>
         </v-list-item>
       </v-list>
@@ -363,11 +125,13 @@ import "@mdi/font/css/materialdesignicons.css";
 import "mapbox-gl/dist/mapbox-gl.css";
 import Mapbox from "mapbox-gl";
 import { MglMap, MglRasterLayer } from "vue-mapbox";
+import MapboxLayer from "./components/MapboxLayer";
 
 export default {
   components: {
     MglMap,
-    MglRasterLayer
+    MglRasterLayer,
+    MapboxLayer
   },
   props: {},
   watch: {
