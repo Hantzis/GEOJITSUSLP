@@ -1,5 +1,6 @@
 <template>
   <v-app id="inspire">
+    <!-- Menú de capas -->
     <v-navigation-drawer
       v-model="drawerRight"
       app
@@ -12,7 +13,6 @@
         <v-tab href="#capas">Capas<v-icon>mdi-layers</v-icon></v-tab>
         <v-tab href="#base">Mapas Base<v-icon>mdi-map</v-icon></v-tab>
       </v-tabs>
-
       <v-tabs-items v-model="vmodel_layertab">
         <v-tab-item value="base">
           <!-- CARD Mapas base -->
@@ -22,21 +22,13 @@
             </v-card-title>
             <v-card-text>
               <v-radio-group v-model="vmodel_capasbase" :mandatory="true">
-                <v-radio label="Open Street Map" value="osm"></v-radio>
                 <v-radio
-                  label="Google Satellite"
-                  value="google_satellite"
-                ></v-radio>
-                <v-radio
-                  label="Google Terrain"
-                  value="google_terrain"
-                ></v-radio>
-                <v-radio
-                  label="Google Streets"
-                  value="google_streets"
-                ></v-radio>
-                <v-radio label="Bing Maps" value="bing"></v-radio>
-                <v-radio label="Mapbox" value="mapbox"></v-radio>
+                  v-for="(value, key) in mapbox_styles"
+                  v-bind:value="key"
+                  v-bind:key="key"
+                  v-bind:label="value.name"
+                  @change="set_style(value.url)"
+                />
               </v-radio-group>
             </v-card-text>
           </v-card>
@@ -46,17 +38,16 @@
           <!-- CARD Capas -->
           <v-card style="border-radius: 0px;">
             <v-card-title style="padding-bottom: 0;">
-              <v-icon>mdi-layers</v-icon><v-icon>mdi-info</v-icon>Capas
+              <v-icon>mdi-layers</v-icon>Capas
             </v-card-title>
             <v-card-text> </v-card-text>
           </v-card>
-          <MapboxLayer></MapboxLayer>
-
+          <mapbox-layer></mapbox-layer>
           <!-- /CARD Mapas base -->
         </v-tab-item>
       </v-tabs-items>
     </v-navigation-drawer>
-
+    <!-- / Menú de capas -->
     <v-app-bar app clipped-right color="blue-grey" dark>
       <v-app-bar-nav-icon @click.stop="drawer = !drawer" />
       <v-toolbar-title>Maptitude XYZ</v-toolbar-title>
@@ -74,7 +65,6 @@
       <v-btn icon>
         <v-icon>mdi-login</v-icon>
       </v-btn>
-
     </v-app-bar>
 
     <v-navigation-drawer v-model="drawer" app mobile-break-point="320">
@@ -97,8 +87,8 @@
         <MglMap
           :accessToken="accessToken"
           :mapStyle.sync="mapStyle"
-          :zoom="10"
-          :center="Array(-100.96, 22.16)"
+          :zoom.sync="map_zoom"
+          :center.sync="map_center"
         >
           <MglRasterLayer
             sourceId="municipios_src"
@@ -140,11 +130,6 @@ export default {
     }
   },
   data: () => ({
-    items: [
-      { text: "Real-Time", icon: "mdi-clock" },
-      { text: "Audience", icon: "mdi-account" },
-      { text: "Conversions", icon: "mdi-flag" }
-    ],
     municipios_src: {
       id: "municipios_source",
       type: "raster",
@@ -174,9 +159,31 @@ export default {
       outdoors_v11: {
         name: "Outdoors",
         url: "mapbox://styles/mapbox/outdoors-v11"
+      },
+      streets_v11: {
+        name: "Streets",
+        url: "mapbox://styles/mapbox/streets-v11"
+      },
+      light_v10: {
+        name: "Light",
+        url: "mapbox://styles/mapbox/light-v10"
+      },
+      dark_v10: {
+        name: "Dark",
+        url: "mapbox://styles/mapbox/dark-v10"
+      },
+      satellite_v9: {
+        name: "Satellite",
+        url: "mapbox://styles/mapbox/satellite-v9"
+      },
+      satellite_streets_v11: {
+        name: "Satellite Streets",
+        url: "mapbox://styles/mapbox/satellite-streets-v11"
       }
     },
     mapStyle: "mapbox://styles/mapbox/outdoors-v11",
+    map_center: Array(-100.96, 22.16),
+    map_zoom: 10,
     drawer: false,
     drawerRight: false,
     right: false,
@@ -186,16 +193,20 @@ export default {
     rotation: 0,
     twoLine: false,
     threeLine: false,
-    vmodel_capasbase: "osm",
-    vmodel_layertab: "osm",
+    vmodel_capasbase: "vmodel_capasbase",
+    vmodel_layertab: "layers",
     vmodel_layericontabs: null,
     slider: 80
   }),
   methods: {
+    set_style(val) {
+      this.mapStyle = val;
+    },
     testa(val) {
       alert(val);
     }
   },
+  computed: {},
   created() {
     // We need to set mapbox-gl library here in order to use it in template
     this.mapbox = Mapbox;
