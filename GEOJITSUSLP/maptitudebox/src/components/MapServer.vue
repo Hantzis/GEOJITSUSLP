@@ -8,9 +8,9 @@
       :flat="true"
       :focusable="true"
     >
-      <v-expansion-panel v-for="(item, i) in 5" :key="i">
+      <v-expansion-panel v-for="(item, i) in this.servers" :key="i">
         <v-expansion-panel-header
-          >Municipios {{ item }}</v-expansion-panel-header
+          >{{ item.server_name }}</v-expansion-panel-header
         >
         <v-expansion-panel-content>
           <v-row justify="space-between" align="start">
@@ -178,6 +178,9 @@
 <script>
 export default {
   name: "MapboxLayer",
+  props: {
+    servers: Array
+  },
   data: () => ({
     slider: 80,
     vmodel_layericontabs: null,

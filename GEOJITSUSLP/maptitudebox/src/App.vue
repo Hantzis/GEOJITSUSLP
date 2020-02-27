@@ -9,11 +9,30 @@
       mobile-break-point="320"
       style="width: 284px;"
     >
-      <v-tabs icons-and-text v-model="vmodel_layertab">
+      <v-tabs icons-and-text :show-arrows="true" grow v-model="vmodel_layertab">
         <v-tab href="#capas">Capas<v-icon>mdi-layers</v-icon></v-tab>
         <v-tab href="#base">Mapas Base<v-icon>mdi-map</v-icon></v-tab>
+        <v-tab href="#servidores">Servidores<v-icon>mdi-network</v-icon></v-tab>
       </v-tabs>
       <v-tabs-items v-model="vmodel_layertab">
+        <v-tab-item value="capas">
+          <!-- CARD Capas -->
+          <v-card style="border-radius: 0px;">
+            <v-card-title style="padding-bottom: 0;">
+              <v-row>
+                <v-col> <v-icon>mdi-layers</v-icon>Capas</v-col>
+                <v-col align="right">
+                  <v-btn fab small color="green"
+                    ><v-icon color="white">mdi-plus</v-icon></v-btn
+                  >
+                </v-col>
+              </v-row>
+            </v-card-title>
+            <v-card-text> </v-card-text>
+          </v-card>
+          <mapbox-layer></mapbox-layer>
+          <!-- /CARD Mapas base -->
+        </v-tab-item>
         <v-tab-item value="base">
           <!-- CARD Mapas base -->
           <v-card>
@@ -34,15 +53,40 @@
           </v-card>
           <!-- /CARD Mapas base -->
         </v-tab-item>
-        <v-tab-item value="capas">
+        <v-tab-item value="servidores">
           <!-- CARD Capas -->
           <v-card style="border-radius: 0px;">
             <v-card-title style="padding-bottom: 0;">
-              <v-icon>mdi-layers</v-icon>Capas
+              <v-row>
+                <v-col cols="8"> <v-icon>mdi-network</v-icon>Servidores</v-col>
+                <v-col cols="4" align="right">
+                  <v-btn fab small color="green"
+                    ><v-icon color="white">mdi-plus</v-icon></v-btn
+                  >
+                </v-col>
+              </v-row>
             </v-card-title>
-            <v-card-text> </v-card-text>
+            <v-card-text>
+              <v-list>
+                <v-list-item
+                  :three-line="true"
+                  v-for="(item, i) in servers"
+                  :key="i"
+                  :dense="true"
+                >
+                  <v-list-item-content>
+                    <v-list-item-title
+                      v-html="item.server_name"
+                    ></v-list-item-title>
+                    <v-list-item-subtitle
+                      v-html="item.server_title"
+                    ></v-list-item-subtitle>
+                  </v-list-item-content>
+                </v-list-item>
+              </v-list>
+            </v-card-text>
           </v-card>
-          <mapbox-layer></mapbox-layer>
+          <map-server :servers="servers"></map-server>
           <!-- /CARD Mapas base -->
         </v-tab-item>
       </v-tabs-items>
@@ -93,8 +137,8 @@
           <MglRasterLayer
             sourceId="municipios_src"
             layerId="municipios_lyr"
-            :source="municipios_src"
-            :layer="municipios_lyr"
+            :source.sync="municipios_src"
+            :layer.sync="municipios_lyr"
           ></MglRasterLayer>
         </MglMap>
       </v-container>
@@ -116,12 +160,15 @@ import "mapbox-gl/dist/mapbox-gl.css";
 import Mapbox from "mapbox-gl";
 import { MglMap, MglRasterLayer } from "vue-mapbox";
 import MapboxLayer from "./components/MapboxLayer";
+import MapServer from "./components/MapServer";
+import axios from "axios";
 
 export default {
   components: {
     MglMap,
     MglRasterLayer,
-    MapboxLayer
+    MapboxLayer,
+    MapServer
   },
   props: {},
   watch: {
@@ -143,6 +190,18 @@ export default {
       type: "raster",
       source: "municipios_src"
     },
+    providers: [
+      {
+        name: "Maptitude",
+        base_url: "https://api.parcelas-slp.maptitude.xyz/rest/v2/",
+        servers: "wms-servers",
+        layers: "wms-layers",
+        crs: "wms-crs"
+      }
+    ],
+    servers_url: "https://api.parcelas-slp.maptitude.xyz/rest/v2/wms-servers/",
+    servers: [],
+    layers: [],
     municipios: {
       type: "raster",
       sourceId: "municipios",
@@ -188,11 +247,6 @@ export default {
     drawerRight: false,
     right: false,
     left: false,
-    zoom: 2,
-    center: [0, 0],
-    rotation: 0,
-    twoLine: false,
-    threeLine: false,
     vmodel_capasbase: "vmodel_capasbase",
     vmodel_layertab: "layers",
     vmodel_layericontabs: null,
@@ -210,6 +264,25 @@ export default {
   created() {
     // We need to set mapbox-gl library here in order to use it in template
     this.mapbox = Mapbox;
+  },
+  mounted() {
+    for (let provider of this.providers) {
+      const server = provider.base_url + provider.servers + "/";
+      console.log("provider_server ", server);
+      axios.get(server).then(response => {
+        console.log("response data: ", response.data);
+        this.servers.concat(this.servers, response.data);
+        for (let server in response.data.entries()) {
+          console.log("server for: ", server);
+        }
+        console.log("servers: ", this.servers);
+      });
+    }
+    console.log("aqui");
+    axios.get(this.servers_url).then(response => {
+      console.log("SERVER data", response.data);
+      this.servers = response.data;
+    });
   }
 };
 </script>
