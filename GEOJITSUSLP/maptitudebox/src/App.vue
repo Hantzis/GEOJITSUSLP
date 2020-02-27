@@ -67,23 +67,7 @@
               </v-row>
             </v-card-title>
             <v-card-text>
-              <v-list>
-                <v-list-item
-                  :three-line="true"
-                  v-for="(item, i) in servers"
-                  :key="i"
-                  :dense="true"
-                >
-                  <v-list-item-content>
-                    <v-list-item-title
-                      v-html="item.server_name"
-                    ></v-list-item-title>
-                    <v-list-item-subtitle
-                      v-html="item.server_title"
-                    ></v-list-item-subtitle>
-                  </v-list-item-content>
-                </v-list-item>
-              </v-list>
+              Servidores WMS y WFS de dónde conectar capas
             </v-card-text>
           </v-card>
           <map-server :servers="servers"></map-server>
