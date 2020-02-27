@@ -1,5 +1,5 @@
 from rest_framework_gis.serializers import ModelSerializer
-from rest_framework.serializers import StringRelatedField
+from rest_framework.serializers import StringRelatedField, RelatedField
 from . models import WMSServer, WMSLayer, WMSCRS
 
 
@@ -9,8 +9,12 @@ class WMSServerSerializer(ModelSerializer):
         fields = '__all__'
 
 
+class WMSServerURL(RelatedField):
+    def to_representation(self, value):
+        return value.server_baseurl
+
 class WMSLayerSerializer(ModelSerializer):
-    server = StringRelatedField(many=True)
+    server = WMSServerURL(many=False, read_only=True)
 
     class Meta:
         model = WMSLayer

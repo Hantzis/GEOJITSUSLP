@@ -21,6 +21,9 @@ class WMSServer(models.Model):
     server_enabled = models.BooleanField(default=True)
     server_permanent = models.BooleanField(default=False)
 
+    def __str__(self):
+        return self.server_name
+
     def save(self, *args, **kwargs):
         if self.server_baseurl[-1] != '?':  # Revisar si la url termina con un signo '?'
             self.server_baseurl += '?'  # Si no, ponerselo, es necesario para concatenar los demas parametros
