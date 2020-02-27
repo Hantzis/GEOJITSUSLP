@@ -53,7 +53,7 @@ class WMSCRS(models.Model):
 class WMSLayer(models.Model):
     # el layer_name debe ser unique con el usuario propietario (despues)
     layer_name = models.CharField(max_length=255, unique=True)
-    layer_description = models.CharField(max_length=255, unique=True)
+    layer_description = models.CharField(max_length=255, blank=True, null=True)
     layer_enabled = models.BooleanField(default=False)
     layer_permanent = models.BooleanField(default=False)
     layer_visible = models.BooleanField(default=False)
