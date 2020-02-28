@@ -60,6 +60,7 @@ class WMSLayer(models.Model):
     layer_enabled = models.BooleanField(default=False)
     layer_permanent = models.BooleanField(default=False)
     layer_visible = models.BooleanField(default=False)
+    layer_opacity = models.PositiveSmallIntegerField(default=100)
     server = models.ForeignKey(WMSServer, on_delete=models.PROTECT)
     version = models.CharField(max_length=5, choices=(('', 'WMS Version'), ('1.1.1', '1.1.1'), ('1.3.0', '1.3.0')))
     layers = models.CharField(max_length=255)

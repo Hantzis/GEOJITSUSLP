@@ -1,5 +1,20 @@
 <template>
   <div>
+    <v-card style="border-radius: 0px;">
+      <v-card-title style="padding-bottom: 0;">
+        <v-row>
+          <v-col cols="8"> <v-icon>mdi-network</v-icon>Servidores</v-col>
+          <v-col cols="4" align="right">
+            <v-btn fab small color="green" @click.stop="dialog = true"
+              ><v-icon color="white">mdi-plus</v-icon></v-btn
+            >
+          </v-col>
+        </v-row>
+      </v-card-title>
+      <v-card-text>
+        Servidores WMS y WFS de dónde conectar capas
+      </v-card-text>
+    </v-card>
     <v-expansion-panels
       style="border-radius: 0;"
       :accordion="true"
@@ -44,19 +59,25 @@
             <v-card class="mx-auto" min-width="245" max-width="245">
               <v-card-text>
                 <v-form>
-                  <v-text-field label="Nombre" v-model="item.server_name" />
+                  <v-text-field
+                    label="Nombre"
+                    v-model="item.server_name"
+                    :disabled="item.server_permanent"
+                  />
                   <v-text-field
                     label="URL Base"
                     v-model="item.server_baseurl"
+                    :disabled="item.server_permanent"
                   />
-                  <v-text-field label="Versión" v-model="item.server_version" />
-                  <v-text-field label="Título" v-model="item.server_title" />
+                  <v-text-field label="Versión" v-model="item.server_version" :disabled="item.server_permanent" />
+                  <v-text-field label="Título" v-model="item.server_title" :disabled="item.server_permanent" />
                   <v-textarea
                     label="Descripción"
                     maxlength="255"
                     v-model="item.server_abstract"
+                    :disabled="item.server_permanent"
                   />
-                  <v-text-field label="Activo" v-model="item.server_enabled" />
+                  <v-text-field label="Activo" v-model="item.server_enabled" :disabled="item.server_permanent" />
                 </v-form>
               </v-card-text>
             </v-card>
@@ -67,27 +88,59 @@
         </v-expansion-panel-content>
       </v-expansion-panel>
     </v-expansion-panels>
+    <v-dialog v-model="dialog" max-width="800">
+      <v-card>
+        <v-card-title>Agregar servidor</v-card-title>
+        <v-card-text>
+          <v-form>
+            <v-text-field
+              label="Nombre"
+              :outlined="true"
+            />
+            <v-text-field
+              label="URL Base"
+              :outlined="true"
+            />
+            <v-text-field label="Versión" :outlined="true" />
+            <v-text-field label="Título" :outlined="true" />
+            <v-textarea
+              label="Descripción"
+              maxlength="255"
+              :auto-grow="true"
+              :outlined="true"
+            />
+            <v-text-field label="Activo" :outlined="true" />
+          </v-form>
+        </v-card-text>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn color="green darken-1" text @click="dialog = false">Cancelar</v-btn>
+          <v-btn color="green darken-1" text @click="add_new_server()">Agregar servidor</v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
   </div>
 </template>
 
 <script>
 export default {
-  name: "MapboxLayer",
+  name: "MapServer",
   props: {
     servers: Array
   },
   data: () => ({
+    dialog: false,
+    new_server: {},
     slider: 80,
     vmodel_layericontabs: null,
-    items: [
-      { text: "Real-Time", icon: "mdi-clock" },
-      { text: "Audience", icon: "mdi-account" },
-      { text: "Conversions", icon: "mdi-flag" }
-    ]
   }),
   methods: {
     testa(val) {
       alert(val);
+    },
+    add_new_server() {
+      this.servers.push(this.new_server);
+      this.new_server = {};
     }
   }
 };

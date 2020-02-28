@@ -30,7 +30,7 @@
             </v-card-title>
             <v-card-text> </v-card-text>
           </v-card>
-          <mapbox-layer></mapbox-layer>
+          <map-layer :layers="layers"></map-layer>
           <!-- /CARD Mapas base -->
         </v-tab-item>
         <v-tab-item value="base">
@@ -54,24 +54,9 @@
           <!-- /CARD Mapas base -->
         </v-tab-item>
         <v-tab-item value="servidores">
-          <!-- CARD Capas -->
-          <v-card style="border-radius: 0px;">
-            <v-card-title style="padding-bottom: 0;">
-              <v-row>
-                <v-col cols="8"> <v-icon>mdi-network</v-icon>Servidores</v-col>
-                <v-col cols="4" align="right">
-                  <v-btn fab small color="green"
-                    ><v-icon color="white">mdi-plus</v-icon></v-btn
-                  >
-                </v-col>
-              </v-row>
-            </v-card-title>
-            <v-card-text>
-              Servidores WMS y WFS de dónde conectar capas
-            </v-card-text>
-          </v-card>
+          <!-- CARD Servidores -->
           <map-server :servers="servers"></map-server>
-          <!-- /CARD Mapas base -->
+          <!-- /CARD Servidores -->
         </v-tab-item>
       </v-tabs-items>
     </v-navigation-drawer>
@@ -143,7 +128,7 @@ import "@mdi/font/css/materialdesignicons.css";
 import "mapbox-gl/dist/mapbox-gl.css";
 import Mapbox from "mapbox-gl";
 import { MglMap, MglRasterLayer } from "vue-mapbox";
-import MapboxLayer from "./components/MapboxLayer";
+import MapLayer from "./components/MapLayer";
 import MapServer from "./components/MapServer";
 import axios from "axios";
 
@@ -151,7 +136,7 @@ export default {
   components: {
     MglMap,
     MglRasterLayer,
-    MapboxLayer,
+    MapLayer,
     MapServer
   },
   props: {},
@@ -174,16 +159,8 @@ export default {
       type: "raster",
       source: "municipios_src"
     },
-    providers: [
-      {
-        name: "Maptitude",
-        base_url: "https://api.parcelas-slp.maptitude.xyz/rest/v2/",
-        servers: "wms-servers",
-        layers: "wms-layers",
-        crs: "wms-crs"
-      }
-    ],
     servers_url: "https://api.parcelas-slp.maptitude.xyz/rest/v2/wms-servers/",
+    layers_url: "https://api.parcelas-slp.maptitude.xyz/rest/v2/wms-layers/",
     servers: [],
     layers: [],
     municipios: {
@@ -250,22 +227,15 @@ export default {
     this.mapbox = Mapbox;
   },
   mounted() {
-    for (let provider of this.providers) {
-      const server = provider.base_url + provider.servers + "/";
-      console.log("provider_server ", server);
-      axios.get(server).then(response => {
-        console.log("response data: ", response.data);
-        this.servers.concat(this.servers, response.data);
-        for (let server in response.data.entries()) {
-          console.log("server for: ", server);
-        }
-        console.log("servers: ", this.servers);
-      });
-    }
     console.log("aqui");
     axios.get(this.servers_url).then(response => {
-      console.log("SERVER data", response.data);
+      console.log("SERVER data: ", response.data);
       this.servers = response.data;
+    });
+    axios.get(this.layers_url).then(response => {
+      console.log("LAYERS data: ", response.data);
+      this.layers = response.data;
+      console.log("LAYERS: ", this.layers);
     });
   }
 };
