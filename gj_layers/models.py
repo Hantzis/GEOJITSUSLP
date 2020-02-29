@@ -12,7 +12,7 @@ class XYZLayer(models.Model):
         return self.server_name
 
     class Meta:
-        ordering = ['pk']
+        ordering = ['id']
 
 class WMSServer(models.Model):
     # el server_name debe ser unique con el usuario propietario (despues)
@@ -64,6 +64,7 @@ class WMSLayer(models.Model):
     layer_permanent = models.BooleanField(default=False)
     layer_visible = models.BooleanField(default=False)
     layer_opacity = models.PositiveSmallIntegerField(default=100)
+    layer_order = models.PositiveSmallIntegerField(default=0)
     server = models.ForeignKey(WMSServer, on_delete=models.PROTECT)
     version = models.CharField(max_length=5, choices=(('', 'WMS Version'), ('1.1.1', '1.1.1'), ('1.3.0', '1.3.0')))
     layers = models.CharField(max_length=255)
@@ -78,6 +79,9 @@ class WMSLayer(models.Model):
     sld = models.CharField(max_length=255, blank=True, null=True, verbose_name='sld') # tal vez haya que cambiar a texto
     time = models.DateTimeField(null=True, blank=True)
     cql_filter = models.TextField(blank=True, null=True)
+
+    class Meta:
+        ordering = ['layer_order', 'id']
 
     def save(self, *args, **kwargs):
         try:
