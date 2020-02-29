@@ -64,7 +64,7 @@
                     track-fill-color="black"
                     track-color="red"
                     :hide-details="true"
-                    light
+
                   />
                 </v-card-title>
               </v-img>

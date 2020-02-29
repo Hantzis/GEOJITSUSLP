@@ -11,6 +11,9 @@ class XYZLayer(models.Model):
     def __str__(self):
         return self.server_name
 
+    class Meta:
+        ordering = ['id']
+
 class WMSServer(models.Model):
     # el server_name debe ser unique con el usuario propietario (despues)
     server_name = models.CharField(max_length=255, unique=True)
