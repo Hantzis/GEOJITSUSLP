@@ -61,7 +61,7 @@
               </v-img>
               <v-card-text>
                 <v-slider
-                  v-model="slider"
+                  v-model="item.layer_opacity"
                   thumb-label
                   style="min-height: 20px; margin-left: 4px; margin-right: 4px;"
                 ></v-slider>
@@ -209,7 +209,6 @@ export default {
         val.layers +
         "&format=image/png&srs=" +
         val.crs;
-      console.log("THUMB: ", thumb_url);
       return thumb_url;
     },
     get_layer_style(val) {
@@ -220,7 +219,6 @@ export default {
         "&format=image/png&width=30&height=30&layer=" +
         val.layers +
         "&legend_options=fontName:Arial;fontAntiAliasing:true;fontSize:16";
-      console.log("legend: ", layer_url);
       return layer_url;
     }
   }

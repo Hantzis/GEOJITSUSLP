@@ -227,15 +227,11 @@ export default {
     this.mapbox = Mapbox;
   },
   mounted() {
-    console.log("aqui");
     axios.get(this.servers_url).then(response => {
-      console.log("SERVER data: ", response.data);
       this.servers = response.data;
     });
     axios.get(this.layers_url).then(response => {
-      console.log("LAYERS data: ", response.data);
       this.layers = response.data;
-      console.log("LAYERS: ", this.layers);
     });
   }
 };
