@@ -57,14 +57,15 @@
                 :src="get_layer_thumb(item)"
                 aspect-ratio="1.7"
               >
-                <v-card-title><v-slider
-                  v-model="item.layer_opacity"
-                  thumb-label
-                  track-fill-color="black"
-                  track-color="red"
-                  :hide-details="true"
-                  light
-                />
+                <v-card-title
+                  ><v-slider
+                    v-model="item.layer_opacity"
+                    thumb-label
+                    track-fill-color="black"
+                    track-color="red"
+                    :hide-details="true"
+                    light
+                  />
                 </v-card-title>
               </v-img>
               <v-tabs
@@ -107,7 +108,13 @@
                 <v-tab-item value="legend">
                   <v-card>
                     <v-card-text>
-                      <v-img :contain="false" max-width="213px" min-width="213px" width="213px" :src="get_layer_style(item)" />
+                      <v-img
+                        :contain="false"
+                        max-width="213px"
+                        min-width="213px"
+                        width="213px"
+                        :src="get_layer_style(item)"
+                      />
                     </v-card-text>
                   </v-card>
                 </v-tab-item>

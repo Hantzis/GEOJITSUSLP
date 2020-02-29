@@ -52,10 +52,7 @@
               </v-row>
             </v-col>
           </v-row>
-          <v-row style="margin-bottom: 20px; margin-top: -20px;">
-            {{ item.server_abstract }}
-          </v-row>
-          <v-row>
+          <v-row  style="margin-top: -20px;">
             <v-card class="mx-auto" min-width="245" max-width="245">
               <v-card-text>
                 <v-form>
@@ -69,15 +66,22 @@
                     v-model="item.server_baseurl"
                     :disabled="item.server_permanent"
                   />
-                  <v-text-field label="Versión" v-model="item.server_version" :disabled="item.server_permanent" />
-                  <v-text-field label="Título" v-model="item.server_title" :disabled="item.server_permanent" />
+                  <v-text-field
+                    label="Versión"
+                    v-model="item.server_version"
+                    :disabled="item.server_permanent"
+                  />
+                  <v-text-field
+                    label="Título"
+                    v-model="item.server_title"
+                    :disabled="item.server_permanent"
+                  />
                   <v-textarea
                     label="Descripción"
                     maxlength="255"
                     v-model="item.server_abstract"
                     :disabled="item.server_permanent"
                   />
-                  <v-text-field label="Activo" v-model="item.server_enabled" :disabled="item.server_permanent" />
                 </v-form>
               </v-card-text>
             </v-card>
@@ -96,26 +100,45 @@
             <v-text-field
               label="Nombre"
               :outlined="true"
+              v-model="new_server.server_name"
             />
             <v-text-field
               label="URL Base"
               :outlined="true"
+              v-model="new_server.server_baseurl"
             />
-            <v-text-field label="Versión" :outlined="true" />
-            <v-text-field label="Título" :outlined="true" />
+            <v-text-field
+              label="Versión"
+              :outlined="true"
+              v-model="new_server.server_version"
+            />
+            <v-text-field
+              label="Título"
+              :outlined="true"
+              v-model="new_server.server_title"
+            />
             <v-textarea
               label="Descripción"
               maxlength="255"
               :auto-grow="true"
               :outlined="true"
+              v-model="new_server.server_abstract"
             />
-            <v-text-field label="Activo" :outlined="true" />
+            <v-text-field
+              label="Activo"
+              :outlined="true"
+              v-model="new_server.server_enabled"
+            />
           </v-form>
         </v-card-text>
         <v-card-actions>
           <v-spacer></v-spacer>
-          <v-btn color="green darken-1" text @click="dialog = false">Cancelar</v-btn>
-          <v-btn color="green darken-1" text @click="add_new_server()">Agregar servidor</v-btn>
+          <v-btn color="green darken-1" text @click="dialog = false"
+            >Cancelar</v-btn
+          >
+          <v-btn color="green darken-1" text @click="add_new_server()"
+            >Agregar servidor</v-btn
+          >
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -132,7 +155,7 @@ export default {
     dialog: false,
     new_server: {},
     slider: 80,
-    vmodel_layericontabs: null,
+    vmodel_layericontabs: null
   }),
   methods: {
     testa(val) {
@@ -140,7 +163,10 @@ export default {
     },
     add_new_server() {
       this.servers.push(this.new_server);
+      console.log("NEW SERVER: ", this.new_server);
       this.new_server = {};
+      this.dialog = false;
+      console.log("SERVERS: ", this.servers);
     }
   }
 };
