@@ -57,15 +57,16 @@
                 :src="get_layer_thumb(item)"
                 aspect-ratio="1.7"
               >
-                <v-card-title>{{ item.layer_name }}</v-card-title>
-              </v-img>
-              <v-card-text>
-                <v-slider
+                <v-card-title><v-slider
                   v-model="item.layer_opacity"
                   thumb-label
-                  style="min-height: 20px; margin-left: 4px; margin-right: 4px;"
-                ></v-slider>
-              </v-card-text>
+                  track-fill-color="black"
+                  track-color="red"
+                  :hide-details="true"
+                  light
+                />
+                </v-card-title>
+              </v-img>
               <v-tabs
                 color="black"
                 slider-size="3"
