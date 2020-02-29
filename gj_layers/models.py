@@ -12,7 +12,7 @@ class XYZLayer(models.Model):
         return self.server_name
 
     class Meta:
-        ordering = ['id']
+        ordering = ['pk']
 
 class WMSServer(models.Model):
     # el server_name debe ser unique con el usuario propietario (despues)
