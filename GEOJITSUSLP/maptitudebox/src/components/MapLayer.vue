@@ -70,7 +70,7 @@
               </v-img>
               <v-tabs
                 color="black"
-                slider-size="3"
+                slider-size="2"
                 v-model="vmodel_layericontabs"
               >
                 <v-tab

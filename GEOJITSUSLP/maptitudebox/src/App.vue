@@ -28,9 +28,9 @@
                 </v-col>
               </v-row>
             </v-card-title>
-            <v-card-text> </v-card-text>
           </v-card>
           <map-layer :layers="layers"></map-layer>
+
           <!-- /CARD Mapas base -->
         </v-tab-item>
         <v-tab-item value="base">
