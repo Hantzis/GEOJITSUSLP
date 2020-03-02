@@ -52,7 +52,7 @@
               </v-row>
             </v-col>
           </v-row>
-          <v-row  style="margin-top: -20px;">
+          <v-row style="margin-top: -20px;">
             <v-card class="mx-auto" min-width="245" max-width="245">
               <v-card-text>
                 <v-form>

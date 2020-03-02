@@ -64,7 +64,6 @@
                     track-fill-color="black"
                     track-color="red"
                     :hide-details="true"
-
                   />
                 </v-card-title>
               </v-img>
@@ -110,9 +109,10 @@
                     <v-card-text>
                       <v-img
                         :contain="false"
-                        max-width="213px"
-                        min-width="213px"
                         width="213px"
+                        position="left"
+                        :max-height="get_layer_style_height(item)"
+                        :min-height="get_layer_style_height(item)"
                         :src="get_layer_style(item)"
                       />
                     </v-card-text>
@@ -121,7 +121,7 @@
                 <v-tab-item value="info">
                   <v-card>
                     <v-card-text>
-                      info que viene de layer_description
+                      {{ item.layer_description }}
                     </v-card-text>
                   </v-card>
                 </v-tab-item>
@@ -218,6 +218,23 @@ export default {
         "&format=image/png&srs=" +
         val.crs;
       return thumb_url;
+    },
+    get_layer_style_height(val) {
+      const layer_url =
+        val.server +
+        "request=GetLegendGraphic&version=" +
+        val.version +
+        "&format=image/png&width=30&height=30&layer=" +
+        val.layers +
+        "&legend_options=fontName:Arial;fontAntiAliasing:true;fontSize:16";
+      const img = new Image();
+      img.src = layer_url;
+      img.onload = function() {
+        console.log("val", val);
+        console.log("width: ", this.width);
+        console.log("height: ", this.height);
+      };
+      return this.height;
     },
     get_layer_style(val) {
       const layer_url =
