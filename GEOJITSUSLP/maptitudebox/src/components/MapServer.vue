@@ -3,7 +3,7 @@
     <v-card style="border-radius: 0px;">
       <v-card-title style="padding-bottom: 0;">
         <v-row>
-          <v-col cols="8"> <v-icon>mdi-network</v-icon>Servidores</v-col>
+          <v-col cols="8"> <v-icon>mdi-network</v-icon>Servidores <br />WMS</v-col>
           <v-col cols="4" align="right">
             <v-btn fab small color="green" @click.stop="dialog = true"
               ><v-icon color="white">mdi-plus</v-icon></v-btn
@@ -12,7 +12,7 @@
         </v-row>
       </v-card-title>
       <v-card-text>
-        Servidores WMS y WFS de dónde conectar capas
+        Servidores WMS desde dónde conectar capas
       </v-card-text>
     </v-card>
     <v-expansion-panels
@@ -58,6 +58,7 @@
                 <v-form>
                   <v-text-field
                     label="Nombre"
+                    :maxlength="25"
                     v-model="item.server_name"
                     :disabled="item.server_permanent"
                   />
@@ -69,11 +70,6 @@
                   <v-text-field
                     label="Versión"
                     v-model="item.server_version"
-                    :disabled="item.server_permanent"
-                  />
-                  <v-text-field
-                    label="Título"
-                    v-model="item.server_title"
                     :disabled="item.server_permanent"
                   />
                   <v-textarea
@@ -94,51 +90,64 @@
     </v-expansion-panels>
     <v-dialog v-model="dialog" max-width="800">
       <v-card>
-        <v-card-title>Agregar servidor</v-card-title>
+        <v-card-title>Agregar servidor WMS</v-card-title>
         <v-card-text>
+          <p>Detalles del nuevo servidor a agregar</p>
           <v-form>
             <v-text-field
               label="Nombre"
+              :maxlength="25"
               :outlined="true"
               v-model="new_server.server_name"
+              hint="Nombre corto del servidor (debe ser único)"
+              dense
             />
             <v-text-field
               label="URL Base"
+              :maxlength="255"
               :outlined="true"
               v-model="new_server.server_baseurl"
-            />
-            <v-text-field
-              label="Versión"
-              :outlined="true"
-              v-model="new_server.server_version"
-            />
-            <v-text-field
-              label="Título"
-              :outlined="true"
-              v-model="new_server.server_title"
+              hint="URL del servidor WMS; suele estar en la forma https://dominio/uri/wms?"
+              dense
             />
             <v-textarea
               label="Descripción"
-              maxlength="255"
+              :maxlength="255"
               :auto-grow="true"
               :outlined="true"
               v-model="new_server.server_abstract"
+              hint="Descripción breve del servidor WMS, puede ser más especifica que el nombre que es corto"
+              :rows="3"
+              dense
             />
-            <v-text-field
-              label="Activo"
-              :outlined="true"
-              v-model="new_server.server_enabled"
-            />
+            <v-row align="center" style="margin-top: -10px; margin-bottom: -30px;">
+              <v-col cols="7">
+                <v-select
+                  label="Versión"
+                  :outlined="true"
+                  v-model="new_server.server_version"
+                  :items="['1.1.1', '1.3.0']"
+                  dense
+                  hint="Versión del servicio"
+                />
+              </v-col>
+              <v-col cols="5">
+                <v-row justify="end" style="margin-right: 2px;">
+                  <v-switch label="Activo" dense v-model="new_server.server_enabled"/>
+                </v-row>
+              </v-col>
+            </v-row>
           </v-form>
         </v-card-text>
         <v-card-actions>
-          <v-spacer></v-spacer>
-          <v-btn color="green darken-1" text @click="dialog = false"
-            >Cancelar</v-btn
-          >
-          <v-btn color="green darken-1" text @click="add_new_server()"
-            >Agregar servidor</v-btn
-          >
+          <v-row justify="end">
+            <v-btn color="green darken-1" text @click="dialog = false">
+              Cancelar
+            </v-btn>
+            <v-btn color="green darken-1" text @click="add_new_server()">
+              Agregar
+            </v-btn>
+          </v-row>
         </v-card-actions>
       </v-card>
     </v-dialog>

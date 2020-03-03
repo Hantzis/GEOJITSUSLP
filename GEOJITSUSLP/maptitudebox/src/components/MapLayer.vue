@@ -28,12 +28,14 @@
                   <v-btn
                     color="blue-grey"
                     style="height: 28px; width: 28px; min-width: 28px;"
+                    :disabled="i === 0"
                   >
                     <v-icon color="grey lighten-5">mdi-chevron-up</v-icon>
                   </v-btn>
                   <v-btn
                     color="blue-grey"
                     style="height: 28px; width: 28px; min-width: 28px;"
+                    :disabled="i === layers.length - 1"
                   >
                     <v-icon color="grey lighten-5">mdi-chevron-down</v-icon>
                   </v-btn>
@@ -230,9 +232,7 @@ export default {
       const img = new Image();
       img.src = layer_url;
       img.onload = function() {
-        console.log("val", val);
-        console.log("width: ", this.width);
-        console.log("height: ", this.height);
+        console.log("on load maplayer"); // tal vez remover esto
       };
       return this.height;
     },
@@ -246,6 +246,9 @@ export default {
         "&legend_options=fontName:Arial;fontAntiAliasing:true;fontSize:16";
       return layer_url;
     }
+  },
+  mounted() {
+    console.log("mounted");
   }
 };
 </script>

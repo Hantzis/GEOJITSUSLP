@@ -12,12 +12,14 @@
       <v-tabs icons-and-text :show-arrows="true" grow v-model="vmodel_layertab">
         <v-tab href="#capas">Capas<v-icon>mdi-layers</v-icon></v-tab>
         <v-tab href="#base">Mapas Base<v-icon>mdi-map</v-icon></v-tab>
-        <v-tab href="#servidores">Servidores<v-icon>mdi-network</v-icon></v-tab>
+        <v-tab href="#servidores">
+          Servidores WMS<v-icon>mdi-network</v-icon>
+        </v-tab>
       </v-tabs>
       <v-tabs-items v-model="vmodel_layertab">
         <v-tab-item value="capas">
           <!-- CARD Capas -->
-          <v-card style="border-radius: 0px;">
+          <v-card style="border-radius: 0;">
             <v-card-title style="padding-bottom: 0;">
               <v-row>
                 <v-col> <v-icon>mdi-layers</v-icon>Capas</v-col>
@@ -104,9 +106,9 @@
           :center.sync="map_center"
         >
           <MglRasterLayer
-            sourceId="municipios_src"
-            layerId="municipios_lyr"
-            :source.sync="municipios_src"
+            :sourceId="municipios_lyr.source.id"
+            :layerId="municipios_lyr.id"
+            :source.sync="municipios_lyr.source"
             :layer.sync="municipios_lyr"
           ></MglRasterLayer>
         </MglMap>
@@ -141,23 +143,24 @@ export default {
   },
   props: {},
   watch: {
-    model_capasbase(val) {
-      console.log("model_capasbase", val);
+    vmodel_capasbase() {
+      console.log("vmodel_capasbase");
     }
   },
   data: () => ({
-    municipios_src: {
-      id: "municipios_source",
-      type: "raster",
-      tiles: [
-        "https://api.parcelas-slp.maptitude.xyz/geoserver/wms?&service=WMS&request=GetMap&layers=SLP%3Amunicipios&styles=&format=image%2Fpng8&transparent=true&version=1.1.1&width=256&height=256&srs=EPSG%3A3857&bbox={bbox-epsg-3857}"
-      ],
-      tileSize: 256
-    },
     municipios_lyr: {
-      id: "municipios_layer",
-      type: "raster",
-      source: "municipios_src"
+      id: "municipios layer",
+      source: {
+        id: "municipios id",
+        type: "raster",
+        tiles: [
+          "https://api.parcelas-slp.maptitude.xyz/geoserver/wms?&service=WMS&request=GetMap&layers=SLP%3Amunicipios&styles=&format=image%2Fpng8&transparent=true&version=1.1.1&width=256&height=256&srs=EPSG%3A3857&bbox={bbox-epsg-3857}"
+        ],
+        tileSize: 256
+      },
+      paint: {
+        "raster-opacity": 1.0
+      }
     },
     servers_url: "https://api.parcelas-slp.maptitude.xyz/rest/v2/wms-servers/",
     layers_url: "https://api.parcelas-slp.maptitude.xyz/rest/v2/wms-layers/",
