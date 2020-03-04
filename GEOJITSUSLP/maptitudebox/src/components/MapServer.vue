@@ -45,6 +45,7 @@
                     :disabled="item.server_permanent"
                     color="red"
                     style="height: 28px; width: 28px; min-width: 28px;"
+                    @click="ask_delete_wms_server(i)"
                   >
                     <v-icon color="grey lighten-5">mdi-delete</v-icon>
                   </v-btn>
@@ -61,28 +62,38 @@
                     :maxlength="25"
                     v-model="item.server_name"
                     :disabled="item.server_permanent"
+                    hint="Nombre corto del servidor (debe ser único)"
                   />
                   <v-text-field
                     label="URL Base"
+                    :maxlength="255"
                     v-model="item.server_baseurl"
                     :disabled="item.server_permanent"
+                    hint="URL del servidor WMS; suele estar en la forma https://dominio/uri/wms?"
                   />
-                  <v-text-field
-                    label="Versión"
-                    v-model="item.server_version"
-                    :disabled="item.server_permanent"
-                  />
-                  <v-textarea
-                    label="Descripción"
-                    maxlength="255"
-                    v-model="item.server_abstract"
-                    :disabled="item.server_permanent"
-                  />
+
+                      <v-select
+                        label="Versión"
+                        v-model="item.server_version"
+                        :items="['1.1.1', '1.3.0']"
+                        hint="Versión del servicio"
+                      />
+
+                      <v-textarea style="margin-top: 20px;"
+                        label="Descripción"
+                        v-model="item.server_abstract"
+                        :disabled="item.server_permanent"
+                        :maxlength="255"
+                        :auto-grow="true"
+                        :outlined="true"
+                        hint="Descripción breve del servidor WMS, puede ser más especifica que el nombre que es corto"
+                        :rows="4"
+                        dense
+                      />
                 </v-form>
               </v-card-text>
             </v-card>
           </v-row>
-
           <p></p>
           <v-divider bold></v-divider>
         </v-expansion-panel-content>
@@ -138,19 +149,43 @@
               </v-col>
             </v-row>
           </v-form>
-        </v-card-text>
-        <v-card-actions>
-          <v-row justify="end">
-            <v-btn color="green darken-1" text @click="dialog = false">
-              Cancelar
-            </v-btn>
-            <v-btn color="green darken-1" text @click="add_new_server()">
-              Agregar
-            </v-btn>
+          <v-row>
+            <v-col>
+              <v-row justify="end">
+                <v-btn color="secondary darken-1" @click="dialog = false">
+                  Cancelar
+                </v-btn>
+                <v-btn color="success darken-1" @click="add_new_server()">
+                  Agregar
+                </v-btn>
+              </v-row>
+            </v-col>
           </v-row>
-        </v-card-actions>
+        </v-card-text>
       </v-card>
     </v-dialog>
+
+    <v-dialog v-model="wms_delete_dialog" max-width="600">
+      <v-card>
+        <v-card-title>Eliminar servidor WMS</v-card-title>
+        <v-card-text>
+          <p>¿Está seguro de eliminar el servidor <strong>{{ delete_server_name }}</strong>?</p>
+          <v-row>
+            <v-col>
+              <v-row justify="end">
+                <v-btn color="secondary" @click="cancel_delete_wms_server()">
+                  Cancelar
+                </v-btn>
+                <v-btn color="error" @click="confirm_delete_wms_server(delete_server_index)">
+                  Eliminar
+                </v-btn>
+              </v-row>
+            </v-col>
+          </v-row>
+        </v-card-text>
+      </v-card>
+    </v-dialog>
+
   </div>
 </template>
 
@@ -162,6 +197,9 @@ export default {
   },
   data: () => ({
     dialog: false,
+    wms_delete_dialog: false,
+    delete_server_name: "",
+    delete_server_index: undefined,
     new_server: {},
     slider: 80,
     vmodel_layericontabs: null
@@ -176,7 +214,22 @@ export default {
       this.new_server = {};
       this.dialog = false;
       console.log("SERVERS: ", this.servers);
-    }
+    },
+    ask_delete_wms_server(val) {
+      this.delete_server_name = this.servers[val].server_name;
+      this.delete_server_index = val;
+      this.wms_delete_dialog = true;
+    },
+    confirm_delete_wms_server(val) {
+      this.servers.splice(val, 1);
+      this.wms_delete_dialog = false;
+      this.delete_server_name = "";
+      this.delete_server_index = undefined;
+    },
+    cancel_delete_wms_server() {
+      this.wms_delete_dialog = false;
+      this.delete_server_name = "";
+    },
   }
 };
 </script>
