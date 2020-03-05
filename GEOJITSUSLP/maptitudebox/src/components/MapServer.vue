@@ -151,13 +151,15 @@
           </v-form>
           <v-row>
             <v-col>
-              <v-row justify="end">
-                <v-btn color="secondary darken-1" @click="dialog = false">
-                  Cancelar
-                </v-btn>
-                <v-btn color="success darken-1" @click="add_new_server()">
-                  Agregar
-                </v-btn>
+              <v-row justify="end" style="margin-right: 20">
+                <div>
+                  <v-btn color="secondary darken-1" @click="dialog = false">
+                    Cancelar
+                  </v-btn>
+                  <v-btn color="success darken-1" @click="add_new_server()">
+                    Agregar
+                  </v-btn>
+                </div>
               </v-row>
             </v-col>
           </v-row>
@@ -173,12 +175,14 @@
           <v-row>
             <v-col>
               <v-row justify="end">
-                <v-btn color="secondary" @click="cancel_delete_wms_server()">
-                  Cancelar
-                </v-btn>
-                <v-btn color="error" @click="confirm_delete_wms_server(delete_server_index)">
-                  Eliminar
-                </v-btn>
+                <div>
+                  <v-btn color="secondary" tile @click="cancel_delete_wms_server()">
+                    Cancelar
+                  </v-btn>
+                  <v-btn color="error" tile @click="confirm_delete_wms_server(delete_server_index)">
+                    Eliminar
+                  </v-btn>
+                </div>
               </v-row>
             </v-col>
           </v-row>
