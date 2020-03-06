@@ -3,7 +3,9 @@
     <v-card style="border-radius: 0px;">
       <v-card-title style="padding-bottom: 0;">
         <v-row>
-          <v-col cols="8"> <v-icon>mdi-network</v-icon>Servidores <br />WMS</v-col>
+          <v-col cols="8">
+            <v-icon>mdi-network</v-icon>Servidores <br />WMS</v-col
+          >
           <v-col cols="4" align="right">
             <v-btn fab small color="green" @click.stop="dialog = true"
               ><v-icon color="white">mdi-plus</v-icon></v-btn
@@ -40,16 +42,14 @@
             </v-col>
             <v-col pa-0>
               <v-row justify="end">
-                <v-btn-toggle no-toggle>
-                  <v-btn
-                    :disabled="item.server_permanent"
-                    color="red"
-                    style="height: 28px; width: 28px; min-width: 28px;"
-                    @click="ask_delete_wms_server(i)"
-                  >
-                    <v-icon color="grey lighten-5">mdi-delete</v-icon>
-                  </v-btn>
-                </v-btn-toggle>
+                <v-btn
+                  :disabled="item.server_permanent"
+                  color="red"
+                  style="height: 28px; width: 28px; min-width: 28px;"
+                  @click="ask_delete_wms_server(i)"
+                >
+                  <v-icon color="grey lighten-5">mdi-delete</v-icon>
+                </v-btn>
               </v-row>
             </v-col>
           </v-row>
@@ -71,25 +71,24 @@
                     :disabled="item.server_permanent"
                     hint="URL del servidor WMS; suele estar en la forma https://dominio/uri/wms?"
                   />
-
-                      <v-select
-                        label="Versión"
-                        v-model="item.server_version"
-                        :items="['1.1.1', '1.3.0']"
-                        hint="Versión del servicio"
-                      />
-
-                      <v-textarea style="margin-top: 20px;"
-                        label="Descripción"
-                        v-model="item.server_abstract"
-                        :disabled="item.server_permanent"
-                        :maxlength="255"
-                        :auto-grow="true"
-                        :outlined="true"
-                        hint="Descripción breve del servidor WMS, puede ser más especifica que el nombre que es corto"
-                        :rows="4"
-                        dense
-                      />
+                  <v-select
+                    label="Versión"
+                    v-model="item.server_version"
+                    :disabled="item.server_permanent"
+                    :items="['1.1.1', '1.3.0']"
+                    hint="Versión del servicio"
+                  />
+                  <v-textarea
+                    style="margin-top: 20px;"
+                    label="Descripción"
+                    v-model="item.server_abstract"
+                    :disabled="item.server_permanent"
+                    :maxlength="255"
+                    :auto-grow="true"
+                    hint="Descripción breve del servidor WMS, puede ser más especifica que el nombre que es corto"
+                    :rows="4"
+                    dense
+                  />
                 </v-form>
               </v-card-text>
             </v-card>
@@ -131,7 +130,10 @@
               :rows="3"
               dense
             />
-            <v-row align="center" style="margin-top: -10px; margin-bottom: -30px;">
+            <v-row
+              align="center"
+              style="margin-top: -10px; margin-bottom: -30px;"
+            >
               <v-col cols="7">
                 <v-select
                   label="Versión"
@@ -144,26 +146,32 @@
               </v-col>
               <v-col cols="5">
                 <v-row justify="end" style="margin-right: 2px;">
-                  <v-switch label="Activo" dense v-model="new_server.server_enabled"/>
+                  <v-switch
+                    label="Activo"
+                    dense
+                    v-model="new_server.server_enabled"
+                  />
                 </v-row>
               </v-col>
             </v-row>
           </v-form>
-          <v-row>
-            <v-col>
-              <v-row justify="end" style="margin-right: 20">
+        </v-card-text>
+        <v-col style="margin-top: -24px;">
+          <v-col dense align="end" :justify="this.$vuetify.breakpoint.width < 333 ? 'center' : 'end'">
+            <v-col dense style="margin-top: -10px; margin-bottom: -20px;">
+              <v-row :justify="this.$vuetify.breakpoint.width < 333 ? 'center' : 'end'" style="margin-left: -20px; margin-right: -20px;">
                 <div>
-                  <v-btn color="secondary darken-1" @click="dialog = false">
+                  <v-btn class="ma-2" color="secondary darken-1" tile @click="dialog = false">
                     Cancelar
                   </v-btn>
-                  <v-btn color="success darken-1" @click="add_new_server()">
+                  <v-btn class="ma-2" color="success darken-1" tile @click="add_new_server()">
                     Agregar
                   </v-btn>
-                </div>
+                  </div>
               </v-row>
             </v-col>
-          </v-row>
-        </v-card-text>
+          </v-col>
+        </v-col>
       </v-card>
     </v-dialog>
 
@@ -171,15 +179,27 @@
       <v-card>
         <v-card-title>Eliminar servidor WMS</v-card-title>
         <v-card-text>
-          <p>¿Está seguro de eliminar el servidor <strong>{{ delete_server_name }}</strong>?</p>
+          <p>
+            ¿Está seguro de eliminar el servidor
+            <strong>{{ delete_server_name }}</strong
+            >?
+          </p>
           <v-row>
             <v-col>
               <v-row justify="end">
                 <div>
-                  <v-btn color="secondary" tile @click="cancel_delete_wms_server()">
+                  <v-btn
+                    color="secondary"
+                    tile
+                    @click="cancel_delete_wms_server()"
+                  >
                     Cancelar
                   </v-btn>
-                  <v-btn color="error" tile @click="confirm_delete_wms_server(delete_server_index)">
+                  <v-btn
+                    color="error"
+                    tile
+                    @click="confirm_delete_wms_server(delete_server_index)"
+                  >
                     Eliminar
                   </v-btn>
                 </div>
@@ -189,7 +209,6 @@
         </v-card-text>
       </v-card>
     </v-dialog>
-
   </div>
 </template>
 
@@ -204,7 +223,9 @@ export default {
     wms_delete_dialog: false,
     delete_server_name: "",
     delete_server_index: undefined,
-    new_server: {},
+    new_server: {
+      server_enabled: true
+    },
     slider: 80,
     vmodel_layericontabs: null
   }),
@@ -213,9 +234,12 @@ export default {
       alert(val);
     },
     add_new_server() {
+
       this.servers.push(this.new_server);
       console.log("NEW SERVER: ", this.new_server);
-      this.new_server = {};
+      this.new_server = {
+        server_enabled: true
+      };
       this.dialog = false;
       console.log("SERVERS: ", this.servers);
     },
@@ -233,7 +257,7 @@ export default {
     cancel_delete_wms_server() {
       this.wms_delete_dialog = false;
       this.delete_server_name = "";
-    },
+    }
   }
 };
 </script>
