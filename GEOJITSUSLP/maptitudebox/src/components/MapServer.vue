@@ -157,17 +157,34 @@
           </v-form>
         </v-card-text>
         <v-col style="margin-top: -24px;">
-          <v-col dense align="end" :justify="this.$vuetify.breakpoint.width < 333 ? 'center' : 'end'">
+          <v-col
+            dense
+            align="end"
+            :justify="this.$vuetify.breakpoint.width < 333 ? 'center' : 'end'"
+          >
             <v-col dense style="margin-top: -10px; margin-bottom: -20px;">
-              <v-row :justify="this.$vuetify.breakpoint.width < 333 ? 'center' : 'end'" style="margin-left: -20px; margin-right: -20px;">
-                <div>
-                  <v-btn class="ma-2" color="secondary darken-1" tile @click="dialog = false">
-                    Cancelar
-                  </v-btn>
-                  <v-btn class="ma-2" color="success darken-1" tile @click="add_new_server()">
-                    Agregar
-                  </v-btn>
-                  </div>
+              <v-row
+                :justify="this.$vuetify.breakpoint.width < 333 ? 'center' : 'end'"
+                style="margin-left: -20px; margin-right: -20px;"
+              >
+                <v-btn
+                  class="ma-2"
+                  :block="this.$vuetify.breakpoint.width < 333 ? true : false"
+                  color="secondary darken-1"
+                  tile
+                  @click="dialog = false"
+                >
+                  Cancelar
+                </v-btn>
+                <v-btn
+                  class="ma-2"
+                  :block="this.$vuetify.breakpoint.width < 333 ? true : false"
+                  color="success darken-1"
+                  tile
+                  @click="add_new_server()"
+                >
+                  Agregar
+                </v-btn>
               </v-row>
             </v-col>
           </v-col>
@@ -230,11 +247,7 @@ export default {
     vmodel_layericontabs: null
   }),
   methods: {
-    testa(val) {
-      alert(val);
-    },
     add_new_server() {
-
       this.servers.push(this.new_server);
       console.log("NEW SERVER: ", this.new_server);
       this.new_server = {
