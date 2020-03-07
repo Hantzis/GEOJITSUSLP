@@ -24,7 +24,7 @@
               <v-row>
                 <v-col> <v-icon>mdi-layers</v-icon>Capas</v-col>
                 <v-col align="right">
-                  <v-btn fab small color="green"
+                  <v-btn fab small color="green" style="margin-right: 14px;"
                     ><v-icon color="white">mdi-plus</v-icon></v-btn
                   >
                 </v-col>
