@@ -19,19 +19,7 @@
       <v-tabs-items v-model="vmodel_layertab">
         <v-tab-item value="capas">
           <!-- CARD Capas -->
-          <v-card style="border-radius: 0;">
-            <v-card-title style="padding-bottom: 0;">
-              <v-row>
-                <v-col> <v-icon>mdi-layers</v-icon>Capas</v-col>
-                <v-col align="right">
-                  <v-btn fab small color="green" style="margin-right: 14px;"
-                    ><v-icon color="white">mdi-plus</v-icon></v-btn
-                  >
-                </v-col>
-              </v-row>
-            </v-card-title>
-          </v-card>
-          <map-layer :layers="layers"></map-layer>
+          <map-layer :layers="layers" :servers="servers"></map-layer>
 
           <!-- /CARD Mapas base -->
         </v-tab-item>

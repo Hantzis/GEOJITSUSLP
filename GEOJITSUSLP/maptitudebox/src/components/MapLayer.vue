@@ -1,5 +1,17 @@
 <template>
   <div>
+    <v-card style="border-radius: 0;">
+      <v-card-title style="padding-bottom: 0;">
+        <v-row>
+          <v-col><v-icon>mdi-layers</v-icon>Capas</v-col>
+          <v-col align="right">
+            <v-btn fab small color="green" @click.stop="add_new_layer_dialog()" style="margin-right: 14px; margin-bottom: 14px;">
+              <v-icon color="white">mdi-plus</v-icon>
+            </v-btn>
+          </v-col>
+        </v-row>
+      </v-card-title>
+    </v-card>
     <v-expansion-panels
       style="border-radius: 0;"
       :accordion="true"
@@ -184,6 +196,101 @@
         </v-expansion-panel-content>
       </v-expansion-panel>
     </v-expansion-panels>
+
+    <v-dialog v-model="new_layer_dialog" max-width="800">
+      <v-card>
+        <v-card-title>Agregar Capa WMS</v-card-title>
+        <v-card-text>
+          <p>Detalles de la nueva capa a agregar</p>
+          <v-form>
+            <v-text-field
+              label="Nombre"
+              :maxlength="25"
+              :outlined="true"
+              v-model="new_layer.server_name"
+              hint="Nombre corto de la capa (debe ser único)"
+              dense
+            />
+            <v-text-field
+              label="URL Base"
+              :maxlength="255"
+              :outlined="true"
+              v-model="new_layer.server_baseurl"
+              hint="URL del servidor WMS; suele estar en la forma https://dominio/uri/wms?"
+              dense
+            />
+            <v-textarea
+              label="Descripción"
+              :maxlength="255"
+              :auto-grow="true"
+              :outlined="true"
+              v-model="new_layer.server_abstract"
+              hint="Descripción breve del servidor WMS, puede ser más especifica que el nombre que es corto"
+              :rows="3"
+              dense
+            />
+            <v-row
+              align="center"
+              style="margin-top: -10px; margin-bottom: -30px;"
+            >
+              <v-col cols="7">
+                <v-select
+                  label="Versión"
+                  :outlined="true"
+                  v-model="new_layer.server_version"
+                  :items="['1.1.1', '1.3.0']"
+                  dense
+                  hint="Versión del servicio"
+                />
+              </v-col>
+              <v-col cols="5">
+                <v-row justify="end" style="margin-right: 2px;">
+                  <v-switch
+                    label="Activo"
+                    dense
+                    v-model="new_layer.layer_enabled"
+                  />
+                </v-row>
+              </v-col>
+            </v-row>
+          </v-form>
+        </v-card-text>
+        <v-col style="margin-top: -24px;">
+          <v-col
+            dense
+            align="end"
+            :justify="this.$vuetify.breakpoint.width < 333 ? 'center' : 'end'"
+          >
+            <v-col dense style="margin-top: -10px; margin-bottom: -20px;">
+              <v-row
+                :justify="this.$vuetify.breakpoint.width < 333 ? 'center' : 'end'"
+                style="margin-left: -20px; margin-right: -20px;"
+              >
+                <v-btn
+                  class="ma-2"
+                  :block="this.$vuetify.breakpoint.width < 333 ? true : false"
+                  color="secondary darken-1"
+                  tile
+                  @click="new_layer_dialog = false"
+                >
+                  Cancelar
+                </v-btn>
+                <v-btn
+                  class="ma-2"
+                  :block="this.$vuetify.breakpoint.width < 333 ? true : false"
+                  color="success darken-1"
+                  tile
+                  @click="add_new_layer()"
+                >
+                  Agregar
+                </v-btn>
+              </v-row>
+            </v-col>
+          </v-col>
+        </v-col>
+      </v-card>
+    </v-dialog>
+
   </div>
 </template>
 
@@ -191,19 +298,35 @@
 export default {
   name: "MapLayer",
   props: {
-    layers: Array
+    layers: Array,
+    servers: Array
   },
   data: () => ({
-    slider: 80,
+    new_layer_dialog: false,
+    new_layer: {
+      layer_enabled: true
+    },
     vmodel_layericontabs: null
   }),
   methods: {
     testa(val) {
       alert(val);
     },
+    add_new_layer_dialog() {
+      console.log(this.servers);
+      this.new_layer_dialog = true;
+    },
     add_new_layer() {
+
       this.layers.push(this.new_layer);
       this.new_layer = {};
+    },
+    add_new_server() {
+      this.servers.push(this.new_server);
+      this.new_server = {
+        server_enabled: true
+      };
+      this.dialog = false;
     },
     get_layer_thumb(val) {
       let thumb_server = val.server;
@@ -249,6 +372,7 @@ export default {
   },
   mounted() {
     console.log("mounted");
+
   }
 };
 </script>
