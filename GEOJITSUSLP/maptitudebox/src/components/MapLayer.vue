@@ -203,6 +203,13 @@
         <v-card-text>
           <p>Detalles de la nueva capa a agregar</p>
           <v-form>
+            <v-select
+              label="Servidor"
+              :outlined="true"
+              :items="servers_select"
+              dense
+              hint="Versión del servicio"
+            />
             <v-text-field
               label="Nombre"
               :maxlength="25"
@@ -263,12 +270,14 @@
           >
             <v-col dense style="margin-top: -10px; margin-bottom: -20px;">
               <v-row
-                :justify="this.$vuetify.breakpoint.width < 333 ? 'center' : 'end'"
+                :justify="
+                  this.$vuetify.breakpoint.width < 333 ? 'center' : 'end'
+                "
                 style="margin-left: -20px; margin-right: -20px;"
               >
                 <v-btn
                   class="ma-2"
-                  :block="this.$vuetify.breakpoint.width < 333 ? true : false"
+                  :block="this.$vuetify.breakpoint.width < 333"
                   color="secondary darken-1"
                   tile
                   @click="new_layer_dialog = false"
@@ -277,7 +286,7 @@
                 </v-btn>
                 <v-btn
                   class="ma-2"
-                  :block="this.$vuetify.breakpoint.width < 333 ? true : false"
+                  :block="this.$vuetify.breakpoint.width < 333"
                   color="success darken-1"
                   tile
                   @click="add_new_layer()"
@@ -308,6 +317,19 @@ export default {
     },
     vmodel_layericontabs: null
   }),
+  computed: {
+    servers_select() {
+      let names = [];
+      for (let item of this.servers) {
+        names.push(item.server_name);
+      }
+      const map_names = names.map(function(val, index) {
+        return {value:index, text:val};
+      });
+      console.log("map_names: ", map_names);
+      return map_names;
+    },
+  },
   methods: {
     testa(val) {
       alert(val);
