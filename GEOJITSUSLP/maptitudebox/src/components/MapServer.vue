@@ -179,7 +179,7 @@
                   :block="this.$vuetify.breakpoint.width < 333 ? true : false"
                   color="secondary darken-1"
                   tile
-                  @click="dialog = false"
+                  @click="add_new_server_cancel()"
                 >
                   Cancelar
                 </v-btn>
@@ -267,6 +267,10 @@ export default {
     vmodel_layericontabs: null
   }),
   methods: {
+    add_new_server_cancel() {
+      this.new_server = { server_enabled: true };
+      this.dialog = false;
+    },
     add_new_server() {
       this.servers.push(this.new_server);
       this.new_server = { server_enabled: true };
@@ -286,6 +290,7 @@ export default {
     cancel_delete_wms_server() {
       this.wms_delete_dialog = false;
       this.delete_server_name = "";
+      this.new_server = { server_enabled: true };
     }
   }
 };

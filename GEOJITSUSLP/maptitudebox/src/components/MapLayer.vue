@@ -212,7 +212,7 @@
             <v-select
               label="Servidor"
               :outlined="true"
-              v-model="new_layer.server"
+              v-model="new_layer_server"
               :items="servers_select"
               dense
               hint="Versión del servicio"
@@ -220,8 +220,8 @@
             <v-select
               label="Versión"
               :outlined="true"
-              :disabled="false"
-              v-model="new_layer.version"
+              :disabled="true"
+              v-model="new_layer_version"
               :items="['1.1.1', '1.3.0']"
               dense
               hint="Versión del servidor WMS"
@@ -316,18 +316,31 @@ export default {
   },
   data: () => ({
     new_layer_dialog: false,
+    new_layer_version: undefined,
+    new_layer_server: undefined,
     new_layer: {
       layer_enabled: true
     },
     vmodel_layericontabs: null
   }),
   watch: {
+    new_layer_server() {
+      this.new_layer_version = this.servers[
+        this.new_layer_server
+      ].server_version;
+      console.log("new_layer_server: ", this.new_layer_server);
+      console.log("new_layer_version: ", this.new_layer_version);
+    },
     new_layer() {
       this.new_layer.version = this.servers[
         this.new_layer.server
       ].server_version;
+      /* this.new_layer_server = this.servers[
+        this.new_layer.server
+      ]; */
       console.log("new_layer.server: ", this.new_layer.server);
       console.log("new_layer.version: ", this.new_layer.version);
+      console.log("new_layer: ", this.new_layer);
     }
   },
   computed: {
@@ -385,9 +398,6 @@ export default {
         "&legend_options=fontName:Arial;fontAntiAliasing:true;fontSize:16";
       const img = new Image();
       img.src = layer_url;
-      img.onload = function() {
-        console.log("on load maplayer"); // tal vez remover esto
-      };
       return this.height;
     },
     get_layer_style(val) {
