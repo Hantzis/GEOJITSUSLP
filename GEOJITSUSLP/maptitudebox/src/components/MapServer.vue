@@ -6,8 +6,13 @@
           <v-col cols="8">
             <v-icon>mdi-network</v-icon>Servidores <br />WMS</v-col
           >
-          <v-col cols="4" align="right" >
-            <v-btn fab small color="green" @click.stop="dialog = true" style="margin-right: 14px;"
+          <v-col cols="4" align="right">
+            <v-btn
+              fab
+              small
+              color="green"
+              @click.stop="dialog = true"
+              style="margin-right: 14px;"
               ><v-icon color="white">mdi-plus</v-icon></v-btn
             >
           </v-col>
@@ -164,7 +169,9 @@
           >
             <v-col dense style="margin-top: -10px; margin-bottom: -20px;">
               <v-row
-                :justify="this.$vuetify.breakpoint.width < 333 ? 'center' : 'end'"
+                :justify="
+                  this.$vuetify.breakpoint.width < 333 ? 'center' : 'end'
+                "
                 style="margin-left: -20px; margin-right: -20px;"
               >
                 <v-btn
@@ -209,7 +216,9 @@
             >
               <v-col dense style="margin-top: -10px; margin-bottom: -20px;">
                 <v-row
-                  :justify="this.$vuetify.breakpoint.width < 333 ? 'center' : 'end'"
+                  :justify="
+                    this.$vuetify.breakpoint.width < 333 ? 'center' : 'end'
+                  "
                   style="margin-left: -20px; margin-right: -20px;"
                 >
                   <v-btn
@@ -234,7 +243,6 @@
               </v-col>
             </v-col>
           </v-row>
-
         </v-card-text>
       </v-card>
     </v-dialog>
@@ -261,9 +269,7 @@ export default {
   methods: {
     add_new_server() {
       this.servers.push(this.new_server);
-      this.new_server = {
-        server_enabled: true
-      };
+      this.new_server = { server_enabled: true };
       this.dialog = false;
     },
     ask_delete_wms_server(val) {

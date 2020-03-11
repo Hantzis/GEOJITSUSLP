@@ -5,7 +5,13 @@
         <v-row>
           <v-col><v-icon>mdi-layers</v-icon>Capas</v-col>
           <v-col align="right">
-            <v-btn fab small color="green" @click.stop="add_new_layer_dialog()" style="margin-right: 14px; margin-bottom: 14px;">
+            <v-btn
+              fab
+              small
+              color="green"
+              @click.stop="add_new_layer_dialog()"
+              style="margin-right: 14px; margin-bottom: 14px;"
+            >
               <v-icon color="white">mdi-plus</v-icon>
             </v-btn>
           </v-col>
@@ -206,25 +212,25 @@
             <v-select
               label="Servidor"
               :outlined="true"
+              v-model="new_layer.server"
               :items="servers_select"
               dense
               hint="Versión del servicio"
             />
-            <v-text-field
-              label="Nombre"
-              :maxlength="25"
+            <v-select
+              label="Versión"
               :outlined="true"
-              v-model="new_layer.server_name"
-              hint="Nombre corto de la capa (debe ser único)"
+              :disabled="false"
+              v-model="new_layer.version"
+              :items="['1.1.1', '1.3.0']"
               dense
+              hint="Versión del servidor WMS"
             />
-            <v-text-field
-              label="URL Base"
-              :maxlength="255"
+            <v-select
+              label="Capa"
               :outlined="true"
-              v-model="new_layer.server_baseurl"
-              hint="URL del servidor WMS; suele estar en la forma https://dominio/uri/wms?"
               dense
+              :hint="'Capa a agregar desde el servidor ' + new_layer.server"
             />
             <v-textarea
               label="Descripción"
@@ -244,10 +250,9 @@
                 <v-select
                   label="Versión"
                   :outlined="true"
-                  v-model="new_layer.server_version"
-                  :items="['1.1.1', '1.3.0']"
+                  v-model="new_layer.version"
                   dense
-                  hint="Versión del servicio"
+                  hint="Versión del servidor WMS"
                 />
               </v-col>
               <v-col cols="5">
@@ -299,7 +304,6 @@
         </v-col>
       </v-card>
     </v-dialog>
-
   </div>
 </template>
 
@@ -317,6 +321,15 @@ export default {
     },
     vmodel_layericontabs: null
   }),
+  watch: {
+    new_layer() {
+      this.new_layer.version = this.servers[
+        this.new_layer.server
+      ].server_version;
+      console.log("new_layer.server: ", this.new_layer.server);
+      console.log("new_layer.version: ", this.new_layer.version);
+    }
+  },
   computed: {
     servers_select() {
       let names = [];
@@ -324,31 +337,27 @@ export default {
         names.push(item.server_name);
       }
       const map_names = names.map(function(val, index) {
-        return {value:index, text:val};
+        return { value: index, text: val };
       });
       console.log("map_names: ", map_names);
       return map_names;
-    },
+    }
   },
   methods: {
     testa(val) {
       alert(val);
     },
     add_new_layer_dialog() {
-      console.log(this.servers);
       this.new_layer_dialog = true;
     },
-    add_new_layer() {
-
-      this.layers.push(this.new_layer);
-      this.new_layer = {};
+    add_new_layer_cancel() {
+      this.new_layer = { layer_enabled: true };
+      this.new_layer_dialog = false;
     },
-    add_new_server() {
-      this.servers.push(this.new_server);
-      this.new_server = {
-        server_enabled: true
-      };
-      this.dialog = false;
+    add_new_layer() {
+      this.layers.push(this.new_layer);
+      this.new_layer = { layer_enabled: true };
+      this.new_layer_dialog = false;
     },
     get_layer_thumb(val) {
       let thumb_server = val.server;
@@ -394,7 +403,6 @@ export default {
   },
   mounted() {
     console.log("mounted");
-
   }
 };
 </script>
