@@ -308,6 +308,8 @@
 </template>
 
 <script>
+let wmsclient = require("wms-client");
+
 export default {
   name: "MapLayer",
   props: {
@@ -330,6 +332,15 @@ export default {
       ].server_version;
       console.log("new_layer_server: ", this.new_layer_server);
       console.log("new_layer_version: ", this.new_layer_version);
+      let url = this.servers[this.new_layer_server].server_baseurl;
+      let wms = new wmsclient(url);
+      console.log(url);
+      console.log(wms);
+      // Get WMS Service Title
+      wms.capabilities((err, capabilities) => {
+        if (err) return console.log(err);
+        console.log(capabilities.service.title);
+      });
     },
     new_layer() {
       this.new_layer.version = this.servers[
