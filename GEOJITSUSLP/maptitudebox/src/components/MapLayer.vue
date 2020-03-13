@@ -167,16 +167,6 @@
                   <v-list dense subheader>
                     <v-list-item @click="testa('item list alert')">
                       <v-list-item-content>
-                        <v-list-item-title
-                          v-text="item.layer_name"
-                        ></v-list-item-title>
-                      </v-list-item-content>
-                      <v-list-item-icon>
-                        <v-icon color="primary">mdi-download</v-icon>
-                      </v-list-item-icon>
-                    </v-list-item>
-                    <v-list-item @click="testa('item list alert')">
-                      <v-list-item-content>
                         KML
                       </v-list-item-content>
                       <v-list-item-icon>
@@ -229,8 +219,10 @@
             <v-select
               label="Capa"
               :outlined="true"
+              v-model="new_layer_server_title"
+              :items="new_layer_server_layers"
               dense
-              :hint="'Capa a agregar desde el servidor ' + new_layer.server"
+              :hint="'Capa a agregar desde el servidor ' + this.servers[this.new_layer_server].server_name"
             />
             <v-textarea
               label="Descripción"
@@ -320,6 +312,10 @@ export default {
     new_layer_dialog: false,
     new_layer_version: undefined,
     new_layer_server: undefined,
+    new_layer_server_title: undefined,
+    new_layer_server_layers: undefined,
+    new_layer_server_layers_titles: undefined,
+    new_layer_server_layers_enabled: false,
     new_layer: {
       layer_enabled: true
     },
@@ -337,34 +333,40 @@ export default {
       console.log(url);
       console.log(wms);
       // Get WMS Service Title
-      wms.capabilities((err, capabilities) => {
+      let array_layers = [];
+      let array_layers_titles = [];
+      wms.layers((err, layers) => {
         if (err) return console.log(err);
-        console.log(capabilities.service.title);
+        console.log("LAYERS: ", layers);
+        this.new_layer_server_layers = undefined;
+        this.new_layer_server_title = undefined;
+        array_layers = layers;
+        console.log("ARRAYLAYERS: ", array_layers);
+        for (let item of array_layers.entries()) {
+          console.log("ITEM: ", item[1].title + " (" + item[1].name + ")");
+          array_layers_titles.push(item[1].title + " (" + item[1].name + ")");
+        }
+        this.new_layer_server_layers = array_layers_titles.map(function(text, value) {
+          return { value: value, text: text };
+        });
       });
     },
     new_layer() {
       this.new_layer.version = this.servers[
         this.new_layer.server
       ].server_version;
-      /* this.new_layer_server = this.servers[
-        this.new_layer.server
-      ]; */
-      console.log("new_layer.server: ", this.new_layer.server);
-      console.log("new_layer.version: ", this.new_layer.version);
-      console.log("new_layer: ", this.new_layer);
     }
   },
   computed: {
     servers_select() {
-      let names = [];
+      let servers_names = [];
       for (let item of this.servers) {
-        names.push(item.server_name);
+        servers_names.push(item.server_name);
       }
-      const map_names = names.map(function(val, index) {
+      const servers_names_map = servers_names.map(function(val, index) {
         return { value: index, text: val };
       });
-      console.log("map_names: ", map_names);
-      return map_names;
+      return servers_names_map;
     }
   },
   methods: {
