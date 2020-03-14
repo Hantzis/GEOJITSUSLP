@@ -222,7 +222,7 @@
               v-model="new_layer_server_title"
               :items="new_layer_server_layers"
               dense
-              :hint="'Capa a agregar desde el servidor ' + this.servers[this.new_layer_server].server_name"
+              :hint="'Capa a agregar desde el servidor '"
             />
             <v-textarea
               label="Descripción"
