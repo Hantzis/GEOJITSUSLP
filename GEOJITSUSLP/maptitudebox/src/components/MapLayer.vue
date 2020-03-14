@@ -301,6 +301,7 @@
 
 <script>
 let wmsclient = require("wms-client");
+let extend = require("extend");
 
 export default {
   name: "MapLayer",
@@ -373,6 +374,22 @@ export default {
     testa(val) {
       alert(val);
     },
+    /* capabilitiesUrl: function( wmsBaseUrl, queryOptions ) {
+      queryOptions = extend( {
+          request: 'GetCapabilities',
+          version: this.version,
+          service: 'WMS'
+        },
+        queryOptions
+      );
+      // Append user provided GET parameters in the URL to required queryOptions
+      var urlQueryParams = new urijs( wmsBaseUrl ).search( true );
+      queryOptions = extend( queryOptions, urlQueryParams );
+      // Merge queryOptions GET parameters to the URL
+      var url = new urijs( wmsBaseUrl ).search( queryOptions );
+      debug( 'Using capabilities URL: %s', url );
+      return url.toString();
+	}, */
     add_new_layer_dialog() {
       this.new_layer_dialog = true;
     },
