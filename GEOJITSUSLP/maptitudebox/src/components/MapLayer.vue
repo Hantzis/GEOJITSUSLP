@@ -203,23 +203,14 @@
               label="Servidor"
               :outlined="true"
               v-model="new_layer_server"
-              :items="servers_select"
+              :items="new_layer_servers_select"
               dense
               hint="Versión del servicio"
             />
             <v-select
-              label="Versión"
-              :outlined="true"
-              :disabled="true"
-              v-model="new_layer_version"
-              :items="['1.1.1', '1.3.0']"
-              dense
-              hint="Versión del servidor WMS"
-            />
-            <v-select
               label="Capa"
               :outlined="true"
-              v-model="new_layer_server_title"
+              v-model="new_layer_server_layer_title"
               :items="new_layer_server_layers"
               dense
               :hint="'Capa a agregar desde el servidor '"
@@ -242,7 +233,9 @@
                 <v-select
                   label="Versión"
                   :outlined="true"
-                  v-model="new_layer.version"
+                  :disabled="true"
+                  v-model="new_layer_version"
+                  :items="['1.1.1', '1.3.0']"
                   dense
                   hint="Versión del servidor WMS"
                 />
@@ -301,7 +294,6 @@
 
 <script>
 let wmsclient = require("wms-client");
-let extend = require("extend");
 
 export default {
   name: "MapLayer",
@@ -311,12 +303,10 @@ export default {
   },
   data: () => ({
     new_layer_dialog: false,
-    new_layer_version: undefined,
     new_layer_server: undefined,
-    new_layer_server_title: undefined,
+    new_layer_version: undefined,
+    new_layer_server_layer_title: undefined,
     new_layer_server_layers: undefined,
-    new_layer_server_layers_titles: undefined,
-    new_layer_server_layers_enabled: false,
     new_layer: {
       layer_enabled: true
     },
@@ -359,7 +349,7 @@ export default {
     }
   },
   computed: {
-    servers_select() {
+    new_layer_servers_select() {
       let servers_names = [];
       for (let item of this.servers) {
         servers_names.push(item.server_name);
