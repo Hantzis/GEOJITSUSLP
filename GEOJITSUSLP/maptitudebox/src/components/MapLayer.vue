@@ -215,6 +215,14 @@
               dense
               :hint="'Capa a agregar desde el servidor '"
             />
+            <v-text-field
+              label="Nombre de capa"
+              :maxlength="25"
+              :outlined="true"
+              v-model="new_layer.layer_name"
+              hint="Nombre de la capa como se va a agregar"
+              dense
+            />
             <v-textarea
               label="Descripción"
               :maxlength="255"
@@ -270,7 +278,7 @@
                   :block="this.$vuetify.breakpoint.width < 333"
                   color="secondary darken-1"
                   tile
-                  @click="new_layer_dialog = false"
+                  @click="add_new_layer_cancel()"
                 >
                   Cancelar
                 </v-btn>
@@ -328,13 +336,10 @@ export default {
       let array_layers_titles = [];
       wms.layers((err, layers) => {
         if (err) return console.log(err);
-        console.log("LAYERS: ", layers);
         this.new_layer_server_layers = undefined;
-        this.new_layer_server_title = undefined;
+        this.new_layer_server_layer_title = undefined;
         array_layers = layers;
-        console.log("ARRAYLAYERS: ", array_layers);
         for (let item of array_layers.entries()) {
-          console.log("ITEM: ", item[1].title + " (" + item[1].name + ")");
           array_layers_titles.push(item[1].title + " (" + item[1].name + ")");
         }
         this.new_layer_server_layers = array_layers_titles.map(function(text, value) {
@@ -364,22 +369,6 @@ export default {
     testa(val) {
       alert(val);
     },
-    /* capabilitiesUrl: function( wmsBaseUrl, queryOptions ) {
-      queryOptions = extend( {
-          request: 'GetCapabilities',
-          version: this.version,
-          service: 'WMS'
-        },
-        queryOptions
-      );
-      // Append user provided GET parameters in the URL to required queryOptions
-      var urlQueryParams = new urijs( wmsBaseUrl ).search( true );
-      queryOptions = extend( queryOptions, urlQueryParams );
-      // Merge queryOptions GET parameters to the URL
-      var url = new urijs( wmsBaseUrl ).search( queryOptions );
-      debug( 'Using capabilities URL: %s', url );
-      return url.toString();
-	}, */
     add_new_layer_dialog() {
       this.new_layer_dialog = true;
     },
@@ -389,8 +378,7 @@ export default {
     },
     add_new_layer() {
       this.layers.push(this.new_layer);
-      this.new_layer = { layer_enabled: true };
-      this.new_layer_dialog = false;
+      this.add_new_layer_cancel();
     },
     get_layer_thumb(val) {
       let thumb_server = val.server;
