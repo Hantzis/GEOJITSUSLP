@@ -9,7 +9,7 @@
               fab
               small
               color="green"
-              @click.stop="add_new_layer_dialog()"
+              @click.stop="add_newLayer_dialog()"
               style="margin-right: 14px; margin-bottom: 14px;"
             >
               <v-icon color="white">mdi-plus</v-icon>
@@ -193,7 +193,7 @@
       </v-expansion-panel>
     </v-expansion-panels>
 
-    <v-dialog v-model="new_layer_dialog" max-width="800">
+    <v-dialog v-model="newLayer_dialog" max-width="800">
       <v-card>
         <v-card-title>Agregar Capa WMS</v-card-title>
         <v-card-text>
@@ -202,25 +202,25 @@
             <v-select
               label="Servidor"
               :outlined="true"
-              v-model="new_layer_server"
-              :items="new_layer_servers_select"
+              v-model="newLayer_server"
+              :items="newLayer_serverSelect"
               dense
               hint="Versión del servicio"
             />
             <v-select
               label="Capa"
               :outlined="true"
-              v-model="new_layer_server_layer_title"
-              :items="new_layer_server_layers"
+              v-model="newLayer_serverLayer"
+              :items="newLayer_serverLayerSelect"
               dense
               :hint="'Capa a agregar desde el servidor '"
             />
             <v-text-field
-              label="Nombre de capa"
+              label="Nombre para mostrar"
               :maxlength="25"
               :outlined="true"
               v-model="new_layer.layer_name"
-              hint="Nombre de la capa como se va a agregar"
+              hint="Nombre de la capa como se va a mostrar en la lista de capas"
               dense
             />
             <v-textarea
@@ -242,7 +242,7 @@
                   label="Versión"
                   :outlined="true"
                   :disabled="true"
-                  v-model="new_layer_version"
+                  v-model="newLayer_version"
                   :items="['1.1.1', '1.3.0']"
                   dense
                   hint="Versión del servidor WMS"
@@ -310,57 +310,57 @@ export default {
     servers: Array
   },
   data: () => ({
-    new_layer_dialog: false,
-    new_layer_server: undefined,
-    new_layer_version: undefined,
-    new_layer_server_layer_title: undefined,
-    new_layer_server_layers: undefined,
+    newLayer_dialog: false,
+    newLayer_server: undefined,
+    newLayer_version: undefined,
+    newLayer_serverLayer: undefined,
+    newLayer_serverLayerSelect: undefined,
     new_layer: {
       layer_enabled: true
     },
     vmodel_layericontabs: null
   }),
   watch: {
-    new_layer_server() {
-      this.new_layer_version = this.servers[
-        this.new_layer_server
-      ].server_version;
-      console.log("new_layer_server: ", this.new_layer_server);
-      console.log("new_layer_version: ", this.new_layer_version);
-      let url = this.servers[this.new_layer_server].server_baseurl;
+    newLayer_server() {
+      this.newLayer_serverLayer = undefined;
+      this.newLayer_serverLayerSelect = undefined;
+      this.new_layer.server = this.servers[this.newLayer_server].server_baseurl;
+      this.newLayer_version = this.servers[this.newLayer_server].server_version;
+      this.new_layer.layer_name = "prueba";
+      console.log("newLayer_server: ", this.newLayer_server);
+      console.log("newLayer_version: ", this.newLayer_version);
+      let url = this.servers[this.newLayer_server].server_baseurl;
       let wms = new wmsclient(url);
-      console.log(url);
-      console.log(wms);
-      // Get WMS Service Title
-      let array_layers = [];
+      let array_layers_titlename = [];
       let array_layers_titles = [];
+
       wms.layers((err, layers) => {
         if (err) return console.log(err);
-        this.new_layer_server_layers = undefined;
-        this.new_layer_server_layer_title = undefined;
-        array_layers = layers;
-        for (let item of array_layers.entries()) {
-          array_layers_titles.push(item[1].title + " (" + item[1].name + ")");
+        //let new_layer_server_layers_titlename = undefined;
+        let new_layer_server_layers = [];
+        for (let item of layers.entries()) {
+          array_layers_titlename.push(
+            item[1].title + " (" + item[1].name + ")"
+          );
+          array_layers_titles.push(item[1].title);
+          new_layer_server_layers.push(item[1].title);
         }
-        this.new_layer_server_layers = array_layers_titles.map(function(text, value) {
-          return { value: value, text: text };
-        });
+        this.newLayer_serverLayerSelect = array_layers_titlename.map(
+          (text, value) => {
+            return { value: value, text: text };
+          }
+        );
       });
-    },
-    new_layer() {
-      this.new_layer.version = this.servers[
-        this.new_layer.server
-      ].server_version;
     }
   },
   computed: {
-    new_layer_servers_select() {
+    newLayer_serverSelect() {
       let servers_names = [];
-      for (let item of this.servers) {
-        servers_names.push(item.server_name);
+      for (let server of this.servers) {
+        servers_names.push(server.server_name);
       }
-      const servers_names_map = servers_names.map(function(val, index) {
-        return { value: index, text: val };
+      const servers_names_map = servers_names.map((text, value) => {
+        return { value: value, text: text };
       });
       return servers_names_map;
     }
@@ -369,12 +369,13 @@ export default {
     testa(val) {
       alert(val);
     },
-    add_new_layer_dialog() {
-      this.new_layer_dialog = true;
+    add_newLayer_dialog() {
+      this.newLayer_dialog = true;
     },
     add_new_layer_cancel() {
+      alert("jghgj");
       this.new_layer = { layer_enabled: true };
-      this.new_layer_dialog = false;
+      this.newLayer_dialog = false;
     },
     add_new_layer() {
       this.layers.push(this.new_layer);
