@@ -93,12 +93,12 @@
           :zoom.sync="map_zoom"
           :center.sync="map_center"
         >
-          <MglRasterLayer
+          <!-- <MglRasterLayer
             :sourceId="municipios_lyr.source.id"
             :layerId="municipios_lyr.id"
             :source.sync="municipios_lyr.source"
             :layer.sync="municipios_lyr"
-          ></MglRasterLayer>
+          ></MglRasterLayer> -->
         </MglMap>
       </v-container>
     </v-content>
@@ -117,7 +117,8 @@
 import "@mdi/font/css/materialdesignicons.css";
 import "mapbox-gl/dist/mapbox-gl.css";
 import Mapbox from "mapbox-gl";
-import { MglMap, MglRasterLayer } from "vue-mapbox";
+//import { MglMap, MglRasterLayer } from "vue-mapbox";
+import { MglMap } from "vue-mapbox";
 import MapLayer from "./components/MapLayer";
 import MapServer from "./components/MapServer";
 import axios from "axios";
@@ -125,7 +126,7 @@ import axios from "axios";
 export default {
   components: {
     MglMap,
-    MglRasterLayer,
+    //MglRasterLayer,
     MapLayer,
     MapServer
   },
@@ -193,7 +194,7 @@ export default {
       }
     },
     mapStyle: "mapbox://styles/mapbox/outdoors-v11",
-    map_center: Array(-100.96, 22.16),
+    map_center: Array(-102.96, 21.16),
     map_zoom: 10,
     drawer: false,
     drawerRight: false,

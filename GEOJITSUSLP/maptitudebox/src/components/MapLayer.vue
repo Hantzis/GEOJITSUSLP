@@ -228,7 +228,7 @@
               :maxlength="255"
               :auto-grow="true"
               :outlined="true"
-              v-model="new_layer.server_abstract"
+              v-model="new_layer.layer_description"
               hint="Descripción breve del servidor WMS, puede ser más especifica que el nombre que es corto"
               :rows="3"
               dense
@@ -315,37 +315,67 @@ export default {
     newLayer_version: undefined,
     newLayer_serverLayer: undefined,
     newLayer_serverLayerSelect: undefined,
+    newLayer_serverLayerSelectTitles: undefined,
+    newLayer_serverLayerSelectNames: undefined,
     new_layer: {
       layer_enabled: true
     },
     vmodel_layericontabs: null
   }),
   watch: {
+    newLayer_version() {
+      if (this.newLayer_version !== undefined){
+        this.new_layer.version = this.newLayer_version
+      }
+    },
+    newLayer_serverLayer() {
+      if (this.newLayer_serverLayer !== undefined) {
+        console.log(
+          "capa: ",
+          this.newLayer_serverLayerSelectTitles[this.newLayer_serverLayer].text
+        );
+        this.new_layer.layer_name = this.newLayer_serverLayerSelectTitles[
+          this.newLayer_serverLayer
+        ].text;
+        this.new_layer.layers = this.newLayer_serverLayerSelectNames[
+          this.newLayer_serverLayer
+        ].text;
+      }
+    },
     newLayer_server() {
       this.newLayer_serverLayer = undefined;
       this.newLayer_serverLayerSelect = undefined;
+      this.new_layer.layer_name = null;
       this.new_layer.server = this.servers[this.newLayer_server].server_baseurl;
       this.newLayer_version = this.servers[this.newLayer_server].server_version;
-      this.new_layer.layer_name = "prueba";
       console.log("newLayer_server: ", this.newLayer_server);
       console.log("newLayer_version: ", this.newLayer_version);
       let url = this.servers[this.newLayer_server].server_baseurl;
       let wms = new wmsclient(url);
-      let array_layers_titlename = [];
-      let array_layers_titles = [];
 
       wms.layers((err, layers) => {
+        let array_layers_titles = [];
+        let array_layers_names = [];
+        let array_layers_titlenames = [];
         if (err) return console.log(err);
-        //let new_layer_server_layers_titlename = undefined;
-        let new_layer_server_layers = [];
         for (let item of layers.entries()) {
-          array_layers_titlename.push(
+          array_layers_titlenames.push(
             item[1].title + " (" + item[1].name + ")"
           );
           array_layers_titles.push(item[1].title);
-          new_layer_server_layers.push(item[1].title);
+          array_layers_names.push(item[1].name);
         }
-        this.newLayer_serverLayerSelect = array_layers_titlename.map(
+        this.newLayer_serverLayerSelect = array_layers_titlenames.map(
+          (text, value) => {
+            return { value: value, text: text };
+          }
+        );
+        this.newLayer_serverLayerSelectTitles = array_layers_titles.map(
+          (text, value) => {
+            return { value: value, text: text };
+          }
+        );
+        this.newLayer_serverLayerSelectNames = array_layers_names.map(
           (text, value) => {
             return { value: value, text: text };
           }
@@ -373,12 +403,17 @@ export default {
       this.newLayer_dialog = true;
     },
     add_new_layer_cancel() {
-      alert("jghgj");
       this.new_layer = { layer_enabled: true };
       this.newLayer_dialog = false;
+      this.newLayer_server = undefined;
+      this.newLayer_version = undefined;
+      this.newLayer_serverLayer = undefined;
+      this.newLayer_serverLayerSelect = undefined;
+      this.newLayer_serverLayerSelectTitles = undefined;
     },
     add_new_layer() {
       this.layers.push(this.new_layer);
+      console.log("layers: ", this.layers);
       this.add_new_layer_cancel();
     },
     get_layer_thumb(val) {
