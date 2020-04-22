@@ -192,7 +192,6 @@
         </v-expansion-panel-content>
       </v-expansion-panel>
     </v-expansion-panels>
-
     <v-dialog v-model="newLayer_dialog" max-width="800">
       <v-card>
         <v-card-title>Agregar Capa WMS</v-card-title>
