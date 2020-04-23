@@ -2,18 +2,19 @@ from rest_framework.viewsets import ModelViewSet, ReadOnlyModelViewSet
 from . models import WMSServer, WMSLayer, WMSCRS
 from . serializers import WMSServerSerializer, WMSLayerSerializer, WMSCRSSerializer
 from django_filters.rest_framework import DjangoFilterBackend
+from rest_framework.filters import SearchFilter
 
 class WMSServerViewSet(ModelViewSet):
     queryset = WMSServer.objects.all()
     serializer_class = WMSServerSerializer
-    filter_backends = [DjangoFilterBackend]
+    filter_backends = [DjangoFilterBackend, SearchFilter]
     filter_fields = ['project', 'id']
 
 
 class WMSLayerViewSet(ModelViewSet):
     queryset = WMSLayer.objects.all()
     serializer_class = WMSLayerSerializer
-    filter_backends = [DjangoFilterBackend]
+    filter_backends = [DjangoFilterBackend, SearchFilter]
     filter_fields = ['server__project', 'id']
 
 
