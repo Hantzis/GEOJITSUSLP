@@ -323,8 +323,8 @@ export default {
   }),
   watch: {
     newLayer_version() {
-      if (this.newLayer_version !== undefined){
-        this.new_layer.version = this.newLayer_version
+      if (this.newLayer_version !== undefined) {
+        this.new_layer.version = this.newLayer_version;
       }
     },
     newLayer_serverLayer() {

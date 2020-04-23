@@ -93,12 +93,13 @@
           :zoom.sync="map_zoom"
           :center.sync="map_center"
         >
-          <!-- <MglRasterLayer
-            :sourceId="municipios_lyr.source.id"
-            :layerId="municipios_lyr.id"
-            :source.sync="municipios_lyr.source"
-            :layer.sync="municipios_lyr"
-          ></MglRasterLayer> -->
+          <MglRasterLayer
+            v-for="(layer, i) in this.mlg_layers"
+            :key="i"
+            :sourceId.sync="layer.source.id"
+            :layerId.sync="layer.id"
+            :layer.sync="layer"
+          />
         </MglMap>
       </v-container>
     </v-content>
@@ -117,8 +118,8 @@
 import "@mdi/font/css/materialdesignicons.css";
 import "mapbox-gl/dist/mapbox-gl.css";
 import Mapbox from "mapbox-gl";
-//import { MglMap, MglRasterLayer } from "vue-mapbox";
-import { MglMap } from "vue-mapbox";
+import { MglMap, MglRasterLayer } from "vue-mapbox";
+// import { MglMap } from "vue-mapbox";
 import MapLayer from "./components/MapLayer";
 import MapServer from "./components/MapServer";
 import axios from "axios";
@@ -126,7 +127,7 @@ import axios from "axios";
 export default {
   components: {
     MglMap,
-    //MglRasterLayer,
+    MglRasterLayer,
     MapLayer,
     MapServer
   },
@@ -140,10 +141,24 @@ export default {
     municipios_lyr: {
       id: "municipios layer",
       source: {
-        id: "municipios id",
+        id: "municipios sourceid",
         type: "raster",
         tiles: [
-          "https://api.parcelas-slp.maptitude.xyz/geoserver/wms?&service=WMS&request=GetMap&layers=SLP%3Amunicipios&styles=&format=image%2Fpng8&transparent=true&version=1.1.1&width=256&height=256&srs=EPSG%3A3857&bbox={bbox-epsg-3857}"
+          "https://api.parcelas-slp.maptitude.xyz/geoserver/gwc/service/wms?&service=WMS&request=GetMap&layers=SLP%3Amunicipios&styles=&format=image%2Fpng8&transparent=true&version=1.1.1&width=256&height=256&srs=EPSG%3A3857&bbox={bbox-epsg-3857}"
+        ],
+        tileSize: 256
+      },
+      paint: {
+        "raster-opacity": 1.0
+      }
+    },
+    ejidos_lyr: {
+      id: "ejidos layer",
+      source: {
+        id: "ejidos sourceid",
+        type: "raster",
+        tiles: [
+          "https://api.parcelas-slp.maptitude.xyz/geoserver/gwc/service/wms?&service=WMS&request=GetMap&layers=SLP%3Aejidos&styles=&format=image%2Fpng8&transparent=true&version=1.1.1&width=256&height=256&srs=EPSG%3A3857&bbox={bbox-epsg-3857}"
         ],
         tileSize: 256
       },
@@ -155,6 +170,7 @@ export default {
     layers_url: "https://api.parcelas-slp.maptitude.xyz/rest/v2/wms-layers/",
     servers: [],
     layers: [],
+    mlg_layers: [],
     municipios: {
       type: "raster",
       sourceId: "municipios",
@@ -194,7 +210,7 @@ export default {
       }
     },
     mapStyle: "mapbox://styles/mapbox/outdoors-v11",
-    map_center: Array(-102.96, 21.16),
+    map_center: Array(-100.96, 22.16),
     map_zoom: 10,
     drawer: false,
     drawerRight: false,
@@ -217,14 +233,53 @@ export default {
   created() {
     // We need to set mapbox-gl library here in order to use it in template
     this.mapbox = Mapbox;
+    this.mlg_layers = [this.municipios_lyr, this.ejidos_lyr];
   },
   mounted() {
     axios.get(this.servers_url).then(response => {
       this.servers = response.data;
     });
-    axios.get(this.layers_url).then(response => {
-      this.layers = response.data;
-    });
+    axios
+      .get(this.layers_url)
+      .then(response => {
+        this.layers = response.data;
+      })
+      .then(() => {
+        console.log("LAYERS: ", this.layers);
+        for (let layer of this.layers) {
+          console.log(layer);
+          let layer_url =
+            layer.server +
+            "service=WMS&request=GetMap&layers=" +
+            layer.layers +
+            "&styles=";
+          if (layer.styles) {
+            layer_url += layer.styles
+          }
+          layer_url +=
+            "&format=" +
+            layer.format +
+            "&transparent=" +
+            layer.transparent +
+            "&version=" +
+            layer.version +
+            "&width=256&height=256&srs=" +
+            layer.crs +
+            "&bbox={bbox-epsg-3857}";
+          this.mlg_layers.push({
+            id: layer.id.toString(),
+            source: {
+              id: layer.layers,
+              type: "raster",
+              tiles: [layer_url],
+              tileSize: 256
+            },
+            paint: {
+              "raster-opacity": layer.layer_opacity % 100 / 100
+            }
+          });
+        }
+      });
   }
 };
 </script>
