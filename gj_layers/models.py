@@ -75,7 +75,7 @@ class WMSLayer(models.Model):
     layer_description = models.CharField(max_length=255, blank=True, null=True)
     layer_enabled = models.BooleanField(default=False)
     layer_permanent = models.BooleanField(default=False)
-    layer_visible = models.BooleanField(default=False)
+    # layer_visible = models.BooleanField(default=False)
     layer_opacity = models.PositiveSmallIntegerField(default=100)
     layer_order = models.PositiveSmallIntegerField(default=0)
     server = models.ForeignKey(WMSServer, on_delete=models.PROTECT)

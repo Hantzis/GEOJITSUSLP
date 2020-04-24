@@ -306,7 +306,8 @@ export default {
   name: "MapLayer",
   props: {
     layers: Array,
-    servers: Array
+    servers: Array,
+    mgl_layers: Array
   },
   data: () => ({
     newLayer_dialog: false,
@@ -322,6 +323,28 @@ export default {
     vmodel_layericontabs: null
   }),
   watch: {
+    layers: {
+      handler(val) {
+        console.log("layers changed");
+        console.log(val);
+        console.log(this.mgl_layers);
+        for (let i in val) {
+          console.log(val[i]);
+          console.log(val[i].layer_enabled);
+          if (val[i].layer_enabled) {
+            console.log("enabled");
+            console.log("mgl; ", this.mgl_layers[i]);
+            this.mgl_layers[i].layout.visibility = "visible";
+            this.mgl_layers[i].paint["raster-opacity"] =
+              (val[i].layer_opacity % 100) / 100;
+          } else {
+            console.log("not enabled");
+            this.mgl_layers[i].layout.visibility = "none";
+          }
+        }
+      },
+      deep: true
+    },
     newLayer_version() {
       if (this.newLayer_version !== undefined) {
         this.new_layer.version = this.newLayer_version;

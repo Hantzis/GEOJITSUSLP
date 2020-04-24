@@ -19,7 +19,11 @@
       <v-tabs-items v-model="vmodel_layertab">
         <v-tab-item value="capas">
           <!-- CARD Capas -->
-          <map-layer :layers="layers" :servers="servers"></map-layer>
+          <map-layer
+            :layers="layers"
+            :servers="servers"
+            :mgl_layers="mgl_layers"
+          ></map-layer>
 
           <!-- /CARD Mapas base -->
         </v-tab-item>
@@ -94,7 +98,7 @@
           :center.sync="map_center"
         >
           <MglRasterLayer
-            v-for="(layer, i) in this.mlg_layers"
+            v-for="(layer, i) in this.mgl_layers"
             :key="i"
             :sourceId.sync="layer.source.id"
             :layerId.sync="layer.id"
@@ -170,7 +174,7 @@ export default {
     layers_url: "https://api.parcelas-slp.maptitude.xyz/rest/v2/wms-layers/",
     servers: [],
     layers: [],
-    mlg_layers: [],
+    mgl_layers: [],
     municipios: {
       type: "raster",
       sourceId: "municipios",
@@ -233,7 +237,6 @@ export default {
   created() {
     // We need to set mapbox-gl library here in order to use it in template
     this.mapbox = Mapbox;
-    this.mlg_layers = [this.municipios_lyr, this.ejidos_lyr];
   },
   mounted() {
     axios.get(this.servers_url).then(response => {
@@ -245,16 +248,14 @@ export default {
         this.layers = response.data;
       })
       .then(() => {
-        console.log("LAYERS: ", this.layers);
         for (let layer of this.layers) {
-          console.log(layer);
           let layer_url =
             layer.server +
             "service=WMS&request=GetMap&layers=" +
             layer.layers +
             "&styles=";
           if (layer.styles) {
-            layer_url += layer.styles
+            layer_url += layer.styles;
           }
           layer_url +=
             "&format=" +
@@ -266,7 +267,7 @@ export default {
             "&width=256&height=256&srs=" +
             layer.crs +
             "&bbox={bbox-epsg-3857}";
-          this.mlg_layers.push({
+          this.mgl_layers.push({
             id: layer.id.toString(),
             source: {
               id: layer.layers,
@@ -274,8 +275,11 @@ export default {
               tiles: [layer_url],
               tileSize: 256
             },
+            layout: {
+              visibility: layer.layer_visible
+            },
             paint: {
-              "raster-opacity": layer.layer_opacity % 100 / 100
+              "raster-opacity": (layer.layer_opacity % 100) / 100
             }
           });
         }
