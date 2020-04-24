@@ -325,20 +325,12 @@ export default {
   watch: {
     layers: {
       handler(val) {
-        console.log("layers changed");
-        console.log(val);
-        console.log(this.mgl_layers);
         for (let i in val) {
-          console.log(val[i]);
-          console.log(val[i].layer_enabled);
           if (val[i].layer_enabled) {
-            console.log("enabled");
-            console.log("mgl; ", this.mgl_layers[i]);
             this.mgl_layers[i].layout.visibility = "visible";
             this.mgl_layers[i].paint["raster-opacity"] =
-              (val[i].layer_opacity % 100) / 100;
+              val[i].layer_opacity / 100;
           } else {
-            console.log("not enabled");
             this.mgl_layers[i].layout.visibility = "none";
           }
         }
